@@ -70,12 +70,19 @@ img, svg { max-width: 100%; height: auto; }
 /* 본문 레이아웃 */
 .page {
   max-width: 72rem; margin: 0 auto; padding: 2rem 1.25rem 5rem;
-  display: grid; grid-template-columns: 1fr; gap: 3rem;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem;
 }
 @media (min-width: 1000px) { .page { grid-template-columns: 15rem minmax(0, 1fr); } }
 .side { font-family: var(--sans); font-size: 0.875rem; line-height: 1.6; order: 2; }
 @media (min-width: 1000px) { .side { order: 0; } }
 @media (min-width: 1000px) { .side .side-sticky { position: sticky; top: 1.5rem; } }
+/* 좁은 화면: 범례는 본문 앞, 목차는 본문 뒤 */
+@media (max-width: 999px) {
+  .side, .side .side-sticky { display: contents; }
+  .side .legend { order: -1; margin: 0; }
+  .side nav { order: 2; }
+  .legend ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+}
 .side h2 { font-size: 0.95rem; margin: 0 0 0.75rem; }
 .side ol { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--rule); }
 .side li a { display: block; padding: 0.3rem 0 0.3rem 0.9rem; color: var(--muted); text-decoration: none; }
@@ -157,6 +164,22 @@ th { font-weight: 600; border-bottom: 2px solid var(--ink); }
   width: 1rem; height: 1rem; border: 2px solid var(--muted); border-radius: 2px;
 }
 .reasons li, .summary li { margin-bottom: 0.6rem; }
+/* 정의 목록 */
+.defs { margin: 0 0 1.25rem; display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1.25rem; }
+.defs dt { font-weight: 700; }
+.defs dd { margin: 0; }
+@media (max-width: 599px) { .defs { grid-template-columns: 1fr; } .defs dd { margin-bottom: 0.5rem; } }
+
+/* 버전 주석 */
+.footnote {
+  font-family: var(--sans); font-size: 0.95rem; line-height: 1.7; color: var(--muted);
+  border-top: 1px dashed var(--rule); border-bottom: 1px dashed var(--rule);
+  padding: 0.75rem 0; margin: 0 0 1.75rem;
+}
+.footnote-title { font-weight: 700; color: var(--ink); margin: 0 0 0.35rem; }
+.footnote ul { list-style: none; padding: 0; margin: 0; }
+.footnote li { margin-bottom: 0.35rem; }
+
 .note { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
 .refs li { font-size: 0.95rem; }
 
