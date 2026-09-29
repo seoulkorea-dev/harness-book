@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
 <title>하네스 엔지니어링: 기초부터 고급까지, 실사용 및 사례 포함</title>
 <meta name="description" content="AI 에이전트를 둘러싼 도구, 컨텍스트, 검증, 권한을 설계하는 하네스 엔지니어링을 OpenAI, Anthropic, 제3자의 실제 사례로 배우는 책">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +23,9 @@
   <div>
     <h1>하네스<br>엔지니어링</h1>
     <p class="subtitle">기초부터 고급까지, 실사용 및 사례 포함. 모델을 바꾸기 전에 모델을 둘러싼 것을 바꾸는 방법을 실제 사례로 배웁니다.</p>
-    <p class="meta">초급, 중급, 상급 3부 16장 구성</p>
+    <p class="meta">3부 16장 구성</p>
   </div>
+  <figure class="fig cover-fig">
   <svg class="layers" viewBox="0 0 400 400" role="img" aria-labelledby="layers-title">
     <title id="layers-title">환경이 하네스를, 하네스가 모델을 감싸는 3층 구조</title>
     <rect x="10" y="10" width="380" height="380" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 6"/>
@@ -35,73 +37,70 @@
     <text x="200" y="45" text-anchor="middle" font-size="18" font-weight="600">환경</text>
     <text x="200" y="370" text-anchor="middle" font-size="14">파일, API, 권한, 데이터</text>
   </svg>
+  <figcaption><span class="fig-no">그림 1.</span> 환경, 하네스, 모델의 3층 구조
+    <p>모델은 하네스 안에서, 하네스는 환경 안에서 일합니다. 이 책은 가운데 층인 하네스를 다룹니다.</p>
+  </figcaption>
+  </figure>
 </section>
 
 <main class="page" id="toc">
   <aside class="side">
+    <div class="side-sticky">
     <nav aria-label="이 페이지">
       <h2>이 페이지</h2>
       <ol>
-        <li><a href="#reader">이 책의 독자</a></li>
-        <li><a href="#how">읽는 법</a></li>
-        <li><a href="#part1">1부 초급</a></li>
-        <li><a href="#part2">2부 중급</a></li>
-        <li><a href="#part3">3부 상급</a></li>
+        <li><a href="#reader">대상 독자</a></li>
+        <li><a href="#part1">1부 하네스 개념과 최소 구성</a></li>
+        <li><a href="#part2">2부 실무 운영 과제</a></li>
+        <li><a href="#part3">3부 규모와 시간 확장</a></li>
       </ol>
     </nav>
+    <section class="legend" aria-labelledby="legend-h">
+      <h2 id="legend-h">발표 주체</h2>
+      <ul>
+        <li><span class="mark openai" aria-hidden="true">O</span>OpenAI 발표</li>
+        <li><span class="mark anthropic" aria-hidden="true">A</span>Anthropic 발표</li>
+        <li><span class="mark third" aria-hidden="true">3</span>제3자 (기업, 연구자, 개인)</li>
+      </ul>
+    </section>
+    </div>
   </aside>
 
   <div class="prose">
-    <h2 id="reader">이 책의 독자</h2>
+    <h2 id="reader">대상 독자</h2>
     <p>이 책은 프롬프트를 쓸 줄 알고 AI 생태계를 어느 정도 아는 독자를 위한 책입니다. LLM이 무엇인지, 프롬프트를 어떻게 쓰는지는 설명하지 않습니다. 대신 에이전트가 실제 일을 할 때 결과를 좌우하는 바깥 구조, 곧 하네스를 다룹니다.</p>
-    <p>초급은 하네스라는 개념과 최소 구성을 익히는 단계, 중급은 실무 운영에서 부딪히는 검증, 컨텍스트, 권한 문제를 다루는 단계, 상급은 여러 에이전트와 긴 작업, 평가, 조직 도입으로 규모를 키우는 단계입니다.</p>
 
-    <h2 id="how">읽는 법</h2>
-    <p>모든 장은 사례로 시작합니다. 그리고 다음 순서로 진행합니다.</p>
-    <ol>
-      <li>사례: 누가, 무엇을 하다가, 어떤 일이 있었나</li>
-      <li>문제 분석: 모델 문제인가, 하네스 문제인가</li>
-      <li>하네스 해법: 그들이 실제로 바꾼 것</li>
-      <li>내 프로젝트 적용: 바로 해볼 것</li>
-      <li>체크리스트</li>
-    </ol>
-    <p>사례와 인용에는 출처를 반드시 표시합니다. 같은 개념이라도 OpenAI와 Anthropic은 다른 방식으로 풀기 때문입니다.</p>
-    <div class="case openai"><span class="source openai">OpenAI, Codex</span><p>OpenAI가 직접 발표한 사례와 인용</p></div>
-    <div class="case anthropic"><span class="source anthropic">Anthropic, Claude</span><p>Anthropic이 직접 발표한 사례와 인용</p></div>
-    <div class="case"><span class="source">제3자</span><p>두 회사가 아닌 기업, 연구자, 개인의 사례. 어떤 회사의 모델을 썼는지 함께 적습니다.</p></div>
-    <p class="note">책에 나오는 수치는 모두 해당 회사나 저자가 스스로 발표한 값이며, 독립적으로 검증된 값이 아닙니다.</p>
-
-    <div class="toc-part" id="part1">
-      <h3>1부 초급: 하네스가 결과를 바꾼다</h3>
+    <div class="toc-part" id="part1" data-level="basic">
+      <h3>1부 하네스 개념과 최소 구성</h3>
       <ol class="toc">
-        <li><span class="no">1장</span><span><a class="t" href="chapters/ch01.html">같은 모델, 다른 점수</a><span class="d">제3자 LangChain이 모델을 고정하고 하네스만 바꿔 점수를 올린 실험, Anthropic의 SWE-bench 최소 스캐폴드</span></span><span class="st ready">원고</span></li>
-        <li><span class="no">2장</span><span><span class="t">실수를 환경에 새긴다</span><span class="d">제3자 Mitchell Hashimoto가 이름 붙인 습관과 용어의 확산</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">3장</span><span><span class="t">에이전트가 못 보면 없는 것이다</span><span class="d">OpenAI의 저장소 컨텍스트 교훈, AGENTS.md와 Claude Code 지시 파일</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">4장</span><span><span class="t">도구 설명 한 줄이 행동을 바꾼다</span><span class="d">Anthropic SWE-bench 에이전트의 도구 설계 반복</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">5장</span><span><span class="t">최소 하네스 재현하기</span><span class="d">Anthropic의 프롬프트, bash, 편집 도구 구성을 직접 재현</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">1장</span><span><a class="t" href="chapters/ch01.html">같은 모델, 다른 점수</a><span class="d">LangChain이 모델을 고정하고 하네스만 바꿔 점수를 올린 실험, Anthropic의 SWE-bench 최소 스캐폴드</span></span><span class="st ready">원고</span></li>
+        <li><span class="no">2장</span><span><span class="t">실수의 환경 각인</span><span class="d">Mitchell Hashimoto가 이름 붙인 습관과 용어의 확산</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">3장</span><span><span class="t">에이전트 가시 범위와 저장소 컨텍스트</span><span class="d">OpenAI의 저장소 컨텍스트 교훈, AGENTS.md와 Claude Code 지시 파일</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">4장</span><span><span class="t">도구 설명과 에이전트 행동</span><span class="d">Anthropic SWE-bench 에이전트의 도구 설계 반복</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">5장</span><span><span class="t">최소 하네스 재현</span><span class="d">Anthropic의 프롬프트, bash, 편집 도구 구성을 직접 재현</span></span><span class="st">준비 중</span></li>
       </ol>
     </div>
 
-    <div class="toc-part" id="part2">
-      <h3>2부 중급: 운영에서 부딪히는 문제들</h3>
+    <div class="toc-part" id="part2" data-level="intermediate">
+      <h3>2부 실무 운영 과제</h3>
       <ol class="toc" start="6">
-        <li><span class="no">6장</span><span><span class="t">두 하네스 해부: Codex와 Claude Code</span><span class="d">OpenAI와 Anthropic 도구의 확장 지점 비교</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">7장</span><span><span class="t">말로 부탁하지 말고 기계로 강제하라</span><span class="d">OpenAI의 린터, CI, 브라우저 연동과 Anthropic의 증거 요구 훅</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">8장</span><span><span class="t">컨텍스트가 곧 비용이다</span><span class="d">제3자 Manus의 캐시 설계와 파일 기반 기억, OpenAI의 대화 압축</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">9장</span><span><span class="t">사고 두 건으로 배우는 권한 설계</span><span class="d">제3자 Replit 운영 DB 삭제, Amazon Q 삭제 지시 프롬프트 배포</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">10장</span><span><span class="t">100만 줄 실험 따라가기</span><span class="d">OpenAI 팀의 5개월 에이전트 중심 개발</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">11장</span><span><span class="t">완료 보고를 믿지 않는 관리법</span><span class="d">제3자 Replit의 거짓 보고, OpenAI의 품질 부채 정리</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">6장</span><span><span class="t">두 하네스 해부: Codex, Claude Code</span><span class="d">Codex와 Claude Code의 확장 지점 비교</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">7장</span><span><span class="t">지시 대신 기계적 강제</span><span class="d">OpenAI의 린터, CI, 브라우저 연동과 Anthropic의 증거 요구 훅</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">8장</span><span><span class="t">컨텍스트와 비용</span><span class="d">Manus의 캐시 설계와 파일 기반 기억, OpenAI의 대화 압축</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">9장</span><span><span class="t">사고 사례 두 건과 권한 설계</span><span class="d">Replit 운영 DB 삭제, Amazon Q 삭제 지시 프롬프트 배포</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">10장</span><span><span class="t">100만 줄 실험 분석</span><span class="d">OpenAI 팀의 5개월 에이전트 중심 개발</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">11장</span><span><span class="t">완료 보고 검증 관리</span><span class="d">Replit의 거짓 보고, OpenAI의 품질 부채 정리</span></span><span class="st">준비 중</span></li>
       </ol>
     </div>
 
-    <div class="toc-part" id="part3">
-      <h3>3부 상급: 규모와 시간을 늘릴 때</h3>
+    <div class="toc-part" id="part3" data-level="advanced">
+      <h3>3부 규모와 시간 확장</h3>
       <ol class="toc" start="12">
-        <li><span class="no">12장</span><span><span class="t">멀티 에이전트, 언제 이기고 언제 지나</span><span class="d">Anthropic 리서치 시스템과 16개 에이전트 C 컴파일러</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">13장</span><span><span class="t">교대 근무하는 에이전트</span><span class="d">Anthropic 장시간 에이전트의 초기화, 코딩 에이전트 분리</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">14장</span><span><span class="t">하네스 개선을 수치로 증명하기</span><span class="d">Anthropic BrowseComp 분석과 LLM 채점, 제3자 LangChain 재분석</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">15장</span><span><span class="t">규제 산업에 들여올 때</span><span class="d">OpenAI 사례에 대한 데이터 주권 비판과 감사, 책임 설계</span></span><span class="st">준비 중</span></li>
-        <li><span class="no">16장</span><span><span class="t">배가 될 것인가, 기둥이 될 것인가</span><span class="d">제3자 Manus, OpenAI, Anthropic이 보는 하네스의 미래</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">12장</span><span><span class="t">멀티 에이전트 성패 조건</span><span class="d">Anthropic 리서치 시스템과 16개 에이전트 C 컴파일러</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">13장</span><span><span class="t">에이전트 교대 근무</span><span class="d">Anthropic 장시간 에이전트의 초기화, 코딩 에이전트 분리</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">14장</span><span><span class="t">하네스 개선 효과 정량 검증</span><span class="d">Anthropic BrowseComp 분석과 LLM 채점, LangChain 재분석</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">15장</span><span><span class="t">규제 산업 도입</span><span class="d">OpenAI 사례에 대한 데이터 주권 비판과 감사, 책임 설계</span></span><span class="st">준비 중</span></li>
+        <li><span class="no">16장</span><span><span class="t">하네스 미래 전망</span><span class="d">Manus, OpenAI, Anthropic이 보는 하네스의 미래</span></span><span class="st">준비 중</span></li>
       </ol>
     </div>
   </div>

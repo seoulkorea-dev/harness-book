@@ -1,10 +1,12 @@
 /* 하네스 엔지니어링 - 공통 스타일 */
 :root {
-  --paper: #F3F4EF;
-  --paper-2: #E9EBE4;
-  --ink: #1E2422;
-  --muted: #5B635F;
-  --rule: #CFD3CA;
+  /* 읽기 편한 아이보리 단일 테마. 시스템 다크 모드를 따르지 않음 */
+  color-scheme: light;
+  --paper: #FAF6EB;
+  --paper-2: #F1EBDB;
+  --ink: #2B2A26;
+  --muted: #625D52;
+  --rule: #DCD4C2;
   --accent: #234E70;
   --src-openai: #0E6B57;
   --src-anthropic: #9C4A12;
@@ -12,19 +14,6 @@
   --serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
   --sans: "IBM Plex Sans KR", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
   --measure: 38em;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #151918;
-    --paper-2: #1E2321;
-    --ink: #E4E7E1;
-    --muted: #A2AAA5;
-    --rule: #333A37;
-    --accent: #8DB6D9;
-    --src-openai: #5CC2A4;
-    --src-anthropic: #E0955E;
-    --src-third: #A7B3C2;
-  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -80,7 +69,7 @@ img, svg { max-width: 100%; height: auto; }
 @media (min-width: 1000px) { .page { grid-template-columns: 15rem minmax(0, 1fr); } }
 .side { font-family: var(--sans); font-size: 0.875rem; line-height: 1.6; order: 2; }
 @media (min-width: 1000px) { .side { order: 0; } }
-@media (min-width: 1000px) { .side nav { position: sticky; top: 1.5rem; } }
+@media (min-width: 1000px) { .side .side-sticky { position: sticky; top: 1.5rem; } }
 .side h2 { font-size: 0.95rem; margin: 0 0 0.75rem; }
 .side ol { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--rule); }
 .side li a { display: block; padding: 0.3rem 0 0.3rem 0.9rem; color: var(--muted); text-decoration: none; }
@@ -112,21 +101,34 @@ pre {
 }
 pre code { background: none; padding: 0; }
 
-/* 출처 표기가 붙는 사례 블록 */
+/* 출처 표시: 색 막대와 기호(O, A, 3), 범례는 사이드바에 한 번 */
 .case {
   margin: 1.75rem 0; padding: 1.1rem 1.25rem 0.4rem;
   border-left: 5px solid var(--src-third); background: var(--paper-2);
 }
 .case.openai { border-left-color: var(--src-openai); }
 .case.anthropic { border-left-color: var(--src-anthropic); }
-.source {
-  display: inline-block; font-family: var(--sans); font-size: 0.85rem; font-weight: 700;
-  padding: 0.15rem 0.6rem; border-radius: 2px; margin-bottom: 0.6rem;
-  color: var(--paper); background: var(--src-third);
-}
-.source.openai { background: var(--src-openai); }
-.source.anthropic { background: var(--src-anthropic); }
 .case h3 { margin-top: 0.2rem; }
+.case-meta { font-family: var(--sans); font-size: 0.9rem; font-weight: 600; color: var(--muted); margin: 0 0 0.6rem; }
+.mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.35em; height: 1.35em; border-radius: 50%; margin-right: 0.45em;
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 700; line-height: 1;
+  color: var(--paper); background: var(--src-third); vertical-align: 0.12em;
+}
+.mark.openai { background: var(--src-openai); }
+.mark.anthropic { background: var(--src-anthropic); }
+.legend { margin-top: 2rem; }
+.legend ul { list-style: none; padding: 0; margin: 0; }
+.legend li { display: flex; align-items: center; margin-bottom: 0.45rem; color: var(--muted); }
+
+/* 그림, 표 번호와 해설 (항상 아래) */
+.fig { margin: 1.75rem 0 2rem; }
+.fig .table-wrap { margin: 0; }
+.fig figcaption { font-family: var(--sans); font-size: 0.9rem; line-height: 1.7; color: var(--ink); font-weight: 600; margin-top: 0.6rem; }
+.fig figcaption p { font-weight: 400; color: var(--muted); margin: 0.25rem 0 0; }
+.fig-no { color: var(--accent); font-weight: 700; margin-right: 0.25em; }
+.cover-fig { margin: 0; justify-self: center; max-width: 26rem; }
 
 /* 표 */
 .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
@@ -161,7 +163,7 @@ th { font-weight: 700; border-bottom: 2px solid var(--ink); }
 .toc .t { font-family: var(--sans); font-weight: 600; display: block; }
 .toc .d { color: var(--muted); font-size: 0.95rem; line-height: 1.6; display: block; margin-top: 0.2rem; }
 .toc .st { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
-.toc .st.ready { color: var(--src-openai); font-weight: 700; }
+.toc .st.ready { color: var(--accent); font-weight: 700; }
 
 .chapter-nav {
   display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
