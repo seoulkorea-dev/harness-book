@@ -156,6 +156,7 @@ th { font-weight: 600; border-bottom: 2px solid var(--ink); }
   content: ""; position: absolute; left: 0; top: 0.45em;
   width: 1rem; height: 1rem; border: 2px solid var(--muted); border-radius: 2px;
 }
+.reasons li, .summary li { margin-bottom: 0.6rem; }
 .note { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
 .refs li { font-size: 0.95rem; }
 
