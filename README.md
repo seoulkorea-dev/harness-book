@@ -17,6 +17,7 @@ OpenAI, Anthropic, 제3자의 실제 사례로 배우는 책입니다.
 - `index.html` 표지와 목차
 - `chapters/` 장별 원고
 - `assets/style.css` 공통 스타일 (아이보리 단일 테마)
+- `assets/fonts/` Pretendard v1.3.9 (SIL Open Font License 1.1, `LICENSE.txt` 포함)
 
 ## 발표 주체 표시
 
