@@ -32,12 +32,13 @@
 - 제목(부, 장, 절)은 문어체로 쓰고 조사는 최소로 씁니다. 예: "하네스 용어의 역사"
 - 항목 나열은 가운뎃점(·) 대신 쉼표(,)로 구분합니다.
 - 비교는 회사가 아니라 하네스, 제품, 에이전트 단위로 합니다.
+- 비유를 쓰지 않습니다. 용어는 처음 나올 때 정의하고, 정의한 뜻으로만 씁니다.
 - 발표 주체는 기호로 표시합니다: (O) OpenAI, (A) Anthropic, (3) 제3자
 - 기호의 HTML은 아래 형식 하나만 씁니다. 괄호 문자는 넣지 않습니다.
   - `<span class="mark openai" role="img" aria-label="OpenAI 발표" title="OpenAI 발표">O</span>`
   - `<span class="mark anthropic" role="img" aria-label="Anthropic 발표" title="Anthropic 발표">A</span>`
   - `<span class="mark third" role="img" aria-label="제3자" title="제3자">3</span>`
-- 그림과 표는 `<figure class="fig">` 안에 두고, `<figcaption>` 태그를 사용해 아래에 번호, 제목, 1~2문장 해설을 둡니다. 예: "표 1-1. 하네스 구성 요소"
+- 그림과 표는 `<figure class="fig">` 안에 두고, `<figcaption>` 태그를 사용해 아래에 번호, 제목, 짧은 설명을 둡니다. 설명은 무엇을 나타내는지 명사구 한 줄로 씁니다. 예: "표 1-2. 하네스 구성 요소 / 구성 요소별 역할, 예시, 이 책에서 다루는 장"
 - 수치는 발표 주체가 스스로 발표한 값임을 밝힙니다.
 - 사례 당시의 모델, 도구 버전은 바꾸지 않습니다. 최신 버전은 해당 사례 바로 뒤에 `<aside class="footnote">`로 덧붙이고, 확인 날짜와 출처 링크를 적습니다.
 

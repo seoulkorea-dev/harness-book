@@ -143,7 +143,7 @@ pre code { background: none; padding: 0; }
 .fig-no { color: var(--accent); font-weight: 700; margin-right: 0.25em; }
 .cover-fig { margin: 0; justify-self: center; max-width: 26rem; }
 .timeline td:first-child { white-space: nowrap; }
-.fig-center svg { display: block; max-width: 22rem; margin: 0 auto; }
+.fig-center svg { display: block; max-width: 26rem; margin: 0 auto; }
 
 /* 표 */
 .table-wrap { overflow-x: auto; margin: 1.5rem 0; }

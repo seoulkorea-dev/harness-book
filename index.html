@@ -24,19 +24,32 @@
     <p class="meta">3부 16장 구성</p>
   </div>
   <figure class="fig cover-fig">
-  <svg class="layers" viewBox="0 0 400 400" role="img" aria-labelledby="layers-title">
-    <title id="layers-title">환경이 하네스를, 하네스가 모델을 감싸는 3층 구조</title>
-    <rect x="10" y="10" width="380" height="380" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 6"/>
-    <rect x="70" y="70" width="260" height="260" fill="var(--paper-2)" stroke="var(--accent)" stroke-width="10"/>
-    <rect x="140" y="140" width="120" height="120" fill="var(--ink)"/>
-    <text x="200" y="207" text-anchor="middle" font-size="22" font-weight="700" fill="var(--paper)" style="fill:var(--paper)">모델</text>
-    <text x="200" y="110" text-anchor="middle" font-size="20" font-weight="700">하네스</text>
-    <text x="200" y="302" text-anchor="middle" font-size="14">도구, 컨텍스트, 루프, 검증</text>
-    <text x="200" y="45" text-anchor="middle" font-size="18" font-weight="600">환경</text>
-    <text x="200" y="370" text-anchor="middle" font-size="14">파일, API, 권한, 데이터</text>
+  <svg class="layers flow" viewBox="0 0 520 560" role="img" aria-labelledby="layers-title">
+    <title id="layers-title">환경의 정보는 하네스를 거쳐 모델로 가고, 모델의 도구 호출 요청은 하네스가 실행해 환경에 반영하는 흐름</title>
+    <defs><marker id="cov-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
+    <rect x="140" y="20" width="240" height="80" rx="6" fill="var(--ink)" stroke="var(--ink)" stroke-width="2"/>
+    <text x="260" y="67.0" text-anchor="middle" font-size="24" font-weight="700" style="fill:var(--paper)">모델</text>
+    <line x1="215" y1="196" x2="215" y2="106" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#cov-arrow)"/>
+    <line x1="305" y1="104" x2="305" y2="194" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#cov-arrow)"/>
+    <text x="205" y="142" text-anchor="end" font-size="16">컨텍스트</text>
+    <text x="205" y="162" text-anchor="end" font-size="16">(지시, 도구 결과)</text>
+    <text x="315" y="142" text-anchor="start" font-size="16">응답,</text>
+    <text x="315" y="162" text-anchor="start" font-size="16">도구 호출 요청</text>
+    <rect x="140" y="200" width="240" height="120" rx="6" fill="var(--paper-2)" stroke="var(--accent)" stroke-width="6"/>
+    <text x="260" y="254.0" text-anchor="middle" font-size="24" font-weight="700" >하네스</text>
+    <text x="260" y="280.0" text-anchor="middle" font-size="16" >도구, 루프, 권한 확인, 검증</text>
+    <line x1="215" y1="436" x2="215" y2="326" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#cov-arrow)"/>
+    <line x1="305" y1="324" x2="305" y2="434" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#cov-arrow)"/>
+    <text x="205" y="372" text-anchor="end" font-size="16">파일, API 응답,</text>
+    <text x="205" y="392" text-anchor="end" font-size="16">실행 결과</text>
+    <text x="315" y="372" text-anchor="start" font-size="16">명령 실행,</text>
+    <text x="315" y="392" text-anchor="start" font-size="16">파일 수정, API 호출</text>
+    <rect x="140" y="440" width="240" height="100" rx="6" fill="var(--paper-2)" stroke="var(--muted)" stroke-width="2"/>
+    <text x="260" y="484.0" text-anchor="middle" font-size="24" font-weight="700" >환경</text>
+    <text x="260" y="510.0" text-anchor="middle" font-size="16" >파일, API, 권한, 데이터</text>
   </svg>
-  <figcaption><span class="fig-no">그림 1.</span> 환경, 하네스, 모델의 3층 구조
-    <p>모델은 하네스 안에서, 하네스는 환경 안에서 일합니다. 이 책은 가운데 층인 하네스를 다룹니다.</p>
+  <figcaption><span class="fig-no">그림 1.</span> 모델, 하네스, 환경의 관계
+    <p>환경, 하네스, 모델 사이의 데이터 흐름</p>
   </figcaption>
   </figure>
 </section>
@@ -66,12 +79,12 @@
 
   <div class="prose">
     <h2 id="reader">대상 독자</h2>
-    <p>이 책은 프롬프트를 쓸 줄 알고 AI 생태계를 어느 정도 아는 독자를 위한 책입니다. LLM이 무엇인지, 프롬프트를 어떻게 쓰는지는 설명하지 않습니다. 대신 에이전트가 실제 일을 할 때 결과를 좌우하는 바깥 구조, 곧 하네스를 다룹니다.</p>
+    <p>이 책은 AI 에이전트를 처음 공부하는 독자를 위한 책입니다. 1장에서 AI 모델, 에이전트, 하네스의 기초 개념을 설명하고, 2장부터 하네스의 구성 요소를 하나씩 다룹니다. 모든 장은 실제 사례를 바탕으로 설명합니다.</p>
 
     <div class="toc-part" id="part1" data-level="basic">
       <h3>1부 하네스 개념과 최소 구성</h3>
       <ol class="toc">
-        <li><span class="no">1장</span><span><a class="t" href="chapters/ch01.html">같은 모델, 다른 점수</a><span class="d">LangChain이 모델을 고정하고 하네스만 바꿔 점수를 올린 실험, Anthropic의 SWE-bench 최소 스캐폴드</span></span><span class="st ready">원고</span></li>
+        <li><span class="no">1장</span><span><a class="t" href="chapters/ch01.html">같은 모델, 다른 점수</a><span class="d">AI 모델, 에이전트, 하네스의 기초 개념. LangChain이 모델을 고정하고 하네스만 바꿔 점수를 올린 실험, Anthropic의 SWE-bench 최소 스캐폴드</span></span><span class="st ready">원고</span></li>
         <li><span class="no">2장</span><span><span class="t">실수의 환경 각인</span><span class="d">Mitchell Hashimoto가 이름 붙인 습관과 용어의 확산</span></span><span class="st">준비 중</span></li>
         <li><span class="no">3장</span><span><span class="t">에이전트 가시 범위와 저장소 컨텍스트</span><span class="d">OpenAI의 저장소 컨텍스트 교훈, AGENTS.md와 Claude Code 지시 파일</span></span><span class="st">준비 중</span></li>
         <li><span class="no">4장</span><span><span class="t">도구 설명과 에이전트 행동</span><span class="d">Anthropic SWE-bench 에이전트의 도구 설계 반복</span></span><span class="st">준비 중</span></li>
