@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Chapter 10 작가 사례: 책 한 권을 에이전트와 함께 만든 과정 | 하네스 엔지니어링(가제)</title>
+<meta name="description" content="하네스의 완성도를 정하는 것은 처음 설계의 정교함이 아니라, 실패가 반복될 때마다 그 원인을 역할, 도구, 권한, 기록, 검증 가운데 어디로 옮겼는지입니다.">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<header class="topbar">
+<a class="brand" href="../index.html">하네스 엔지니어링(가제)</a>
+<span class="spacer"></span>
+<a class="navlink" href="#sidenav">전체 목차</a>
+<a href="https://github.com/seoulkorea-dev/harness-book">저장소</a>
+</header>
+<div class="layout">
+<nav class="sidenav" id="sidenav" aria-label="전체 목차">
+<h2>전체 목차</h2>
+<ul>
+<li class="group">본문</li>
+<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">모델, 프롬프트, 컨텍스트, 하네스의 관계</span></a></li>
+<li><a href="../chapters/ch02.html"><span class="nav-num">Chapter 2</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
+<li><a href="../chapters/ch03.html"><span class="nav-num">Chapter 3</span><span class="nav-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></a></li>
+<li><a href="../chapters/ch04.html"><span class="nav-num">Chapter 4</span><span class="nav-title">하네스의 구성 요소</span></a></li>
+<li><a href="../chapters/ch05.html"><span class="nav-num">Chapter 5</span><span class="nav-title">착수: 맡길 업무 선정과 작업 단위 분할</span></a></li>
+<li><a href="../chapters/ch06.html"><span class="nav-num">Chapter 6</span><span class="nav-title">검증 설계: 완료 보고 대신 증거 받기</span></a></li>
+<li><a href="../chapters/ch07.html"><span class="nav-num">Chapter 7</span><span class="nav-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></a></li>
+<li><a href="../chapters/ch08.html"><span class="nav-num">Chapter 8</span><span class="nav-title">위험 관리: 승인, 격리, 비용</span></a></li>
+<li><a href="../chapters/ch09.html"><span class="nav-num">Chapter 9</span><span class="nav-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></a></li>
+<li><a href="../chapters/ch10.html" aria-current="page"><span class="nav-num">Chapter 10</span><span class="nav-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></a></li>
+</ul></nav>
+<main id="main">
+<article>
+<h1><span class="h-num">Chapter 10</span> <span class="h-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></h1>
+<p class="lead">하네스는 처음부터 완성된 형태로 설계되지 않으며, 작업 중 반복된 실패를 구성 요소로 옮기면서 자랍니다. 하네스의 완성도를 정하는 것은 처음 설계의 정교함이 아니라, 실패가 반복될 때마다 그 원인을 역할, 도구, 권한, 기록, 검증 가운데 어디로 옮겼는지입니다. 그래서 실패를 개별 수정으로만 처리하면, 같은 종류의 실패가 다음 작업에서 다시 나타납니다. 따라서 관리자는 반복된 실패를 하네스 구성 요소의 변경으로 처리해야 합니다. 이 장에서는 이 책의 작가가 책 두 권을 에이전트와 함께 만든 과정을 하네스 구성 요소에 대응해 살펴봅니다.</p>
+<ul class="summary"><li>지난 책은 73차례 검수 과정에서 반복된 실패를 기록했습니다.</li><li>반복된 실패는 결정 기록, 역할 분리, lint, CI 같은 구성 요소로 옮겼습니다.</li><li>이 책의 저장소는 그 구성 요소를 설계 단계부터 적용했습니다.</li></ul>
+<h2 id="failures">지난 책에서 반복된 실패</h2>
+<p>이 책의 작가는 앞선 책 「생성형 AI, 묻고 확인하고 활용하기」를 AI 에이전트와 함께 만들며 73차례 검수를 거쳤습니다. 작가는 결정과 승인을 맡고, 원고 작성과 검수는 에이전트가 맡았습니다. 검수 과정에서 같은 종류의 실패가 반복되었고, 작가는 그 실패를 다섯 가지로 정리했습니다.</p>
+<ul><li>큰 결정의 반복 변경: 장 구성, 첫 문단의 틀 같은 결정을 집필 중에 여러 번 뒤집었습니다. 첫 문단의 틀은 세 번 변경되었습니다.</li><li>문장 추가 때의 연결 단절: 문장을 중간에 추가할 때 앞뒤 연결이 끊기거나 같은 내용이 겹친 사례가 26건 나왔습니다.</li><li>검수 문서의 혼입: 검수 문서의 설명문이 원고에 섞여 들어가거나, 검수 문서가 작성 쪽에 전달되지 않았습니다.</li><li>설명 없는 링크: 본문에서 설명하지 않은 개념을 다른 장으로 링크했고, 링크는 쪽 맨 위로만 이동했습니다.</li><li>사람이 찾는 반복 실수: 어휘, 조사, 표 번호, 가운뎃점 같은 같은 종류의 실수를 사람이 매번 찾았습니다.</li></ul>
+<h2 id="mapping">실패를 구성 요소로 옮긴 과정</h2>
+<p>작가는 각 실패를 개별 수정으로 끝내지 않고, 다시 일어나지 않게 하는 장치로 옮겼습니다. 표 10-1은 실패별로 옮긴 구성 요소와 장치입니다.</p>
+<figure class="fig" id="tbl-10-1"><div class="table-wrap"><table><thead><tr><th>실패</th><th>구성 요소</th><th>장치</th></tr></thead><tbody>
+<tr><td>큰 결정의 반복 변경</td><td>기록</td><td>집필 전 설계서 확정, 결정 기록에 대체 관계 기록</td></tr>
+<tr><td>문장 추가 때의 연결 단절</td><td>검증</td><td>추가 위치를 "○○ 문장 뒤"로 지정, 이웃 문장 중복 검사</td></tr>
+<tr><td>검수 문서의 혼입</td><td>역할</td><td>작성과 검수의 분리, 원고에 옮길 문장은 코드 상자에만 작성</td></tr>
+<tr><td>설명 없는 링크</td><td>검증</td><td>장 링크에 절 앵커 필수, 앵커 없는 링크 검사</td></tr>
+<tr><td>사람이 찾는 반복 실수</td><td>검증</td><td>금칙어, 조사, 번호 검사를 lint 규칙으로 자동화</td></tr>
+</tbody></table></div><figcaption><b>표 10-1. 실패별 구성 요소와 장치</b><ul class="capnote"><li>지난 책의 실패를 옮긴 구성 요소와 장치</li></ul></figcaption></figure>
+<p>표 10-1에서 다섯 실패 가운데 세 가지가 검증 구성 요소로 옮겨졌습니다. 사람이 반복해서 찾던 실수가 자동 검사로 옮겨지면서, 사람의 검수는 판단이 필요한 항목에 집중되었습니다. OpenAI도 에이전트가 실패하면 어떤 능력이 누락되었는지를 묻고, 그 능력을 에이전트가 읽을 수 있고 강제되는 형태로 추가했다고 밝혔습니다(<a href="#ref-lopopolo-2026">Lopopolo, 2026</a>).</p>
+<h2 id="this-book">이 책 저장소의 하네스</h2>
+<p>이 책은 지난 책에서 옮긴 장치를 설계 단계부터 적용했습니다. 저장소를 처음부터 다시 만들고, 설계 인터뷰로 집필 목적, 범위, 목차, 문체를 정한 뒤 집필을 시작했습니다. 그림 10-1은 이 책 저장소의 하네스 구성입니다.</p>
+<figure class="fig diagram" id="fig-10-1"><div class="svg-wrap" role="img" aria-label="역할, 도구, 권한, 기록, 검증별 이 책 저장소의 장치"><svg viewBox="0 0 760 268" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, sans-serif"><rect x="8" y="8" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="36" font-size="17" fill="#0284c7" font-weight="700">역할</text><text x="170" y="36" font-size="15" fill="#625D52">작가, 작성 채팅, 검수 채팅 분리</text><rect x="8" y="60" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="88" font-size="17" fill="#0284c7" font-weight="700">도구</text><text x="170" y="88" font-size="15" fill="#625D52">에이전트 6개, 명령 3개, Skill 5개</text><rect x="8" y="112" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="140" font-size="17" fill="#0284c7" font-weight="700">권한</text><text x="170" y="140" font-size="15" fill="#625D52">작성 채팅만 저장소에 push</text><rect x="8" y="164" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="192" font-size="17" fill="#0284c7" font-weight="700">기록</text><text x="170" y="192" font-size="15" fill="#625D52">설계서, 결정 기록, 검수 문서</text><rect x="8" y="216" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="244" font-size="17" fill="#0284c7" font-weight="700">검증</text><text x="170" y="244" font-size="15" fill="#625D52">lint 4종, 빌드 재현성, CI</text></svg></div><figcaption><b>그림 10-1. 이 책 저장소의 하네스</b><ul class="capnote"><li>다섯 구성 요소별로 이 책 저장소에 적용한 장치</li></ul></figcaption></figure>
+<p>역할은 세 주체로 나뉩니다. 작가는 설계와 결정, 최종 승인을 맡습니다. 작성 채팅은 원고 수정, 빌드, 검사, 커밋을 맡습니다. 검수 채팅은 원고를 검토하고 검수 문서를 작성하며, 저장소에는 반영하지 않습니다.</p>
+<p>검증은 세 단계로 이루어집니다. 원고를 빌드한 뒤 금칙어, 번호, 구조, 문체의 네 가지 lint를 실행합니다. 같은 원고를 다시 빌드했을 때 결과가 같은지 확인합니다. 저장소에 반영하면 GitHub Actions가 같은 검사와 사이트 검증을 다시 실행합니다.</p>
+<h2 id="steps">자기 프로젝트의 하네스 개선 순서</h2>
+<p>개인 작업에는 하네스가 과하다는 의견이 있습니다. 지난 책은 작가 한 사람의 작업이었지만, 같은 종류의 실수를 찾는 검수가 73차례 동안 반복되었습니다. 반복 실수의 비용은 작업 규모와 관계없이 누적됩니다. 자기 프로젝트의 하네스는 다음 순서로 개선합니다.</p>
+<ol><li>실패 기록: 에이전트의 실패를 작업마다 기록하고, 같은 종류가 두 번 나오면 표시합니다.</li><li>구성 요소 판단: 표시된 실패의 원인이 역할, 도구, 권한, 기록, 검증 가운데 어디에 있는지 판단합니다.</li><li>장치 추가: 기준이 명확한 실패는 자동 검사로, 판단이 필요한 실패는 규칙 문서나 독립 검수로 옮깁니다.</li><li>결정 기록: 추가한 장치와 그 이유를 결정 기록에 남깁니다.</li></ol>
+<p>하네스는 반복된 실패가 나올 때마다 그 원인을 구성 요소의 변경으로 옮기면서 완성됩니다.</p>
+<h2 id="refs">참고 자료</h2>
+<ul><li id="ref-lopopolo-2026">Lopopolo, R. (2026년 2월 11일). Harness engineering: leveraging Codex in an agent-first world. OpenAI</li></ul>
+
+</article>
+<footer class="site-foot">하네스 엔지니어링(가제): 프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기.</footer>
+</main>
+<aside class="pagetoc" aria-label="이 페이지"><h2>이 페이지</h2><ol>
+<li><a href="#failures">지난 책에서 반복된 실패</a></li>
+<li><a href="#mapping">실패를 구성 요소로 옮긴 과정</a></li>
+<li><a href="#this-book">이 책 저장소의 하네스</a></li>
+<li><a href="#steps">자기 프로젝트의 하네스 개선 순서</a></li>
+<li><a href="#refs">참고 자료</a></li>
+</ol></aside>
+</div>
+</body>
+</html>

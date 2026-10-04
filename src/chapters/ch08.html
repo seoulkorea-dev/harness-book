@@ -1,0 +1,34 @@
+<h1><span class="h-num">Chapter 8</span> <span class="h-title">위험 관리: 승인, 격리, 비용</span></h1>
+<p class="lead">에이전트는 허용된 권한 안에서 파일을 수정하고 명령을 실행하며, 그 동작에는 되돌리기 어려운 것도 포함됩니다. 사고의 크기를 정하는 것은 에이전트의 판단력이 아니라, 에이전트에 허용한 권한의 범위와 승인 지점의 위치입니다. 그래서 권한을 넓게 열어 두면, 한 번의 잘못된 판단이 원본 자료의 손상이나 외부 발송으로 이어집니다. 따라서 권한은 작업에 필요한 범위로 제한하고, 되돌리기 어려운 동작에는 사람의 승인 지점을 두어야 합니다. 이 장에서는 승인, 격리, 비용의 세 가지 위험 관리 방법을 다룹니다.</p>
+<ul class="summary"><li>위험 관리는 승인, 격리, 비용의 세 가지로 나눕니다.</li><li>승인 지점은 되돌리기 어려운 동작에만 둡니다.</li><li>권한 규칙과 격리 환경은 서로를 보완하는 통제 수단입니다.</li></ul>
+<h2 id="kinds">위험 관리의 세 가지</h2>
+<p>에이전트의 위험은 통제 대상에 따라 세 가지로 관리합니다. 표 8-1은 방법별 통제 대상과 Claude Code의 수단입니다.</p>
+<figure class="fig" id="tbl-8-1"><div class="table-wrap"><table><thead><tr><th>방법</th><th>통제 대상</th><th>Claude Code의 수단</th></tr></thead><tbody>
+<tr><td>승인</td><td>되돌리기 어려운 동작의 실행 여부</td><td>ask 권한 규칙, 권한 모드</td></tr>
+<tr><td>격리</td><td>에이전트가 접근할 수 있는 파일과 네트워크</td><td>작업 디렉터리 제한, 샌드박스, 컨테이너</td></tr>
+<tr><td>비용</td><td>토큰 사용량과 지출</td><td>사용량 추적, 지출 한도, 컨텍스트 관리</td></tr>
+</tbody></table></div><figcaption><b>표 8-1. 위험 관리의 세 가지 방법</b><ul class="capnote"><li>방법별 통제 대상과 Claude Code의 수단</li></ul></figcaption></figure>
+<h2 id="approval">승인 지점 설계</h2>
+<p>Anthropic의 프롬프트 작성 문서는 에이전트가 되돌리기 어려운 동작을 하기 전에 사용자에게 확인하도록 지시하는 예를 제시합니다(<a href="#ref-anthropic-2026a">Anthropic, 2026a</a>). 이 문서가 확인 대상으로 든 동작은 세 종류입니다.</p>
+<ul><li>파괴적인 동작: 파일이나 브랜치 삭제, 데이터베이스 테이블 삭제</li><li>되돌리기 어려운 동작: 강제 push, 게시된 커밋의 수정</li><li>다른 사람에게 보이는 동작: 코드 push, 이슈나 PR에 댓글 작성, 메시지 발송, 공유 인프라 변경</li></ul>
+<p>승인 단계가 많으면 자동화의 의미가 없다는 의견이 있습니다. 승인 지점을 모든 동작에 두면 관리자는 확인 요청을 검토하지 않고 승인하게 되고, 승인 지점은 통제 수단의 기능을 잃습니다. 승인 지점은 위의 세 종류처럼 되돌리기 어려운 동작에만 둡니다. 파일 수정이나 검사 실행처럼 되돌릴 수 있는 동작은 승인 없이 진행하게 합니다.</p>
+<h2 id="permissions">권한 규칙과 격리</h2>
+<p>Claude Code의 권한 규칙은 세 종류입니다. allow 규칙은 확인 없이 도구 사용을 허용합니다. ask 규칙은 사용할 때마다 확인을 요청합니다. deny 규칙은 사용을 금지합니다. 규칙은 deny, ask, allow 순서로 평가되며, 처음 일치한 규칙이 결과를 정합니다. 더 구체적인 allow 규칙도 deny 규칙의 예외를 만들 수 없습니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). 그림 8-1은 평가 순서입니다.</p>
+<figure class="fig diagram" id="fig-8-1"><div class="svg-wrap" role="img" aria-label="도구 요청이 deny, ask, allow 규칙 순서로 평가되고 일치하지 않으면 권한 모드가 처리하는 흐름"><svg viewBox="0 0 760 372" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, sans-serif"><defs><marker id="a81" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a8272"/></marker></defs><rect x="8" y="8" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="36" font-size="17" fill="#0284c7" font-weight="700">도구 요청</text><text x="170" y="36" font-size="15" fill="#625D52">에이전트가 도구 사용을 요청</text><line x1="100" y1="56" x2="100" y2="82" stroke="#8a8272" stroke-width="1.6" marker-end="url(#a81)"/><rect x="8" y="86" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="114" font-size="17" fill="#0284c7" font-weight="700">deny 규칙</text><text x="170" y="114" font-size="15" fill="#625D52">일치하면 금지</text><line x1="100" y1="134" x2="100" y2="160" stroke="#8a8272" stroke-width="1.6" marker-end="url(#a81)"/><rect x="8" y="164" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="192" font-size="17" fill="#0284c7" font-weight="700">ask 규칙</text><text x="170" y="192" font-size="15" fill="#625D52">일치하면 사용자에게 확인</text><line x1="100" y1="212" x2="100" y2="238" stroke="#8a8272" stroke-width="1.6" marker-end="url(#a81)"/><rect x="8" y="242" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="270" font-size="17" fill="#0284c7" font-weight="700">allow 규칙</text><text x="170" y="270" font-size="15" fill="#625D52">일치하면 확인 없이 실행</text><line x1="100" y1="290" x2="100" y2="316" stroke="#8a8272" stroke-width="1.6" marker-end="url(#a81)"/><rect x="8" y="320" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="348" font-size="17" fill="#0284c7" font-weight="700">권한 모드</text><text x="170" y="348" font-size="15" fill="#625D52">일치하는 규칙이 없을 때 처리</text></svg></div><figcaption><b>그림 8-1. Claude Code 권한 규칙의 평가 순서</b><ul class="capnote"><li>처음 일치한 규칙이 결과를 정하는 평가 순서</li></ul></figcaption></figure>
+<p>다음은 주간 보고서 예제에 승인 지점을 추가한 설정의 예입니다. 원본 자료 수정과 push는 금지하고, 커밋은 확인을 거치게 합니다.</p>
+<pre>{
+  "permissions": {
+    "allow": ["Read(./data/**)", "Edit(./output/**)", "Bash(python3 verify_counts.py)"],
+    "ask": ["Bash(git commit *)"],
+    "deny": ["Edit(./data/**)", "Bash(git push *)", "WebFetch"]
+  }
+}</pre>
+<p>권한 규칙에는 한계가 있습니다. Claude Code 문서는 Bash 규칙이 명령의 문자열과 일치하는지만 확인하므로, 같은 프로그램을 다른 형태로 호출하면 일치하지 않는다고 설명합니다. 예를 들어 git push 금지 규칙은 git -C . push 형태의 명령과 일치하지 않습니다. 문서는 명령 문자열과 관계없이 파일과 네트워크 접근을 제한하려면 샌드박스를 사용하라고 안내합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</p>
+<p>Claude Code 문서는 권한과 샌드박스를 서로를 보완하는 보안 계층으로 설명합니다. 권한은 어떤 도구를 사용하고 어떤 파일과 도메인에 접근할지를 통제합니다. 샌드박스는 셸 명령과 그 하위 프로세스의 파일 시스템과 네트워크 접근을 운영 체제 수준에서 제한합니다. 모든 권한 확인을 생략하는 bypassPermissions 모드는 컨테이너나 가상 머신처럼 격리된 환경에서만 사용하라고 경고합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</p>
+<p>Codex도 같은 두 계층을 사용합니다. OpenAI 문서에 따르면 승인 정책은 Codex가 동작 전에 멈추고 확인하는 시점을 정합니다. 샌드박스는 명령이 접근할 수 있는 파일과 네트워크를 정합니다(<a href="#ref-openai-2026">OpenAI, 2026</a>). 두 제품의 차이는 <a href="ch09.html#permissions">Chapter 9의 권한과 격리 비교</a>에서 다룹니다.</p>
+<h2 id="cost">비용 관리</h2>
+<p>에이전트의 비용은 토큰 사용량에 비례합니다. Claude Code 문서는 비용 관리 방법으로 토큰 사용량 추적, 팀 지출 한도 설정, 컨텍스트 관리, 모델 선택을 안내합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). 관리자가 정할 비용 관리 기준은 세 가지입니다.</p>
+<ul><li>작업 단위의 크기: 한 세션에 끝나는 크기로 나누면, 실패한 작업을 처음부터 다시 실행하는 비용이 줄어듭니다(<a href="ch05.html#split">Chapter 5의 작업 단위 분할</a>).</li><li>읽힐 자료의 범위: 상시 규칙 문서를 짧게 유지하면 세션마다 읽히는 토큰이 줄어듭니다.</li><li>지출 한도: 팀이나 사용자별 한도를 정하고, 한도에 이르면 관리자가 계속 여부를 결정합니다.</li></ul>
+<p>위험 관리는 권한을 작업에 필요한 범위로 제한하고, 되돌리기 어려운 동작에만 승인 지점을 두는 일입니다.</p>
+<h2 id="refs">참고 자료</h2>
+<ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 4일). Prompting best practices. Claude Platform Docs</li><li id="ref-anthropic-2026b">Anthropic. (확인 2026년 10월 4일). Configure permissions, Manage costs effectively. Claude Code Docs</li><li id="ref-openai-2026">OpenAI. (확인 2026년 10월 4일). Agent approvals and security. Codex 문서</li></ul>

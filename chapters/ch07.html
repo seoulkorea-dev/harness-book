@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Chapter 7 기록과 인계: 결정, 진행, 규칙의 문서화 | 하네스 엔지니어링(가제)</title>
+<meta name="description" content="작업이 이어지는지를 정하는 것은 대화 이력의 길이가 아니라, 결정과 진행 상황이 에이전트가 읽을 수 있는 문서로 남아 있는지입니다.">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<header class="topbar">
+<a class="brand" href="../index.html">하네스 엔지니어링(가제)</a>
+<span class="spacer"></span>
+<a class="navlink" href="#sidenav">전체 목차</a>
+<a href="https://github.com/seoulkorea-dev/harness-book">저장소</a>
+</header>
+<div class="layout">
+<nav class="sidenav" id="sidenav" aria-label="전체 목차">
+<h2>전체 목차</h2>
+<ul>
+<li class="group">본문</li>
+<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">모델, 프롬프트, 컨텍스트, 하네스의 관계</span></a></li>
+<li><a href="../chapters/ch02.html"><span class="nav-num">Chapter 2</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
+<li><a href="../chapters/ch03.html"><span class="nav-num">Chapter 3</span><span class="nav-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></a></li>
+<li><a href="../chapters/ch04.html"><span class="nav-num">Chapter 4</span><span class="nav-title">하네스의 구성 요소</span></a></li>
+<li><a href="../chapters/ch05.html"><span class="nav-num">Chapter 5</span><span class="nav-title">착수: 맡길 업무 선정과 작업 단위 분할</span></a></li>
+<li><a href="../chapters/ch06.html"><span class="nav-num">Chapter 6</span><span class="nav-title">검증 설계: 완료 보고 대신 증거 받기</span></a></li>
+<li><a href="../chapters/ch07.html" aria-current="page"><span class="nav-num">Chapter 7</span><span class="nav-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></a></li>
+<li><a href="../chapters/ch08.html"><span class="nav-num">Chapter 8</span><span class="nav-title">위험 관리: 승인, 격리, 비용</span></a></li>
+<li><a href="../chapters/ch09.html"><span class="nav-num">Chapter 9</span><span class="nav-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></a></li>
+<li><a href="../chapters/ch10.html"><span class="nav-num">Chapter 10</span><span class="nav-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></a></li>
+</ul></nav>
+<main id="main">
+<article>
+<h1><span class="h-num">Chapter 7</span> <span class="h-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></h1>
+<p class="lead">에이전트의 세션은 새 컨텍스트에서 시작하며, 이전 세션의 대화 내용을 기억하지 못합니다. 작업이 이어지는지를 정하는 것은 대화 이력의 길이가 아니라, 결정과 진행 상황이 에이전트가 읽을 수 있는 문서로 남아 있는지입니다. 그래서 대화 안에서만 합의한 내용은 다음 세션에서 사라지고, 같은 논의와 같은 실수가 반복됩니다. 따라서 결정, 진행, 규칙은 저장소의 문서로 기록해야 합니다. 이 장에서는 기록의 세 종류와 결정 기록, 인계 메모의 작성 방법을 다룹니다.</p>
+<ul class="summary"><li>새 세션과 다른 에이전트는 이전 대화를 읽지 못합니다.</li><li>기록은 결정 기록, 진행 기록, 규칙 문서의 세 종류로 관리합니다.</li><li>작업을 다른 세션에 넘길 때는 인계 메모를 작성합니다.</li></ul>
+<h2 id="session">세션이 끝난 뒤 남는 것</h2>
+<p>Anthropic은 장시간 실행 에이전트의 핵심 과제를 세션의 단절로 설명합니다. 에이전트는 분리된 세션으로 일하며, 새 세션은 이전 세션의 기억 없이 시작합니다(<a href="#ref-young-2025">Young, 2025</a>). Claude Code 문서도 세션마다 새 컨텍스트에서 시작하며, CLAUDE.md와 자동 메모리가 세션 사이에 지식을 전달한다고 설명합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</p>
+<p>OpenAI는 에이전트가 실행 중에 접근할 수 없는 지식은 에이전트에게 존재하지 않는 것과 마찬가지라고 밝혔습니다. 문서 도구, 채팅, 사람의 기억에 있는 지식이 여기에 해당합니다(<a href="#ref-lopopolo-2026">Lopopolo, 2026</a>). 세션이 끝난 뒤에도 남는 것은 저장소에 기록된 문서와 커밋뿐입니다.</p>
+<p>대화 이력에 모두 남아 있다는 의견이 있습니다. 대화 이력은 같은 세션 안에서만 유효합니다. Claude Code 문서는 대화에서만 전달한 지시가 컨텍스트 압축 뒤에 사라질 수 있으며, 유지할 지시는 CLAUDE.md에 추가하라고 안내합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</p>
+<h2 id="kinds">기록의 세 종류</h2>
+<p>기록은 내용에 따라 세 종류로 나뉩니다. 결정 기록은 무엇을 왜 정했는지를 남깁니다. 진행 기록은 어떤 작업이 어디까지 진행되었는지를 남깁니다. 규칙 문서는 모든 작업에 적용할 지침을 남깁니다. 그림 7-1은 세 기록이 다음 세션의 입력이 되는 흐름을, 표 7-1은 종류별 내용과 갱신 시점을 보여 줍니다.</p>
+<figure class="fig diagram" id="fig-7-1"><div class="svg-wrap" role="img" aria-label="작업 세션이 결정 기록, 진행 기록, 규칙 문서를 남기고 다음 세션이 이를 읽는 흐름"><svg viewBox="0 0 760 372" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, sans-serif"><defs><marker id="m1-a71" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a8272"/></marker></defs><rect x="8" y="8" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="36" font-size="17" fill="#0284c7" font-weight="700">작업 세션</text><text x="170" y="36" font-size="15" fill="#625D52">결정하고 작업하고 검사함</text><line x1="100" y1="56" x2="100" y2="82" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m1-a71)"/><rect x="8" y="86" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="114" font-size="17" fill="#0284c7" font-weight="700">결정 기록</text><text x="170" y="114" font-size="15" fill="#625D52">무엇을 왜 정했는지</text><line x1="100" y1="134" x2="100" y2="160" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m1-a71)"/><rect x="8" y="164" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="192" font-size="17" fill="#0284c7" font-weight="700">진행 기록</text><text x="170" y="192" font-size="15" fill="#625D52">작업 단위별 상태와 커밋</text><line x1="100" y1="212" x2="100" y2="238" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m1-a71)"/><rect x="8" y="242" width="744" height="44" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="270" font-size="17" fill="#0284c7" font-weight="700">규칙 문서</text><text x="170" y="270" font-size="15" fill="#625D52">반복된 실수에서 나온 지침</text><line x1="100" y1="290" x2="100" y2="316" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m1-a71)"/><rect x="8" y="320" width="744" height="44" rx="10" fill="#D9E7E6" stroke="#0284c7" stroke-width="1.6"/><text x="26" y="348" font-size="17" fill="#0284c7" font-weight="700">다음 세션</text><text x="170" y="348" font-size="15" fill="#625D52">세 기록을 읽고 시작</text></svg></div><figcaption><b>그림 7-1. 세션 사이의 기록 흐름</b><ul class="capnote"><li>세 기록이 다음 세션의 입력이 되는 흐름</li></ul></figcaption></figure>
+<figure class="fig" id="tbl-7-1"><div class="table-wrap"><table><thead><tr><th>종류</th><th>내용</th><th>갱신 시점</th><th>예</th></tr></thead><tbody>
+<tr><td>결정 기록</td><td>결정, 대체 관계, 이유</td><td>결정하거나 결정을 변경할 때</td><td>DECISIONS.md</td></tr>
+<tr><td>진행 기록</td><td>작업 단위별 상태, 다음 작업</td><td>작업 단위가 끝날 때</td><td>작업 목록 파일, git 커밋</td></tr>
+<tr><td>규칙 문서</td><td>모든 작업에 적용할 지침</td><td>같은 실수가 반복될 때</td><td>CLAUDE.md, AGENTS.md</td></tr>
+</tbody></table></div><figcaption><b>표 7-1. 기록의 세 종류</b><ul class="capnote"><li>종류별 내용, 갱신 시점, 예</li></ul></figcaption></figure>
+<p>Anthropic의 실험에서 에이전트는 진행 기록 파일과 git 이력으로 작업 상태를 파악했습니다. 세션마다 설명이 포함된 커밋을 남기고 진행 요약을 기록하도록 하자, 에이전트는 잘못된 변경을 되돌리고 동작하는 상태를 복구할 수 있었습니다(<a href="#ref-young-2025">Young, 2025</a>).</p>
+<h2 id="decisions">결정 기록의 형식</h2>
+<p>결정 기록은 결정마다 번호, 날짜, 결정 내용, 대체 관계, 이유를 남깁니다. 결정을 변경할 때는 이전 기록을 삭제하지 않고, 새 결정이 어느 결정을 대체하는지 적습니다. 이전 결정이 왜 변경되었는지 남아 있어야, 다음 세션의 에이전트가 이미 폐기된 결정으로 돌아가지 않습니다.</p>
+<pre>| 번호 | 날짜 | 결정 | 대체 | 이유 |
+|---|---|---|---|---|
+| D-012 | 2026-10-12 | CR-07 조건부 수용. 프로젝트 코드는 인사 시스템 일 1회 갱신 자료 사용 | | 운영 위원회 결정, 실시간 연동 규격 없음 |
+| D-015 | 2026-10-16 | 프로젝트 코드를 인사 시스템 API로 실시간 조회 | D-012 | 인사팀이 조회 API 제공 일정 확정 |</pre>
+<p>이 책의 저장소도 같은 형식의 결정 기록을 사용합니다. 설계 인터뷰부터 장 설계까지의 결정 31건이 DECISIONS.md에 번호순으로 남아 있습니다. 작성 에이전트와 검수 에이전트는 작업 전에 이 문서를 읽습니다.</p>
+<h2 id="handover">인계 메모 작성</h2>
+<p>인계 메모는 작업을 다른 세션이나 다른 에이전트에 넘길 때 작성하는 문서입니다. 결정 기록과 진행 기록이 저장소에 있어도, 새 세션은 어느 문서부터 읽어야 하는지 알지 못합니다. 인계 메모는 다음 항목을 담습니다.</p>
+<ul><li>현재 상태: 최종 커밋, 완료된 작업 단위, 진행 중인 작업 단위</li><li>읽을 문서: 규칙 문서, 결정 기록, 진행 기록의 위치와 읽는 순서</li><li>미결정 사항: 결정이 필요한 항목과 결정할 사람</li><li>다음 작업: 다음 세션이 시작할 작업 단위와 완료 기준</li><li>확인 명령: 시작할 때 실행해 현재 상태를 확인할 검사 명령</li></ul>
+<p>이 책은 작성과 검수를 서로 다른 채팅에서 진행하며, 검수 채팅을 시작할 때 인계 메모를 전달합니다. 인계 메모에는 저장소 주소, 최종 커밋, 읽을 문서, 검수 문서의 형식이 들어 있습니다.</p>
+<p>기록과 인계는 세션이 끝나도 남아야 할 결정과 진행 상황을 에이전트가 읽을 수 있는 문서로 옮기는 일입니다.</p>
+<h2 id="refs">참고 자료</h2>
+<ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 4일). How Claude remembers your project. Claude Code Docs</li><li id="ref-lopopolo-2026">Lopopolo, R. (2026년 2월 11일). Harness engineering: leveraging Codex in an agent-first world. OpenAI</li><li id="ref-young-2025">Young, J. (2025년 11월 26일). Effective harnesses for long-running agents. Anthropic</li></ul>
+
+</article>
+<footer class="site-foot">하네스 엔지니어링(가제): 프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기.</footer>
+</main>
+<aside class="pagetoc" aria-label="이 페이지"><h2>이 페이지</h2><ol>
+<li><a href="#session">세션이 끝난 뒤 남는 것</a></li>
+<li><a href="#kinds">기록의 세 종류</a></li>
+<li><a href="#decisions">결정 기록의 형식</a></li>
+<li><a href="#handover">인계 메모 작성</a></li>
+<li><a href="#refs">참고 자료</a></li>
+</ol></aside>
+</div>
+</body>
+</html>
