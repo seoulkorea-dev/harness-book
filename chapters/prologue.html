@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>시작하며 | 에이전트에게 일을 맡기는 관리자의 설계</title>
+<meta name="description" content="에이전트가 낸 결과의 품질은 모델 선택보다 관리자가 설계한 작업 환경에서 결정됩니다.">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<header class="topbar">
+<a class="brand" href="../index.html">에이전트에게 일을 맡기는 관리자의 설계</a>
+<span class="spacer"></span>
+<a class="navlink" href="#sidenav">전체 목차</a>
+<a href="https://github.com/seoulkorea-dev/harness-book">저장소</a>
+</header>
+<div class="layout">
+<nav class="sidenav" id="sidenav" aria-label="전체 목차">
+<h2>전체 목차</h2>
+<ul>
+<li class="group">본문</li>
+<li><a href="../chapters/prologue.html" aria-current="page">시작하며</a></li>
+<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">모델, 프롬프트, 컨텍스트, 하네스의 관계</span></a></li>
+<li><a href="../chapters/ch02.html"><span class="nav-num">Chapter 2</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
+<li><a href="../chapters/ch03.html"><span class="nav-num">Chapter 3</span><span class="nav-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></a></li>
+<li><a href="../chapters/ch04.html"><span class="nav-num">Chapter 4</span><span class="nav-title">하네스의 구성 요소</span></a></li>
+<li><a href="../chapters/ch05.html"><span class="nav-num">Chapter 5</span><span class="nav-title">착수: 맡길 업무 선정과 작업 단위 분할</span></a></li>
+<li><a href="../chapters/ch06.html"><span class="nav-num">Chapter 6</span><span class="nav-title">검증 설계: 완료 보고 대신 증거 받기</span></a></li>
+<li><a href="../chapters/ch07.html"><span class="nav-num">Chapter 7</span><span class="nav-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></a></li>
+<li><a href="../chapters/ch08.html"><span class="nav-num">Chapter 8</span><span class="nav-title">위험 관리: 승인, 격리, 비용</span></a></li>
+<li><a href="../chapters/ch09.html"><span class="nav-num">Chapter 9</span><span class="nav-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></a></li>
+<li><a href="../chapters/ch10.html"><span class="nav-num">Chapter 10</span><span class="nav-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></a></li>
+<li><a href="../chapters/epilogue.html">마치며</a></li>
+<li class="group">부록</li>
+<li><a href="../appendix/terms.html">용어 풀이</a></li>
+</ul></nav>
+<main id="main">
+<article>
+<h1><span class="h-title">시작하며</span></h1>
+<p class="lead">이 책은 AI 에이전트에 업무를 맡기는 관리자가 프롬프트, 컨텍스트, 하네스를 설계하는 방법을 다룹니다. 에이전트가 낸 결과의 품질은 모델 선택보다 관리자가 설계한 작업 환경에서 결정됩니다.</p>
+<h2 id="purpose">이 책의 목적</h2>
+<p>이 책의 목적은 세 가지입니다.</p>
+<ul><li>기술 습득: 관리자가 프롬프트 엔지니어링, 컨텍스트 엔지니어링, 하네스 엔지니어링의 작동 원리와 설계 근거를 이해합니다.</li><li>생각 전달: 에이전트의 성과는 모델 선택보다 관리자가 설계한 작업 환경에서 결정된다는 생각을 전달합니다.</li><li>기술 수준 공유: 관리자 관점에서 문제를 정의하고, 효과와 위험을 판단하고, 실행 프로세스를 설계하는 역량을 공유합니다.</li></ul>
+<h2 id="scope">다루는 범위와 전제</h2>
+<p>이 책은 프롬프트, 컨텍스트, 하네스의 세 설계 층을 다룹니다. 소프트웨어 엔지니어링은 하네스를 이해하는 데 필요한 범위에서만 다룹니다.</p>
+<p>이 책은 프롬프트 작성의 기본기와 Claude Code, Codex 같은 AI 에이전트 도구의 사용 경험을 전제로 합니다. 코딩 경험은 전제하지 않습니다. 본문의 코드와 설정 파일은 직접 작성하기 위한 것이 아니라, 에이전트에 무엇을 지시하고 무엇을 확인할지 판단하기 위해 읽는 자료입니다.</p>
+<h2 id="order">읽는 순서</h2>
+<p>이 책의 열 개 장은 관리자가 에이전트 프로젝트를 운영하는 순서로 배치했습니다.</p>
+<ul><li>Chapter 1~3: 세 설계 층의 관계를 정의하고, 요청 한 건과 에이전트가 읽는 정보를 설계합니다. 시작은 <a href="ch01.html#layers">Chapter 1의 모델과 세 설계 층</a>입니다.</li><li>Chapter 4~8: <a href="ch04.html#components">하네스의 다섯 구성 요소</a>를 정의하고, 착수, 검증, 기록과 인계, 위험 관리의 순서로 운영 방법을 다룹니다.</li><li>Chapter 9: 같은 구성 요소를 기준으로 <a href="ch09.html#criteria">Codex와 Claude Code를 비교</a>합니다.</li><li>Chapter 10: 이 책의 작가가 <a href="ch10.html#failures">책을 에이전트와 함께 만든 과정</a>을 구성 요소에 대응해 살펴봅니다.</li></ul>
+<p>Chapter 4~8은 앞 장의 결과를 다음 장의 입력으로 사용하므로 순서대로 읽기를 권합니다. 특정 제품을 도입하려는 경우 Chapter 4를 읽은 뒤 Chapter 9로 넘어가도 됩니다.</p>
+<h2 id="conventions">이 책의 표기 원칙</h2>
+<ul><li>예제: 본문의 예제는 가상 프로젝트인 경비 정산 시스템 개편을 소재로 합니다. 예제의 실행 자료는 저장소의 examples/ 폴더에 있습니다.</li><li>출처: 기술적 사실은 발표 주체를 문장으로 밝히고, 장 끝의 참고 자료로 연결합니다.</li><li>제품 기능: Codex와 Claude Code의 기능은 문서를 확인한 연월을 기준으로 설명합니다. 최신 변경 사항은 버전 주석으로 덧붙입니다.</li><li>비교 단위: 비교는 회사가 아니라 제품과 하네스 구성 요소 단위로 합니다.</li><li>용어: 용어는 처음 나올 때 정의하고, 정의한 뜻으로만 사용합니다. 정의한 용어는 부록의 용어 풀이에 모았습니다.</li></ul>
+
+</article>
+<footer class="site-foot">에이전트에게 일을 맡기는 관리자의 설계: 프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기.</footer>
+</main>
+<aside class="pagetoc" aria-label="이 페이지"><h2>이 페이지</h2><ol>
+<li><a href="#purpose">이 책의 목적</a></li>
+<li><a href="#scope">다루는 범위와 전제</a></li>
+<li><a href="#order">읽는 순서</a></li>
+<li><a href="#conventions">이 책의 표기 원칙</a></li>
+</ol></aside>
+</div>
+</body>
+</html>
