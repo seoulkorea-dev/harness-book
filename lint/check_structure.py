@@ -99,5 +99,33 @@ for _f in sorted(glob.glob(f'{ROOT}/chapters/ch*.html')):
         if _h not in _ref_ids:
             errors.append(f'{_n}: 끊긴 참고 자료 링크 references.html#{_h}')
 
+
+# 장마다 첫 등장 병기 검사(2차 검수 26번, D-041): 용어 풀이의 "한글(원어" 표제어가 장 쪽(ch01~ch10) 본문에
+# 처음 나올 때 바로 뒤에 "(원어"가 있어야 한다. 제목, 표, 그림, 캡션, 코드 상자, 요점 상자, 버전 주석, 참고 자료 절은 제외.
+_pairs = []
+for _dt in re.findall(r'<dt[^>]*>(.*?)</dt>', _terms):
+    _m = re.match(r'([가-힣][가-힣 ]*)\(([A-Za-z][^,)]*)', re.sub(r'<[^>]+>', '', _dt))
+    if _m:
+        _pairs.append((_m.group(1).strip(), _m.group(2).strip()))
+if _pairs:
+    _alt = re.compile('|'.join(re.escape(k) for k, _ in sorted(_pairs, key=lambda x: -len(x[0]))))
+    for _f in sorted(glob.glob(f'{ROOT}/chapters/ch[0-9]*.html')):
+        _n = _f[len(ROOT) + 1:]
+        _t = open(_f, encoding='utf-8').read()
+        _m = re.search(r'<main\b.*?</main>', _t, re.S)
+        _t = _m.group(0) if _m else _t
+        _t = re.split(r'<h2 id="refs"', _t)[0]
+        _t = re.sub(r'<(h[1-6]|table|figure|figcaption|pre|aside|svg)\b.*?</\1>', ' ', _t, flags=re.S)
+        _t = re.sub(r'<ul class="summary">.*?</ul>', ' ', _t, flags=re.S)
+        _t = _html.unescape(re.sub(r'<[^>]+>', '', _t))
+        _seen = set()
+        for _mm in _alt.finditer(_t):
+            _k = _mm.group(0)
+            if _k in _seen:
+                continue
+            _seen.add(_k)
+            if not _t[_mm.end():].startswith('('):
+                errors.append(f'{_n}: 병기 누락 {_k}')
+
 print('\n'.join(errors), end='\n' if errors else '')
 sys.exit(1 if errors else 0)
