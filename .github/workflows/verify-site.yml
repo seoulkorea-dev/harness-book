@@ -1,0 +1,19 @@
+# GitHub Pages 배포가 끝나면 실제 사이트를 받아 확인한다.
+name: verify-site
+on:
+  page_build:
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: 배포 반영 대기 후 확인(최대 5회, 30초 간격)
+        run: |
+          for i in 1 2 3 4 5; do
+            python tools/verify_site.py https://seoulkorea-dev.github.io/harness-book/ && exit 0
+            sleep 30
+          done
+          exit 1

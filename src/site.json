@@ -1,0 +1,12 @@
+{
+  "nav": [["시작하며", ["index"]]],
+  "pages": {
+    "index": {
+      "path": "index.html",
+      "nav": "표지",
+      "title": "하네스 엔지니어링(가제)",
+      "desc": "집필 준비 중"
+    }
+  },
+  "redirects": {}
+}
