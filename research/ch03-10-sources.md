@@ -58,3 +58,7 @@
 - 이 저장소: DECISIONS.md D-001~D-031(31건), .claude/agents 6, commands 3, skills 5, lint 4종, GitHub Actions(book-check, verify-site)
 - 작가의 작업 방식: 완료 보고 대신 명령 출력 원문 요구(작가 진술), 작성과 검수 채팅 분리, 인계 메모
 - 5, 8, 9장: 작가 경험 미확인으로 작가 경험 문단 없음(D-031)
+
+## 2차 검수 반영 때 추가 확인(2026-10-04)
+- Claude Code, Choose a permission mode(https://code.claude.com/docs/en/permission-modes): v2.1.283 이상에서 auto 모드가 대화형 터미널과 VS Code 세션의 기본 시작 모드. 릴리스 노트 v2.1.284(2026-09-28): 모든 요금제와 제공자에서 auto로 시작, permissions.defaultMode가 우선(9장 버전 주석)
+- Codex, Rules(https://developers.openai.com/codex/rules): 규칙 기능은 실험 단계, ~/.codex/rules/default.rules, prefix_rule의 decision 값 forbidden은 확인 없이 요청을 막음, 여러 규칙이 일치하면 forbidden > prompt > allow(9장 예제)
