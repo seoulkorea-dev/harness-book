@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
-BOOK = "하네스 엔지니어링(가제)"
+BOOK = "에이전트에게 일을 맡기는 관리자의 설계"
 SUB = "프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기"
 
 site = json.loads((SRC / "site.json").read_text(encoding="utf-8"))
