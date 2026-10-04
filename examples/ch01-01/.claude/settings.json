@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./data/**)",
+      "Read(./output/**)",
+      "Edit(./output/**)",
+      "Bash(python verify_counts.py)",
+      "Bash(python3 verify_counts.py)"
+    ],
+    "deny": [
+      "Edit(./data/**)",
+      "Edit(./verify_counts.py)",
+      "Edit(./CLAUDE.md)",
+      "Edit(./.claude/**)",
+      "WebFetch",
+      "WebSearch"
+    ]
+  }
+}
