@@ -13,12 +13,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
 BOOK = "하네스 엔지니어링(가제)"
-SUB = "집필 준비 중"
+SUB = "프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기"
 
 site = json.loads((SRC / "site.json").read_text(encoding="utf-8"))
 NAV = site["nav"]
 META = site["pages"]
-ORDER = [pid for _, ids in NAV for pid in ids]
+ORDER = ["index"] + [pid for _, ids in NAV for pid in ids if pid != "index"]
 BODY = {pid: (SRC / META[pid]["path"]).read_text(encoding="utf-8") for pid in ORDER}
 
 

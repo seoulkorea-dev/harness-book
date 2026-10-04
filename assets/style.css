@@ -11,8 +11,9 @@
   --ink: #2B2A26;
   --muted: #625D52;
   --rule: #ddd5c0;
-  --link: #1f5a66;
-  --link-hover: #123e47;
+  --link: #0284c7;
+  --link-hover: #075985;
+  --accent: #0284c7;
   --focus: #2f6fd0;
   --nav-gray: #6e6e6e;
   --nav-gray-dark: #3f3f3f;
@@ -111,7 +112,7 @@ td > ol.levels { margin: 0; padding-left: 1.4rem; }
 
 ul.summary {
   background: var(--panel);
-  border-left: 4px solid var(--link);
+  border-left: 4px solid var(--accent);
   padding: 0.9rem 1.2rem 0.9rem 2.4rem;
 }
 
@@ -230,4 +231,4 @@ figcaption ul.capnote li { margin: 0.1rem 0; }
 /* 표지 부제 */
 .subtitle { margin: -0.4rem 0 1.4rem; font-size: 1.15rem; color: var(--muted); font-weight: 600; }
 /* 부록 머리의 한 줄 안내 상자(요점 상자와 구분) */
-.tip { margin: 0 0 1.6rem; padding: 0.6rem 0.9rem; background: var(--panel); border-left: 3px solid var(--link); border-radius: 4px; color: var(--ink); }
+.tip { margin: 0 0 1.6rem; padding: 0.6rem 0.9rem; background: var(--panel); border-left: 3px solid var(--accent); border-radius: 4px; color: var(--ink); }

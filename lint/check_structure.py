@@ -3,6 +3,7 @@
 2. 절 제목(h2, h3) 바로 뒤에 그림이나 표를 두지 않음
 3. 요약 그림은 캡션에서 가리키는 같은 절의 표보다 앞에 둠
 4. 병합 셀(rowspan)이 있는 표에는 둘째 열 이후의 줄바꿈 금지 클래스(fit-2~)를 쓰지 않음
+5. 장마다 참고 자료 항목과 본문 링크가 있고, 끊긴 링크가 없음
 """
 import glob, os, re, sys
 
@@ -72,6 +73,31 @@ for _dt in re.findall(r'<dt[^>]*>(.*?)</dt>', _terms):
     _head = re.sub(r'<[^>]+>', '', _dt).split('(')[0].strip()
     if _head and _head not in _body:
         errors.append(f'appendix/terms.html: 본문에 없는 표제어 {_head}')
+
+# 참고 자료 링크 검사(1차 검수 25번): 장마다 항목 1개 이상, 항목마다 본문 링크 1개 이상, 끊긴 링크 0, id 형식
+_refp = f'{ROOT}/appendix/references.html'
+_ref_ids = set(re.findall(r'id="(ref-[^"]+)"', open(_refp, encoding='utf-8').read())) if os.path.exists(_refp) else set()
+for _f in sorted(glob.glob(f'{ROOT}/chapters/ch*.html')):
+    _n = _f[len(ROOT) + 1:]
+    _t = open(_f, encoding='utf-8').read()
+    if 'http-equiv="refresh"' in _t:
+        continue
+    _ids = re.findall(r'id="(ref-[^"]+)"', _t)
+    _local = re.findall(r'href="#(ref-[^"]+)"', _t)
+    _remote = re.findall(r'href="[^"]*references\.html#(ref-[^"]+)"', _t)
+    if not _ids and not _remote:
+        errors.append(f'{_n}: 참고 자료 항목 없음')
+    for _i in _ids:
+        if not re.fullmatch(r'ref-[a-z]+-[0-9]{4}[a-z]?', _i):
+            errors.append(f'{_n}: 참고 자료 id 형식 위반 {_i}')
+        if _i not in _local:
+            errors.append(f'{_n}: 본문 링크가 없는 참고 자료 항목 {_i}')
+    for _h in _local:
+        if _h not in _ids:
+            errors.append(f'{_n}: 끊긴 참고 자료 링크 #{_h}')
+    for _h in _remote:
+        if _h not in _ref_ids:
+            errors.append(f'{_n}: 끊긴 참고 자료 링크 references.html#{_h}')
 
 print('\n'.join(errors), end='\n' if errors else '')
 sys.exit(1 if errors else 0)
