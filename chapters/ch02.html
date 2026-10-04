@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Chapter 2 프롬프트 엔지니어링: 한 번의 요청 설계 | 하네스 엔지니어링(가제)</title>
+<meta name="description" content="결과의 품질을 정하는 것은 문장의 표현이 아니라, 요청에 포함된 목적, 입력, 출력 형식, 완료 기준입니다.">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<header class="topbar">
+<a class="brand" href="../index.html">하네스 엔지니어링(가제)</a>
+<span class="spacer"></span>
+<a class="navlink" href="#sidenav">전체 목차</a>
+<a href="https://github.com/seoulkorea-dev/harness-book">저장소</a>
+</header>
+<div class="layout">
+<nav class="sidenav" id="sidenav" aria-label="전체 목차">
+<h2>전체 목차</h2>
+<ul>
+<li class="group">본문</li>
+<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">모델, 프롬프트, 컨텍스트, 하네스의 관계</span></a></li>
+<li><a href="../chapters/ch02.html" aria-current="page"><span class="nav-num">Chapter 2</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
+</ul></nav>
+<main id="main">
+<article>
+<h1><span class="h-num">Chapter 2</span> <span class="h-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></h1>
+<p class="lead">모델은 요청에 적힌 조건과 함께 입력된 자료만으로 결과를 생성합니다. 결과의 품질을 정하는 것은 문장의 표현이 아니라, 요청에 포함된 목적, 입력, 출력 형식, 완료 기준입니다. 그래서 조건이 누락된 요청은 요청한 사람의 의도와 다른 범위와 형식의 결과를 받습니다. 따라서 요청을 보내기 전에 네 요소가 모두 들어 있는지 점검해야 합니다. 이 장에서는 한 번의 요청을 구성하는 요소와 작성 방법을 익힙니다.</p>
+<ul class="summary"><li>요청 한 건은 목적, 입력, 출력 형식, 완료 기준의 네 요소로 구성합니다.</li><li>구체적 지시, 이유 제공, 예시, 구획 구분이 요청을 명확하게 합니다.</li><li>자료 부족, 반복 작업의 일관성, 결과 검증은 프롬프트만으로 해결되지 않습니다.</li></ul>
+
+<h2 id="elements">요청의 네 요소</h2>
+<p>요청 한 건에는 목적, 입력, 출력 형식, 완료 기준이 필요합니다. 목적은 결과를 누가 어디에 사용하는지입니다. 입력은 판단에 필요한 자료입니다. 출력 형식은 결과의 항목, 표 구성, 분량입니다. 완료 기준은 결과를 받아들이기 위해 충족해야 하는 조건입니다.</p>
+<p>Anthropic은 프롬프트를 다듬기 전에 성공 기준과 그 기준으로 결과를 시험하는 방법을 먼저 정하라고 안내합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>). 이 책은 요청 한 건의 성공 기준을 완료 기준이라고 부릅니다. 그림 2-1은 네 요소가 요청을 거쳐 결과로 이어지는 흐름을, 표 2-1은 요소별로 정할 내용을 보여 줍니다.</p>
+<figure class="fig diagram" id="fig-2-1"><div class="svg-wrap" role="img" aria-label="목적, 입력, 출력 형식, 완료 기준이 요청이 되어 모델에 입력되고, 결과는 완료 기준으로 확인하는 흐름"><svg viewBox="0 0 760 372" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, sans-serif"><defs><marker id="m1-a21" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a8272"/></marker></defs><rect x="8" y="8" width="744" height="42" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="35" font-size="17" fill="#0284c7" font-weight="700">목적</text><text x="140" y="35" font-size="15" fill="#625D52">결과를 누가 어디에 사용하는지</text><rect x="8" y="58" width="744" height="42" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="85" font-size="17" fill="#0284c7" font-weight="700">입력</text><text x="140" y="85" font-size="15" fill="#625D52">판단에 필요한 자료</text><rect x="8" y="108" width="744" height="42" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="135" font-size="17" fill="#0284c7" font-weight="700">출력 형식</text><text x="140" y="135" font-size="15" fill="#625D52">항목, 표 구성, 분량</text><rect x="8" y="158" width="744" height="42" rx="10" fill="#FAF6EB" stroke="#8a8272" stroke-width="1"/><text x="26" y="185" font-size="17" fill="#0284c7" font-weight="700">완료 기준</text><text x="140" y="185" font-size="15" fill="#625D52">받아들일 결과의 조건</text><line x1="100" y1="204" x2="100" y2="234" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m1-a21)"/><text x="112" y="224" font-size="15" fill="#625D52">요청</text><rect x="8" y="238" width="744" height="44" rx="10" fill="#D9E7E6" stroke="#0284c7" stroke-width="1.6"/><text x="26" y="266" font-size="17" fill="#0284c7" font-weight="700">모델</text><text x="140" y="266" font-size="15" fill="#625D52">요청의 조건으로 결과 생성</text><line x1="100" y1="286" x2="100" y2="316" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m1-a21)"/><rect x="8" y="320" width="744" height="44" rx="10" fill="#F3EDDF" stroke="#8a8272" stroke-width="1"/><text x="26" y="348" font-size="17" fill="#0284c7" font-weight="700">결과</text><text x="140" y="348" font-size="15" fill="#625D52">완료 기준으로 확인한 뒤 사용</text></svg></div><figcaption><b>그림 2-1. 요청의 네 요소와 결과</b><ul class="capnote"><li>네 요소가 요청이 되어 결과로 이어지는 흐름</li></ul></figcaption></figure>
+<figure class="fig" id="tbl-2-1"><div class="table-wrap"><table><thead><tr><th>요소</th><th>정할 내용</th><th>누락되었을 때의 결과</th></tr></thead><tbody>
+<tr><td>목적</td><td>결과를 누가 어디에 사용하는지</td><td>결과의 깊이와 관점이 사용 목적과 어긋남</td></tr>
+<tr><td>입력</td><td>판단에 필요한 자료와 그 범위</td><td>제공 자료가 아닌 일반 지식에 근거한 결과</td></tr>
+<tr><td>출력 형식</td><td>항목, 표 구성, 분량</td><td>요청할 때마다 형식이 달라 비교와 재사용이 어려움</td></tr>
+<tr><td>완료 기준</td><td>결과를 받아들일 조건</td><td>결과를 받아들일지 판단할 근거가 없음</td></tr>
+</tbody></table></div><figcaption><b>표 2-1. 요청의 네 요소</b><ul class="capnote"><li>요소별로 정할 내용과 누락되었을 때의 결과</li></ul></figcaption></figure>
+<p>네 요소 가운데 관리자가 가장 먼저 정할 것은 목적과 완료 기준입니다. 두 요소는 요청하는 사람만 알고 있는 정보이며, 모델이 대신 정할 수 없습니다.</p>
+
+<h2 id="techniques">요청을 명확하게 만드는 방법</h2>
+<p>Anthropic의 프롬프트 작성 문서는 요청을 명확하게 만드는 방법을 여러 가지로 안내합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>). 관리 업무에 바로 적용할 수 있는 방법은 여섯 가지입니다.</p>
+<ul>
+<li>구체적 지시: 원하는 출력 형식과 제약 조건을 명시합니다. 단계의 순서가 중요하면 번호를 매겨 차례대로 지시합니다.</li>
+<li>이유 제공: 지시의 이유를 함께 적습니다. Anthropic은 이유를 알면 모델이 목표를 이해하고 더 맞는 응답을 한다고 설명합니다.</li>
+<li>예시 제공: Anthropic은 예시를 출력의 형식, 어조, 구조를 조정하는 가장 신뢰할 수 있는 방법의 하나로 봅니다. 예시는 실제 업무와 가깝게, 서로 다른 경우를 포함해 3~5개를 권장합니다.</li>
+<li>구획 구분: 지시, 자료, 예시를 태그로 구분합니다. 태그는 내용의 종류를 표시하는 &lt;자료&gt;, &lt;/자료&gt; 같은 표지입니다.</li>
+<li>할 일로 지시: 하지 말아야 할 일보다 해야 할 일을 적습니다.</li>
+<li>행동 동사: 제안을 원하는지 실행을 원하는지 동사로 구분합니다. Anthropic은 "제안해 줄 수 있어?"라고 물으면 모델이 수정 대신 제안만 할 수 있다고 설명합니다.</li>
+</ul>
+<p>표 2-2는 여섯 가지 방법을 관리 업무의 요청에 적용한 예입니다.</p>
+<figure class="fig" id="tbl-2-2"><div class="table-wrap"><table><thead><tr><th>방법</th><th>덜 명확한 요청</th><th>더 명확한 요청</th></tr></thead><tbody>
+<tr><td>구체적 지시</td><td>일정 정리해 줘</td><td>이번 달 마일스톤을 날짜순 표로 정리해 줘. 열은 마일스톤, 날짜, 담당자로 해 줘.</td></tr>
+<tr><td>이유 제공</td><td>문장을 짧게 작성해 줘</td><td>임원 보고 화면에 그대로 띄울 문장이라 한 문장을 40자 이내로 작성해 줘.</td></tr>
+<tr><td>예시 제공</td><td>위험 목록을 작성해 줘</td><td>아래 예시 두 건과 같은 형식으로 위험 목록을 작성해 줘.</td></tr>
+<tr><td>구획 구분</td><td>지시와 자료를 한 문단에 섞은 요청</td><td>지시, 자료, 예시를 각각 태그로 구분한 요청</td></tr>
+<tr><td>할 일로 지시</td><td>목록 기호를 사용하지 마</td><td>완결된 문단으로 작성해 줘</td></tr>
+<tr><td>행동 동사</td><td>이 계획서를 개선할 방법을 제안해 줄 수 있어?</td><td>이 계획서의 일정 절을 수정해 줘</td></tr>
+</tbody></table></div><figcaption><b>표 2-2. 요청을 명확하게 만드는 방법</b><ul class="capnote"><li>방법별로 덜 명확한 요청과 더 명확한 요청의 비교</li></ul></figcaption></figure>
+
+<h2 id="example">변경 요청 영향 검토 예제</h2>
+<p>이 절의 예제는 Chapter 1과 같은 가상 프로젝트인 경비 정산 시스템 개편을 소재로 합니다. 고객 부서가 보낸 변경 요청의 영향 검토를 모델에 요청하는 상황입니다.</p>
+<h3 id="example-before">네 요소가 누락된 요청</h3>
+<pre>이 변경 요청 검토해 줘.</pre>
+<p><b>예상 결과</b>: 모델은 검토의 목적, 결정 기한, 판단 자료를 알지 못합니다. 결과는 요청 문장만 근거로 한 일반적인 검토 항목이 되거나, 필요한 자료를 묻는 질문이 됩니다.</p>
+<h3 id="example-after">네 요소를 갖춘 요청</h3>
+<pre>다음 주 운영 위원회에서 아래 변경 요청의 수용 여부를 결정해야 해.
+결정에 필요한 영향 검토 결과를 정리해 줘.
+
+&lt;변경 요청&gt;
+CR-07 정산 요청 화면에 프로젝트 코드 선택 항목 추가
+요청 부서: 재무팀, 요청일: 2026-10-05
+사유: 프로젝트별 경비 집계를 월말 결산에 반영하기 위함
+&lt;/변경 요청&gt;
+
+&lt;현재 상황&gt;
+정산 요청 화면 개발(EXP-105) 완료, 단위 테스트(EXP-109) 완료
+통합 테스트 시작 예정일: 2026-10-19
+프로젝트 코드는 인사 시스템에서 관리하며 연동 규격은 없음
+&lt;/현재 상황&gt;
+
+출력 형식: 영향 범위, 예상 공수, 일정 영향, 수용 시 위험, 권고안의 다섯 항목을 표로 정리해 줘.
+완료 기준:
+1. 자료에 근거가 없는 수치는 "확인 필요"로 표시해 줘.
+2. 권고안은 수용, 조건부 수용, 거절 가운데 하나로 정하고 이유를 한 문장으로 적어 줘.</pre>
+<p><b>예상 결과</b>: 다섯 항목의 표가 생성됩니다. 인사 시스템 연동 공수처럼 자료에 근거가 없는 수치는 "확인 필요"로 표시됩니다. 권고안은 세 선택지 가운데 하나로 제시됩니다.</p>
+<p>두 요청에 사용한 모델은 동일합니다. 두 번째 요청은 목적(운영 위원회 결정), 입력(변경 요청과 현재 상황), 출력 형식(다섯 항목의 표), 완료 기준(근거 없는 수치 표시, 권고안 선택지)을 모두 갖추었습니다.</p>
+
+<h2 id="limits">프롬프트로 해결되지 않는 문제</h2>
+<p>프롬프트는 요청 한 건의 품질을 높이지만, 모든 문제를 해결하지는 않습니다. Anthropic도 모든 성공 기준이 프롬프트 엔지니어링으로 가장 효과적으로 해결되는 것은 아니라고 설명합니다. 예를 들어 응답 속도와 비용은 모델을 교체하는 편이 더 쉽게 개선되는 경우가 있습니다. 관리 업무에서는 세 가지 문제가 프롬프트의 범위를 벗어납니다.</p>
+<ul>
+<li>자료 부족: 요청마다 자료를 붙여 넣는 방식은 자료가 늘어날수록 한계에 이릅니다. 이 문제는 Chapter 1에서 정의한 <a href="ch01.html#prompt-context">컨텍스트 엔지니어링</a>의 영역입니다.</li>
+<li>반복 작업의 일관성: 같은 업무도 요청하는 사람마다 다른 프롬프트를 작성합니다. 공통 규칙은 개인의 프롬프트가 아니라 규칙 문서로 관리해야 합니다.</li>
+<li>결과 검증: 완료 기준은 모델에 대한 요청일 뿐이며, 충족 여부는 별도로 확인해야 합니다. Chapter 1의 <a href="ch01.html#example-harness">주간 보고서 예제</a>는 이 확인을 자동 대조로 처리했습니다.</li>
+</ul>
+<p>모델 성능이 높아지면 요청을 간단히 작성해도 된다는 의견도 있습니다. Anthropic은 최신 모델이 지시를 정확히 따르도록 훈련되었다고 설명합니다. 지시를 정확히 따르는 모델일수록 요청에 없는 조건은 결과에도 반영되지 않습니다. 결정 기한, 수신자, 판단 기준은 모델이 알 수 없는 정보이며, 요청하는 사람만 제공할 수 있습니다.</p>
+<p>요청 한 건의 설계는 목적, 입력, 출력 형식, 완료 기준을 정하는 일에서 시작합니다.</p>
+
+<h2 id="refs">참고 자료</h2>
+<ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 4일). Prompting best practices, Prompt engineering overview. Claude Platform Docs</li></ul>
+
+</article>
+<footer class="site-foot">하네스 엔지니어링(가제): 프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기.</footer>
+</main>
+<aside class="pagetoc" aria-label="이 페이지"><h2>이 페이지</h2><ol>
+<li><a href="#elements">요청의 네 요소</a></li>
+<li><a href="#techniques">요청을 명확하게 만드는 방법</a></li>
+<li><a href="#example">변경 요청 영향 검토 예제</a></li>
+<li><a href="#limits">프롬프트로 해결되지 않는 문제</a></li>
+<li><a href="#refs">참고 자료</a></li>
+</ol></aside>
+</div>
+</body>
+</html>
