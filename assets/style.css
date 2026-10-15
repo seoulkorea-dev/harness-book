@@ -6,11 +6,11 @@
 
 :root {
   color-scheme: light;
-  --paper: #FCFCFA;
-  --panel: #F2F2EE;
+  --paper: #FFFFFF;
+  --panel: #F8F8F6;
   --ink: #2B2A26;
   --muted: #625D52;
-  --rule: #E2E2DC;
+  --rule: #EAEAE6;
   --link: #0284c7;
   --link-hover: #075985;
   --accent: #0284c7;
@@ -171,7 +171,7 @@ pre code { background: none; padding: 0; }
 
 aside.footnote {
   border: 1px dashed var(--rule);
-  background: #fffdf6;
+  background: var(--panel);
   padding: 0.8rem 1.1rem;
   margin: 1.2rem 0;
   font-size: 18px;
