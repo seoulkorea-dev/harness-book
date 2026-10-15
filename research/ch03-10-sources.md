@@ -80,3 +80,9 @@
 - How Claude Code works: 메시지, 도구 사용, 결과를 ~/.claude/projects/ 아래 JSONL로 저장, 되감기, 이어 가기, 갈라 시작하기 가능(7장)
 - How the agent loop works: 모든 결과 subtype에 total_cost_usd, usage, num_turns, session_id 포함, PostToolUse는 출력 감사, SubagentStart/Stop은 병렬 작업 결과 추적, PreCompact는 요약 전 전체 대화 보관(7장)
 - Manage costs effectively: OpenTelemetry 내보내기는 모든 환경에서 동작하고 사용자별 토큰, 비용 지표를 거의 실시간으로 조직의 관측 시스템에 보내는 유일한 방법, 세션 데이터는 cleanupPeriodDays(기본 30일)가 지나면 시작 시 삭제(7장)
+
+## 보강 4: 여러 에이전트에 나눠 맡기기(2026-10-15)
+- How Claude Code works: 하위 에이전트는 자신의 컨텍스트 윈도에서 일하고, 포크가 아니면 새로 시작, 도구 호출은 주 컨텍스트 밖에 남고 끝나면 요약 반환(5장)
+- How the agent loop works: 하위 에이전트는 부모의 턴을 보지 않고 최종 응답만 부모에게 도구 결과로 반환, 비용 상한은 하위 에이전트 지출 포함, 상한 도달 시 새 하위 에이전트 생성 실패(5장)
+- Manage costs effectively: 에이전트 팀은 각자 컨텍스트 윈도를 가진 여러 인스턴스, 토큰 사용량은 팀 크기에 대략 비례, 계획 모드 팀원은 일반 세션보다 약 7배 토큰, 출력이 많은 작업은 하위 에이전트에 위임(5장)
+- Glossary: 하위 에이전트는 한 세션 안에서 부모에게만 보고, 팀원은 각자 컨텍스트 윈도를 갖고 사용자가 직접 대화 가능(5장)
