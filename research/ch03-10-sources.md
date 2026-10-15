@@ -70,3 +70,8 @@
 ## 보강 1: 에이전트 루프와 종료 조건(2026-10-15)
 - Anthropic, How the agent loop works(https://code.claude.com/docs/en/agent-sdk/agent-loop): 다섯 단계(요청 수신, 판단과 응답, 도구 실행, 반복, 결과 반환), 턴은 도구 호출 왕복 한 번, max_turns는 도구 사용 턴만 셈, max_budget_usd, 상한 없으면 열린 요청에서 오래 실행, 운영 에이전트는 예산 상한을 기본으로 권장, 결과 subtype(success, error_max_turns, error_max_budget_usd, error_during_execution), 거부된 도구 호출은 거부 메시지가 결과로 전달, Stop 훅은 결과 검증과 세션 상태 저장, PreToolUse 훅은 도구 실행 전(4장)
 - OpenAI, Unrolling the Codex agent loop(https://openai.com/index/unrolling-the-codex-agent-loop/): Codex 하네스가 모든 Codex 경험의 핵심 에이전트 루프 제공, 대화 턴 하나에 모델 추론과 도구 호출이 여러 번 반복, 한 턴에 수백 번의 도구 호출로 컨텍스트 윈도를 소진할 수 있음(4장)
+
+## 보강 2: 하네스 정의 차이와 도구 노출 범위(2026-10-15)
+- Claude Code Glossary(https://code.claude.com/docs/en/glossary): Agentic harness는 언어 모델을 코딩 에이전트로 만드는 도구, 컨텍스트 관리, 실행 환경. Claude Code가 하네스이고 Claude는 그 안의 모델(1장, D-052)
+- How the agent loop works: 내장 도구 스키마는 요청마다 로드, 도구 정의마다 컨텍스트 차지, 하위 에이전트는 tools 필드로 최소 도구 지정, MCP 도구 스키마는 기본적으로 지연 로드, allowed_tools는 자동 승인, disallowed_tools는 차단, 읽기 전용 도구는 동시 실행, 상태 변경 도구는 순차 실행(4장)
+- Manage costs effectively: gh, aws 같은 CLI 도구가 도구 목록을 추가하지 않아 MCP 서버보다 컨텍스트 효율적, 사용하지 않는 서버는 /mcp로 끄기(4장)
