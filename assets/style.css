@@ -6,11 +6,11 @@
 
 :root {
   color-scheme: light;
-  --paper: #FAF6EB;
-  --panel: #F1EBDB;
+  --paper: #FCFCFA;
+  --panel: #F2F2EE;
   --ink: #2B2A26;
   --muted: #625D52;
-  --rule: #ddd5c0;
+  --rule: #E2E2DC;
   --link: #0284c7;
   --link-hover: #075985;
   --accent: #0284c7;
