@@ -29,7 +29,7 @@
 <p>도구 실행 앞에서는 권한이 작동합니다. 문서에 따르면 거부된 도구 호출은 실행되지 않고, 모델은 거부 메시지를 결과로 받습니다. 모델은 다른 방법을 찾거나, 진행할 수 없다고 보고합니다.</p>
 <p>루프는 기본적으로 모델이 스스로 끝낼 때까지 계속됩니다. 문서는 범위가 분명한 작업에서는 문제가 없지만, 열린 요청에서는 루프가 오래 실행될 수 있다고 설명합니다. 그래서 하네스는 두 가지 상한을 둡니다. 턴 상한은 도구를 사용한 턴의 수를, 비용 상한은 지출 금액을 제한합니다. 문서는 운영 환경의 에이전트에 비용 상한을 기본으로 두라고 권합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</p>
 <p>상한에 도달하면 루프는 작업을 마치지 못한 채 끝나고, 결과에 종료 사유가 남습니다. 종료 사유는 정상 완료, 턴 상한 도달, 비용 상한 도달, 실행 중 오류 등으로 구분됩니다. 상한에 도달한 결과는 완료로 판정하지 않습니다(<a href="ch06.html#report">Chapter 6의 완료 보고</a>). 관리자는 두 상한의 값과, 상한에 도달했을 때 세션을 재개할지 중단할지를 미리 정합니다. 비용 상한의 기준은 <a href="ch08.html#cost">Chapter 8의 비용 관리</a>와 연결됩니다.</p>
-<p>Codex도 같은 구조의 루프를 사용합니다. OpenAI는 Codex의 하네스가 모든 Codex 제품에 공통인 에이전트 루프를 제공한다고 설명합니다. 다만 턴이라는 말의 범위가 다릅니다. Agent SDK 문서의 턴은 도구 호출 왕복 한 번이고, OpenAI 글의 턴은 사용자 메시지 하나에 대한 처리 전체입니다. 한 턴 안에서 모델 추론과 도구 호출이 여러 번 반복됩니다. OpenAI는 에이전트가 한 턴에서 수백 번의 도구 호출을 할 수 있고, 그러면 컨텍스트 윈도(Context Window)를 모두 소진할 수 있다고 설명합니다(<a href="#ref-openai-2026">OpenAI, 2026</a>). 두 제품을 함께 운영한다면 턴 상한을 정하기 전에 제품마다 턴이 무엇을 세는지 확인해야 합니다.</p>
+<p>Codex도 같은 구조의 루프를 사용합니다. OpenAI는 Codex의 하네스가 모든 Codex 제품에 공통인 에이전트 루프를 제공한다고 설명합니다. 턴이라는 말의 범위는 두 제품이 다릅니다. Agent SDK 문서의 턴은 도구 호출 왕복 한 번이고, OpenAI 글의 턴은 사용자 메시지 하나에 대한 처리 전체입니다. 한 턴 안에서 모델 추론과 도구 호출이 여러 번 반복됩니다. OpenAI는 에이전트가 한 턴에서 수백 번의 도구 호출을 할 수 있다고 설명합니다. 그러면 컨텍스트 윈도(Context Window)를 모두 소진할 수 있습니다(<a href="#ref-openai-2026">OpenAI, 2026</a>). 두 제품을 함께 운영한다면 턴 상한을 정하기 전에 제품마다 턴이 무엇을 세는지 확인해야 합니다.</p>
 <h2 id="instruct-enforce">지시와 강제</h2>
 <p>구성 요소를 구현하는 수단은 지시와 강제로 나뉩니다. 지시는 에이전트가 읽고 따르도록 요청하는 수단이며, 규칙 문서가 해당합니다. 강제는 에이전트의 판단과 관계없이 도구가 동작을 허용하거나 막는 수단이며, 권한 규칙(Permission Rule)과 훅(Hook)이 해당합니다.</p>
 <p>Claude Code 문서는 권한 규칙을 모델이 아니라 Claude Code가 적용한다고 설명합니다. 프롬프트나 CLAUDE.md의 지시는 에이전트가 시도하는 동작에 영향을 주지만, 허용되는 동작 자체는 정하지 않습니다. 훅은 정해진 시점에 실행되는 셸 명령이며, 에이전트의 판단과 관계없이 적용됩니다(<a href="#ref-anthropic-2026a">Anthropic, 2026a</a>).</p>
@@ -71,4 +71,4 @@
 <p>도구만 연결하면 에이전트가 된다는 의견이 있습니다. 도구만 연결된 에이전트는 작업을 수행할 수는 있지만, 원본 자료를 변경하지 않았는지, 수치가 맞는지 확인할 근거를 남기지 않습니다. 권한, 기록, 검증은 관리자가 결과를 받아들이기 위한 근거입니다.</p>
 <p>하네스 설계는 다섯 구성 요소마다 결정을 내리고, 어겼을 때 되돌리기 어려운 규칙을 강제 수단으로 옮기는 일입니다.</p>
 <h2 id="refs">참고 자료</h2>
-<ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 4일). Configure permissions, How Claude remembers your project. Claude Code Docs</li><li id="ref-anthropic-2026b">Anthropic. How the agent loop works(확인 2026년 10월 15일). Claude Code Docs</li><li id="ref-openai-2026">OpenAI. Unrolling the Codex agent loop(확인 2026년 10월 15일). OpenAI</li></ul>
+<ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 4일). Configure permissions, How Claude remembers your project. Claude Code Docs</li><li id="ref-anthropic-2026b">Anthropic. How the agent loop works(확인 2026년 10월 15일). Claude Code Docs</li><li id="ref-openai-2026">OpenAI. (확인 2026년 10월 15일). Unrolling the Codex agent loop. OpenAI 블로그</li></ul>
