@@ -25,16 +25,17 @@
 <ul>
 <li class="group">본문</li>
 <li><a href="../chapters/prologue.html">시작하며</a></li>
-<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">모델, 프롬프트, 컨텍스트, 하네스의 관계</span></a></li>
-<li><a href="../chapters/ch02.html"><span class="nav-num">Chapter 2</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
-<li><a href="../chapters/ch03.html"><span class="nav-num">Chapter 3</span><span class="nav-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></a></li>
-<li><a href="../chapters/ch04.html"><span class="nav-num">Chapter 4</span><span class="nav-title">하네스의 구성 요소</span></a></li>
-<li><a href="../chapters/ch05.html"><span class="nav-num">Chapter 5</span><span class="nav-title">착수: 맡길 업무 선정과 작업 단위 분할</span></a></li>
-<li><a href="../chapters/ch06.html"><span class="nav-num">Chapter 6</span><span class="nav-title">검증 설계: 완료 보고 대신 증거 받기</span></a></li>
-<li><a href="../chapters/ch07.html"><span class="nav-num">Chapter 7</span><span class="nav-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></a></li>
-<li><a href="../chapters/ch08.html"><span class="nav-num">Chapter 8</span><span class="nav-title">위험 관리: 승인, 격리, 비용</span></a></li>
-<li><a href="../chapters/ch09.html"><span class="nav-num">Chapter 9</span><span class="nav-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></a></li>
-<li><a href="../chapters/ch10.html"><span class="nav-num">Chapter 10</span><span class="nav-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></a></li>
+<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">하네스란 무엇인가</span></a></li>
+<li><a href="../chapters/ch02.html"><span class="nav-num">Chapter 2</span><span class="nav-title">하네스의 구성 요소</span></a></li>
+<li><a href="../chapters/ch03.html"><span class="nav-num">Chapter 3</span><span class="nav-title">하네스로 에이전트 설계하기</span></a></li>
+<li><a href="../chapters/ch04.html"><span class="nav-num">Chapter 4</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
+<li><a href="../chapters/ch05.html"><span class="nav-num">Chapter 5</span><span class="nav-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></a></li>
+<li><a href="../chapters/ch06.html"><span class="nav-num">Chapter 6</span><span class="nav-title">착수: 맡길 업무 선정과 작업 단위 분할</span></a></li>
+<li><a href="../chapters/ch07.html"><span class="nav-num">Chapter 7</span><span class="nav-title">검증 설계: 완료 보고 대신 증거 받기</span></a></li>
+<li><a href="../chapters/ch08.html"><span class="nav-num">Chapter 8</span><span class="nav-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></a></li>
+<li><a href="../chapters/ch09.html"><span class="nav-num">Chapter 9</span><span class="nav-title">위험 관리: 승인, 격리, 비용</span></a></li>
+<li><a href="../chapters/ch10.html"><span class="nav-num">Chapter 10</span><span class="nav-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></a></li>
+<li><a href="../chapters/ch11.html"><span class="nav-num">Chapter 11</span><span class="nav-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></a></li>
 <li><a href="../chapters/epilogue.html">마치며</a></li>
 <li class="group">부록</li>
 <li><a href="../appendix/terms.html" aria-current="page">용어 풀이</a></li>
@@ -56,7 +57,7 @@
 <dt>샌드박스(Sandbox)</dt><dd>명령이 접근할 수 있는 파일 시스템과 네트워크를 운영 체제 수준에서 제한하는 격리 환경입니다.</dd>
 <dt>수용 기준</dt><dd>결과물이 받아들여지기 위해 충족해야 하는 조건입니다.</dd>
 <dt>승인 정책(Approval Policy)</dt><dd>Codex가 동작 전에 멈추고 사용자에게 확인하는 시점을 정하는 설정입니다.</dd>
-<dt>에이전트(Agent)</dt><dd>모델이 반복 루프 안에서 스스로 도구를 사용하는 시스템입니다.</dd>
+<dt>에이전트(Agent)</dt><dd>모델이 도구를 사용해 작업하고, 결과를 확인하며, 목표를 이룰 때까지 반복하는 시스템입니다. 모델과 하네스로 이루어집니다.</dd>
 <dt>완료 기준</dt><dd>결과를 받아들이기 위해 충족해야 하는 조건입니다. 작업을 맡기기 전에 검사할 수 있는 형태로 작성합니다.</dd>
 <dt>인계 메모</dt><dd>작업을 다른 세션이나 에이전트에 넘길 때 현재 상태, 읽을 문서, 미결정 사항, 다음 작업을 정리한 문서입니다.</dd>
 <dt>자동 메모리</dt><dd>Claude Code가 작업 중의 수정 요청과 선호를 스스로 기록하고 다음 세션에 읽는 기능입니다.</dd>
@@ -68,7 +69,7 @@
 <dt>토큰(Token)</dt><dd>모델이 글을 처리하는 최소 단위입니다. Claude Code는 /usage 명령으로, Codex는 /status 명령으로 사용량을 확인합니다.</dd>
 <dt>풀 리퀘스트(Pull Request)</dt><dd>코드 변경을 저장소에 반영하기 전에 검토를 요청하는 단위입니다.</dd>
 <dt>프롬프트 엔지니어링(Prompt Engineering)</dt><dd>원하는 결과를 얻도록 모델에 주는 지시문을 작성하고 구성하는 방법입니다.</dd>
-<dt>하네스(Harness)</dt><dd>모델 바깥에서 에이전트가 일하는 환경을 이루는 장치 전체입니다. 이 책은 역할, 도구, 권한, 기록, 검증의 다섯 구성 요소로 나눕니다.</dd>
+<dt>하네스(Harness)</dt><dd>모델을 에이전트로 동작하게 하는 모델 바깥의 실행 장치 전체입니다. 루프 실행, 도구 제공, 컨텍스트 관리, 권한, 기록, 검증을 맡습니다.</dd>
 <dt>하네스 엔지니어링(Harness Engineering)</dt><dd>에이전트가 신뢰할 수 있는 결과를 내도록 모델 바깥의 작업 환경을 설계하는 일입니다.</dd>
 <dt>하위 에이전트(Subagent)</dt><dd>Claude Code에서 특정 작업을 맡도록 별도로 정의한 에이전트입니다.</dd>
 <dt>훅(Hook)</dt><dd>정해진 시점에 자동으로 실행되는 셸 명령입니다. 에이전트의 판단과 관계없이 적용됩니다.</dd>
