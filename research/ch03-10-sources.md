@@ -62,3 +62,7 @@
 ## 2차 검수 반영 때 추가 확인(2026-10-04)
 - Claude Code, Choose a permission mode(https://code.claude.com/docs/en/permission-modes): v2.1.283 이상에서 auto 모드가 대화형 터미널과 VS Code 세션의 기본 시작 모드. 릴리스 노트 v2.1.284(2026-09-28): 모든 요금제와 제공자에서 auto로 시작, permissions.defaultMode가 우선(9장 버전 주석)
 - Codex, Rules(https://developers.openai.com/codex/rules): 규칙 기능은 실험 단계, ~/.codex/rules/default.rules, prefix_rule의 decision 값 forbidden은 확인 없이 요청을 막음, 여러 규칙이 일치하면 forbidden > prompt > allow(9장 예제)
+
+## 용어 보강 때 추가 확인(2026-10-15)
+- Claude Code, Manage costs effectively(https://code.claude.com/docs/en/costs): /usage의 Session 항목에 현재 세션 토큰 사용량, 구독 요금제는 같은 화면에 요금제 사용량 표시, 상태 줄 설정으로 지속 표시, /context로 컨텍스트 점유 확인, /clear로 대화 비우기, /compact로 요약(3장, 8장, 용어 풀이)
+- Codex, Slash commands(https://developers.openai.com/codex/guides/slash-commands/): /status는 세션 설정, 토큰 사용량, 남은 컨텍스트 용량 표시, /compact는 대화를 요약해 토큰 확보(8장, 용어 풀이)
