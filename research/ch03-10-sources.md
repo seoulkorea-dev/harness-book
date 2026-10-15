@@ -75,3 +75,8 @@
 - Claude Code Glossary(https://code.claude.com/docs/en/glossary): Agentic harness는 언어 모델을 코딩 에이전트로 만드는 도구, 컨텍스트 관리, 실행 환경. Claude Code가 하네스이고 Claude는 그 안의 모델(1장, D-052)
 - How the agent loop works: 내장 도구 스키마는 요청마다 로드, 도구 정의마다 컨텍스트 차지, 하위 에이전트는 tools 필드로 최소 도구 지정, MCP 도구 스키마는 기본적으로 지연 로드, allowed_tools는 자동 승인, disallowed_tools는 차단, 읽기 전용 도구는 동시 실행, 상태 변경 도구는 순차 실행(4장)
 - Manage costs effectively: gh, aws 같은 CLI 도구가 도구 목록을 추가하지 않아 MCP 서버보다 컨텍스트 효율적, 사용하지 않는 서버는 /mcp로 끄기(4장)
+
+## 보강 3: 실행 로그와 추적(2026-10-15)
+- How Claude Code works: 메시지, 도구 사용, 결과를 ~/.claude/projects/ 아래 JSONL로 저장, 되감기, 이어 가기, 갈라 시작하기 가능(7장)
+- How the agent loop works: 모든 결과 subtype에 total_cost_usd, usage, num_turns, session_id 포함, PostToolUse는 출력 감사, SubagentStart/Stop은 병렬 작업 결과 추적, PreCompact는 요약 전 전체 대화 보관(7장)
+- Manage costs effectively: OpenTelemetry 내보내기는 모든 환경에서 동작하고 사용자별 토큰, 비용 지표를 거의 실시간으로 조직의 관측 시스템에 보내는 유일한 방법, 세션 데이터는 cleanupPeriodDays(기본 30일)가 지나면 시작 시 삭제(7장)
