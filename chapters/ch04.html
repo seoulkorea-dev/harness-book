@@ -57,24 +57,40 @@
 </tbody></table></div><figcaption><b>표 4-1. 구성 요소별 결정 항목</b><ul class="capnote"><li>구성 요소별로 관리자가 정할 결정과 Claude Code의 구현 방법</li></ul></figcaption></figure>
 <p>Claude Code의 구현 열은 2026년 10월에 확인한 공식 문서 기준입니다. Codex의 구현 방법은 <a href="ch09.html#rule-docs">Chapter 9의 제품 단위 비교</a>에서 다룹니다.</p>
 <p>표 4-1의 하위 에이전트(Subagent)는 특정 작업을 맡도록 별도로 정의한 에이전트입니다. MCP(Model Context Protocol)는 외부 시스템의 기능을 에이전트의 도구로 연결하는 규약이며, 이를 구현한 서버를 MCP 서버라고 합니다. 자동 메모리는 Claude Code가 작업 중의 수정 요청과 선호를 스스로 기록하고 다음 세션에 읽는 기능입니다.</p>
+<h2 id="loop">에이전트 루프와 종료 조건</h2>
+<p>다섯 구성 요소는 에이전트가 일하는 순서 안에서 서로 다른 시점에 작동합니다. Anthropic의 Agent SDK 문서는 Claude Code의 실행 루프를 다섯 단계로 설명합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</p>
+<ul><li>요청 수신: 모델이 요청과 함께 시스템 프롬프트, 도구 정의, 대화 이력을 받습니다.</li><li>판단과 응답: 모델이 현재 상태를 판단해 텍스트로 답하거나 도구 호출을 요청합니다.</li><li>도구 실행: 하네스가 요청된 도구를 실행하고 결과를 모델에 돌려줍니다.</li><li>반복: 판단과 도구 실행을 반복합니다. 이 왕복 한 번을 턴이라고 부릅니다.</li><li>결과 반환: 모델이 도구 호출 없이 응답하면 루프가 끝나고, 최종 응답과 토큰(Token) 사용량, 비용, 세션 ID가 반환됩니다.</li></ul>
+<p>그림 4-2는 이 루프와 종료 조건을, 표 4-2는 루프의 단계별로 작동하는 구성 요소를 보여 줍니다.</p>
+<figure class="fig diagram" id="fig-4-2"><div class="svg-wrap" role="img" aria-label="요청 수신, 판단과 응답, 도구 실행, 반복, 결과 반환의 다섯 단계와 종료 사유, 관리자가 정할 상한"><svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, sans-serif"><defs><marker id="m2-a42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a8272"/></marker></defs><text x="16" y="30" font-size="19" fill="#2B2A26" font-weight="700">에이전트는 턴을 반복하며 일한다</text><text x="16" y="54" font-size="13.5" fill="#625D52">하네스는 도구 실행을 통제하고, 정한 상한에서 반복을 멈춘다</text><rect x="16" y="76" width="180" height="86" rx="10" fill="#FFFFFF" stroke="#8a8272" stroke-width="1"/><circle cx="38" cy="100" r="12" fill="#0284c7"/><text x="38" y="105" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">1</text><text x="58" y="105" font-size="15" fill="#2B2A26" font-weight="700">요청 수신</text><text x="32" y="132" font-size="12.5" fill="#625D52">요청, 시스템 프롬프트,</text><text x="32" y="150" font-size="12.5" fill="#625D52">도구 정의, 대화 이력</text><rect x="290" y="76" width="180" height="86" rx="10" fill="#FFFFFF" stroke="#8a8272" stroke-width="1"/><circle cx="312" cy="100" r="12" fill="#0284c7"/><text x="312" y="105" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">2</text><text x="332" y="105" font-size="15" fill="#2B2A26" font-weight="700">판단과 응답</text><text x="306" y="132" font-size="12.5" fill="#625D52">텍스트로 답하거나</text><text x="306" y="150" font-size="12.5" fill="#625D52">도구 호출을 요청</text><rect x="564" y="76" width="180" height="86" rx="10" fill="#FFFFFF" stroke="#8a8272" stroke-width="1"/><circle cx="586" cy="100" r="12" fill="#0284c7"/><text x="586" y="105" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">5</text><text x="606" y="105" font-size="15" fill="#2B2A26" font-weight="700">결과 반환</text><text x="580" y="132" font-size="12.5" fill="#625D52">최종 응답, 토큰 사용량,</text><text x="580" y="150" font-size="12.5" fill="#625D52">비용, 세션 ID</text><rect x="290" y="206" width="180" height="86" rx="10" fill="#FFFFFF" stroke="#8a8272" stroke-width="1"/><circle cx="312" cy="230" r="12" fill="#0284c7"/><text x="312" y="235" font-size="13" fill="#FFFFFF" font-weight="700" text-anchor="middle">3</text><text x="332" y="235" font-size="15" fill="#2B2A26" font-weight="700">도구 실행</text><text x="306" y="262" font-size="12.5" fill="#625D52">하네스가 도구를 실행하고</text><text x="306" y="280" font-size="12.5" fill="#625D52">결과를 모델에 돌려줌</text><line x1="198" y1="119" x2="288" y2="119" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m2-a42)"/><line x1="472" y1="119" x2="562" y2="119" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m2-a42)"/><text x="517" y="110" font-size="12" fill="#625D52" text-anchor="middle">도구 호출 없음</text><line x1="350" y1="164" x2="350" y2="204" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m2-a42)"/><text x="342" y="190" font-size="12" fill="#625D52" text-anchor="end">도구 호출</text><line x1="410" y1="204" x2="410" y2="164" stroke="#8a8272" stroke-width="1.6" marker-end="url(#m2-a42)"/><text x="418" y="184" font-size="12" fill="#0284c7" font-weight="700">4  반복</text><text x="418" y="199" font-size="12" fill="#625D52">왕복 한 번 = 한 턴</text><text x="16" y="180" font-size="12" fill="#0284c7">하네스: 역할(규칙 문서)</text><text x="564" y="180" font-size="12" fill="#0284c7">하네스: 기록(세션 ID),</text><text x="564" y="196" font-size="12" fill="#0284c7">검증(Stop 훅)</text><text x="290" y="310" font-size="12" fill="#0284c7">하네스: 도구, 권한(허용, 금지, 훅)</text><rect x="16" y="206" width="200" height="104" rx="10" fill="#F2F2EE" stroke="#8a8272" stroke-width="1"/><text x="30" y="228" font-size="14" fill="#2B2A26" font-weight="700">종료 사유</text><text x="30" y="250" font-size="12.5" fill="#625D52">정상 완료</text><text x="30" y="268" font-size="12.5" fill="#625D52">턴 상한 도달</text><text x="30" y="286" font-size="12.5" fill="#625D52">비용 상한 도달</text><text x="30" y="304" font-size="12.5" fill="#625D52">실행 중 오류</text><rect x="544" y="206" width="200" height="104" rx="10" fill="#F2F2EE" stroke="#0284c7" stroke-width="1.6"/><text x="558" y="228" font-size="14" fill="#0284c7" font-weight="700">관리자가 정할 것</text><text x="558" y="250" font-size="12.5" fill="#625D52">턴 상한 값</text><text x="558" y="268" font-size="12.5" fill="#625D52">비용 상한 값</text><text x="558" y="286" font-size="12.5" fill="#625D52">상한 도달 뒤 재개 또는</text><text x="558" y="304" font-size="12.5" fill="#625D52">중단</text><rect x="16" y="334" width="728" height="44" rx="10" fill="#F2F2EE" stroke="none"/><text x="380" y="362" font-size="15" fill="#2B2A26" font-weight="700" text-anchor="middle">루프는 모델이 끝내거나, 하네스가 정한 상한에서 끝난다.</text></svg></div><figcaption><b>그림 4-2. 에이전트 루프와 종료 조건</b><ul class="capnote"><li>Agent SDK 문서의 다섯 단계와 각 단계에서 작동하는 하네스 구성 요소</li></ul></figcaption></figure>
+<figure class="fig" id="tbl-4-2"><div class="table-wrap"><table><thead><tr><th>루프의 단계</th><th>작동하는 구성 요소</th><th>Claude Code의 장치</th></tr></thead><tbody>
+<tr><td>요청 수신</td><td>역할</td><td>시스템 프롬프트, CLAUDE.md</td></tr>
+<tr><td>도구 실행 전</td><td>권한</td><td>허용, 금지 규칙, 권한 모드, PreToolUse 훅</td></tr>
+<tr><td>도구 실행</td><td>도구</td><td>내장 도구, MCP 서버</td></tr>
+<tr><td>결과 반환</td><td>기록</td><td>세션 ID로 재개, 세션 저장</td></tr>
+<tr><td>루프 종료</td><td>검증</td><td>Stop 훅에서 결과 검증</td></tr>
+</tbody></table></div><figcaption><b>표 4-2. 루프의 단계별 구성 요소</b><ul class="capnote"><li>루프의 단계마다 작동하는 하네스 구성 요소와 Claude Code의 장치</li></ul></figcaption></figure>
+<p>도구 실행 앞에서는 권한이 작동합니다. 문서에 따르면 거부된 도구 호출은 실행되지 않고, 모델은 거부 메시지를 결과로 받습니다. 모델은 다른 방법을 찾거나, 진행할 수 없다고 보고합니다.</p>
+<p>루프는 기본적으로 모델이 스스로 끝낼 때까지 계속됩니다. 문서는 범위가 분명한 작업에서는 문제가 없지만, 열린 요청에서는 루프가 오래 실행될 수 있다고 설명합니다. 그래서 하네스는 두 가지 상한을 둡니다. 턴 상한은 도구를 사용한 턴의 수를, 비용 상한은 지출 금액을 제한합니다. 문서는 운영 환경의 에이전트에 비용 상한을 기본으로 두라고 권합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</p>
+<p>상한에 도달하면 루프는 작업을 마치지 못한 채 끝나고, 결과에 종료 사유가 남습니다. 종료 사유는 정상 완료, 턴 상한 도달, 비용 상한 도달, 실행 중 오류 등으로 구분됩니다. 상한에 도달한 결과는 완료로 판정하지 않습니다(<a href="ch06.html#report">Chapter 6의 완료 보고</a>). 관리자는 두 상한의 값과, 상한에 도달했을 때 세션을 재개할지 중단할지를 미리 정합니다. 비용 상한의 기준은 <a href="ch08.html#cost">Chapter 8의 비용 관리</a>와 연결됩니다.</p>
+<p>Codex도 같은 구조의 루프를 사용합니다. OpenAI는 Codex의 하네스가 모든 Codex 제품에 공통인 에이전트 루프를 제공한다고 설명합니다. 다만 턴이라는 말의 범위가 다릅니다. Agent SDK 문서의 턴은 도구 호출 왕복 한 번이고, OpenAI 글의 턴은 사용자 메시지 하나에 대한 처리 전체입니다. 한 턴 안에서 모델 추론과 도구 호출이 여러 번 반복됩니다. OpenAI는 에이전트가 한 턴에서 수백 번의 도구 호출을 할 수 있고, 그러면 컨텍스트 윈도(Context Window)를 모두 소진할 수 있다고 설명합니다(<a href="#ref-openai-2026">OpenAI, 2026</a>). 두 제품을 함께 운영한다면 턴 상한을 정하기 전에 제품마다 턴이 무엇을 세는지 확인해야 합니다.</p>
 <h2 id="instruct-enforce">지시와 강제</h2>
 <p>구성 요소를 구현하는 수단은 지시와 강제로 나뉩니다. 지시는 에이전트가 읽고 따르도록 요청하는 수단이며, 규칙 문서가 해당합니다. 강제는 에이전트의 판단과 관계없이 도구가 동작을 허용하거나 막는 수단이며, 권한 규칙(Permission Rule)과 훅(Hook)이 해당합니다.</p>
-<p>Claude Code 문서는 권한 규칙을 모델이 아니라 Claude Code가 적용한다고 설명합니다. 프롬프트나 CLAUDE.md의 지시는 에이전트가 시도하는 동작에 영향을 주지만, 허용되는 동작 자체는 정하지 않습니다. 훅은 정해진 시점에 실행되는 셸 명령이며, 에이전트의 판단과 관계없이 적용됩니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</p>
-<figure class="fig" id="tbl-4-2"><div class="table-wrap"><table><thead><tr><th>규칙의 성격</th><th>처리 수단</th><th>예</th></tr></thead><tbody>
+<p>Claude Code 문서는 권한 규칙을 모델이 아니라 Claude Code가 적용한다고 설명합니다. 프롬프트나 CLAUDE.md의 지시는 에이전트가 시도하는 동작에 영향을 주지만, 허용되는 동작 자체는 정하지 않습니다. 훅은 정해진 시점에 실행되는 셸 명령이며, 에이전트의 판단과 관계없이 적용됩니다(<a href="#ref-anthropic-2026a">Anthropic, 2026a</a>).</p>
+<figure class="fig" id="tbl-4-3"><div class="table-wrap"><table><thead><tr><th>규칙의 성격</th><th>처리 수단</th><th>예</th></tr></thead><tbody>
 <tr><td>결과의 품질에 관한 규칙</td><td>지시(규칙 문서)</td><td>문장 형식, 보고서 항목 순서</td></tr>
 <tr><td>어기면 되돌리기 어려운 규칙</td><td>강제(권한 규칙)</td><td>원본 자료 수정 금지, 외부 발송 금지</td></tr>
 <tr><td>특정 시점마다 실행할 규칙</td><td>강제(훅)</td><td>파일 수정 뒤 검사 실행, 커밋 전 lint 실행</td></tr>
-</tbody></table></div><figcaption><b>표 4-2. 규칙의 성격별 처리 수단</b><ul class="capnote"><li>지시로 처리할 규칙과 강제로 처리할 규칙의 구분</li></ul></figcaption></figure>
-<p>표 4-2의 기준은 규칙을 어겼을 때의 결과입니다. 어겼을 때 다시 작업하면 되는 규칙은 지시로 충분합니다. 원본 자료의 손상이나 외부 발송처럼 되돌리기 어려운 결과를 낳는 규칙은 강제 수단으로 처리합니다.</p>
+</tbody></table></div><figcaption><b>표 4-3. 규칙의 성격별 처리 수단</b><ul class="capnote"><li>지시로 처리할 규칙과 강제로 처리할 규칙의 구분</li></ul></figcaption></figure>
+<p>표 4-3의 기준은 규칙을 어겼을 때의 결과입니다. 어겼을 때 다시 작업하면 되는 규칙은 지시로 충분합니다. 원본 자료의 손상이나 외부 발송처럼 되돌리기 어려운 결과를 낳는 규칙은 강제 수단으로 처리합니다.</p>
 <h2 id="example">주간 보고서 하네스의 구현</h2>
-<p>Chapter 1의 주간 보고서 예제는 Claude Code 파일로 구현되어 있습니다. 실행 자료는 저장소의 examples/ch01-01/ 폴더에 있습니다. 표 4-3은 <a href="ch01.html#tbl-1-2">표 1-2</a>의 설정이 어느 파일에 구현되었는지 보여 줍니다.</p>
-<figure class="fig" id="tbl-4-3"><div class="table-wrap"><table><thead><tr><th>구성 요소</th><th>구현 파일</th><th>내용</th></tr></thead><tbody>
+<p>Chapter 1의 주간 보고서 예제는 Claude Code 파일로 구현되어 있습니다. 실행 자료는 저장소의 examples/ch01-01/ 폴더에 있습니다. 표 4-4는 <a href="ch01.html#tbl-1-2">표 1-2</a>의 설정이 어느 파일에 구현되었는지 보여 줍니다.</p>
+<figure class="fig" id="tbl-4-4"><div class="table-wrap"><table><thead><tr><th>구성 요소</th><th>구현 파일</th><th>내용</th></tr></thead><tbody>
 <tr><td>역할</td><td>CLAUDE.md</td><td>에이전트는 초안 작성까지 맡고 발송은 PM이 맡음</td></tr>
 <tr><td>도구</td><td>data/ 폴더의 CSV 파일</td><td>작업 관리 도구와 이슈 관리 도구의 조회 결과를 대신함</td></tr>
 <tr><td>권한</td><td>.claude/settings.json</td><td>data/ 수정 금지, 웹 접근 금지, output/만 수정 허용</td></tr>
 <tr><td>기록</td><td>output/ 폴더</td><td>매주 초안과 PM의 수정 기록(feedback-*.md)을 저장해 다음 주 작성의 입력으로 사용</td></tr>
 <tr><td>검증</td><td>verify_counts.py</td><td>보고서의 완료 건수와 원본 자료의 완료 건수를 대조</td></tr>
-</tbody></table></div><figcaption><b>표 4-3. 주간 보고서 예제의 구현 파일</b><ul class="capnote"><li>구성 요소별 구현 파일과 내용</li></ul></figcaption></figure>
+</tbody></table></div><figcaption><b>표 4-4. 주간 보고서 예제의 구현 파일</b><ul class="capnote"><li>구성 요소별 구현 파일과 내용</li></ul></figcaption></figure>
 <p>다음은 권한 설정 파일의 내용입니다. 원본 자료와 검사 스크립트, 규칙 문서의 수정을 금지해서, 에이전트가 검증 기준 자체를 변경하지 못하게 합니다.</p>
 <pre>{
   "permissions": {
@@ -98,13 +114,14 @@
 <p>도구만 연결하면 에이전트가 된다는 의견이 있습니다. 도구만 연결된 에이전트는 작업을 수행할 수는 있지만, 원본 자료를 변경하지 않았는지, 수치가 맞는지 확인할 근거를 남기지 않습니다. 권한, 기록, 검증은 관리자가 결과를 받아들이기 위한 근거입니다.</p>
 <p>하네스 설계는 다섯 구성 요소마다 결정을 내리고, 어겼을 때 되돌리기 어려운 규칙을 강제 수단으로 옮기는 일입니다.</p>
 <h2 id="refs">참고 자료</h2>
-<ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 4일). Configure permissions, How Claude remembers your project. Claude Code Docs</li></ul>
+<ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 4일). Configure permissions, How Claude remembers your project. Claude Code Docs</li><li id="ref-anthropic-2026b">Anthropic. How the agent loop works(확인 2026년 10월 15일). Claude Code Docs</li><li id="ref-openai-2026">OpenAI. Unrolling the Codex agent loop(확인 2026년 10월 15일). OpenAI</li></ul>
 
 </article>
 <footer class="site-foot">에이전트에게 일을 맡기는 관리자의 설계: 프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기.</footer>
 </main>
 <aside class="pagetoc" aria-label="이 페이지"><h2>이 페이지</h2><ol>
 <li><a href="#components">다섯 구성 요소</a></li>
+<li><a href="#loop">에이전트 루프와 종료 조건</a></li>
 <li><a href="#instruct-enforce">지시와 강제</a></li>
 <li><a href="#example">주간 보고서 하네스의 구현</a></li>
 <li><a href="#refs">참고 자료</a></li>

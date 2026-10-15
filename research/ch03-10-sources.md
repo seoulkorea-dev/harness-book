@@ -66,3 +66,7 @@
 ## 용어 보강 때 추가 확인(2026-10-15)
 - Claude Code, Manage costs effectively(https://code.claude.com/docs/en/costs): /usage의 Session 항목에 현재 세션 토큰 사용량, 구독 요금제는 같은 화면에 요금제 사용량 표시, 상태 줄 설정으로 지속 표시, /context로 컨텍스트 점유 확인, /clear로 대화 비우기, /compact로 요약(3장, 8장, 용어 풀이)
 - Codex, Slash commands(https://developers.openai.com/codex/guides/slash-commands/): /status는 세션 설정, 토큰 사용량, 남은 컨텍스트 용량 표시, /compact는 대화를 요약해 토큰 확보(8장, 용어 풀이)
+
+## 보강 1: 에이전트 루프와 종료 조건(2026-10-15)
+- Anthropic, How the agent loop works(https://code.claude.com/docs/en/agent-sdk/agent-loop): 다섯 단계(요청 수신, 판단과 응답, 도구 실행, 반복, 결과 반환), 턴은 도구 호출 왕복 한 번, max_turns는 도구 사용 턴만 셈, max_budget_usd, 상한 없으면 열린 요청에서 오래 실행, 운영 에이전트는 예산 상한을 기본으로 권장, 결과 subtype(success, error_max_turns, error_max_budget_usd, error_during_execution), 거부된 도구 호출은 거부 메시지가 결과로 전달, Stop 훅은 결과 검증과 세션 상태 저장, PreToolUse 훅은 도구 실행 전(4장)
+- OpenAI, Unrolling the Codex agent loop(https://openai.com/index/unrolling-the-codex-agent-loop/): Codex 하네스가 모든 Codex 경험의 핵심 에이전트 루프 제공, 대화 턴 하나에 모델 추론과 도구 호출이 여러 번 반복, 한 턴에 수백 번의 도구 호출로 컨텍스트 윈도를 소진할 수 있음(4장)
