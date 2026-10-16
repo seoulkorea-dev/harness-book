@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>실습 | 하네스 엔지니어링: 모델을 에이전트로 만드는 설계</title>
+<meta name="description" content="하네스를 직접 구성하고 실행해 보는 실습을 모은 부록입니다.">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 이동</a>
+<header class="topbar">
+<a class="brand" href="../index.html">하네스 엔지니어링: 모델을 에이전트로 만드는 설계</a>
+<span class="spacer"></span>
+<a class="navlink" href="#sidenav">전체 목차</a>
+<a href="https://github.com/seoulkorea-dev/harness-book">저장소</a>
+</header>
+<div class="layout">
+<nav class="sidenav" id="sidenav" aria-label="전체 목차">
+<h2>전체 목차</h2>
+<ul>
+<li class="group">본문</li>
+<li><a href="../chapters/prologue.html">시작하며</a></li>
+<li><a href="../chapters/ch01.html"><span class="nav-num">Chapter 1</span><span class="nav-title">하네스란 무엇인가</span></a></li>
+<li><a href="../chapters/ch02.html"><span class="nav-num">Chapter 2</span><span class="nav-title">하네스의 구성 요소</span></a></li>
+<li><a href="../chapters/ch03.html"><span class="nav-num">Chapter 3</span><span class="nav-title">하네스로 에이전트 설계하기</span></a></li>
+<li><a href="../chapters/ch04.html"><span class="nav-num">Chapter 4</span><span class="nav-title">프롬프트 엔지니어링: 한 번의 요청 설계</span></a></li>
+<li><a href="../chapters/ch05.html"><span class="nav-num">Chapter 5</span><span class="nav-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></a></li>
+<li><a href="../chapters/ch06.html"><span class="nav-num">Chapter 6</span><span class="nav-title">착수: 맡길 업무 선정과 작업 단위 분할</span></a></li>
+<li><a href="../chapters/ch07.html"><span class="nav-num">Chapter 7</span><span class="nav-title">검증 설계: 완료 보고 대신 증거 받기</span></a></li>
+<li><a href="../chapters/ch08.html"><span class="nav-num">Chapter 8</span><span class="nav-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></a></li>
+<li><a href="../chapters/ch09.html"><span class="nav-num">Chapter 9</span><span class="nav-title">위험 관리: 승인, 격리, 비용</span></a></li>
+<li><a href="../chapters/ch10.html"><span class="nav-num">Chapter 10</span><span class="nav-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></a></li>
+<li><a href="../chapters/ch11.html"><span class="nav-num">Chapter 11</span><span class="nav-title">작가 사례: 책 한 권을 에이전트와 함께 만든 과정</span></a></li>
+<li><a href="../chapters/epilogue.html">마치며</a></li>
+<li class="group">부록</li>
+<li><a href="../appendix/terms.html">용어 풀이</a></li>
+<li><a href="../appendix/practice.html" aria-current="page">실습</a></li>
+</ul></nav>
+<main id="main">
+<article>
+<p class="eyebrow-part">부록</p>
+<h1><span class="h-title">실습</span></h1>
+<p class="lead">본문에서 설명한 하네스를 직접 구성하고 실행해 보는 실습을 모았습니다. 실습은 경비 정산 미니 웹 앱 하나를 함께 사용합니다.</p>
+<h2 id="setup">실습 준비</h2>
+<p>이 책의 실습은 경비 정산 미니 웹 앱 하나를 책 전체에서 함께 사용합니다. 실습 자료는 저장소의 examples/expense-app/ 폴더에 둡니다. 실습에는 세 가지 도구가 필요합니다.</p>
+<ul><li>Python 3: 미니 웹 앱과 테스트를 실행합니다. 실습 코드는 표준 라이브러리만 사용하므로 추가 패키지를 설치하지 않습니다.</li><li>Git: 실습 저장소를 내려받고 변경 이력을 확인합니다.</li><li>Claude Code: 실습에서 에이전트를 실행합니다. Claude Code는 Pro 이상의 유료 요금제나 Claude Console의 API 키로 사용하며, 무료 요금제에는 포함되지 않습니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</li></ul>
+<p>Windows에서는 PowerShell에서 다음 명령으로 Claude Code를 설치합니다. macOS와 Linux의 설치 명령은 Claude Code 공식 문서를 따릅니다.</p>
+<pre>irm https://claude.ai/install.ps1 | iex</pre>
+<p>Windows에서 Git for Windows를 설치하면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 설치하지 않으면 PowerShell로 실행합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</p>
+<p>설치를 마친 뒤 터미널에서 다음 세 명령으로 도구를 확인합니다.</p>
+<pre>python --version
+git --version
+claude --version</pre>
+<p>세 명령이 모두 버전 번호를 출력하면 실습을 시작할 수 있습니다. macOS와 Linux에서 python 명령을 찾지 못하면 python3 명령을 사용합니다.</p>
+<aside class="footnote"><b>버전 주석 (2026년 10월)</b> 요금제와 설치 방법은 2026년 10월에 확인한 공식 문서 기준입니다. 도입 시점의 문서에서 다시 확인합니다.</aside>
+<h2 id="refs">참고 자료</h2>
+<ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 16일). Plans &amp; pricing. Claude; Set up Claude Code, Terminal guide for new users. Claude Code Docs</li></ul>
+
+</article>
+<footer class="site-foot">하네스 엔지니어링: 모델을 에이전트로 만드는 설계 — 프롬프트, 컨텍스트, 하네스로 에이전트 설계하기</footer>
+</main>
+<aside class="pagetoc" aria-label="이 페이지"><h2>이 페이지</h2><ol>
+<li><a href="#setup">실습 준비</a></li>
+<li><a href="#refs">참고 자료</a></li>
+</ol></aside>
+</div>
+</body>
+</html>

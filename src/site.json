@@ -21,7 +21,8 @@
     [
       "부록",
       [
-        "terms"
+        "terms",
+        "practice"
       ]
     ]
   ],
@@ -115,6 +116,12 @@
       "nav": "Chapter 3 하네스로 에이전트 설계하기",
       "title": "Chapter 3 하네스로 에이전트 설계하기",
       "desc": "에이전트의 동작을 정하는 것은 요청 문장이 아니라, 목적부터 승인 지점까지 하네스에 정해 둔 항목입니다."
+    },
+    "practice": {
+      "path": "appendix/practice.html",
+      "nav": "실습",
+      "title": "실습",
+      "desc": "하네스를 직접 구성하고 실행해 보는 실습을 모은 부록입니다."
     }
   },
   "redirects": {}

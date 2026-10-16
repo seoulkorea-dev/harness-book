@@ -1,0 +1,17 @@
+<p class="eyebrow-part">부록</p>
+<h1><span class="h-title">실습</span></h1>
+<p class="lead">본문에서 설명한 하네스를 직접 구성하고 실행해 보는 실습을 모았습니다. 실습은 경비 정산 미니 웹 앱 하나를 함께 사용합니다.</p>
+<h2 id="setup">실습 준비</h2>
+<p>이 책의 실습은 경비 정산 미니 웹 앱 하나를 책 전체에서 함께 사용합니다. 실습 자료는 저장소의 examples/expense-app/ 폴더에 둡니다. 실습에는 세 가지 도구가 필요합니다.</p>
+<ul><li>Python 3: 미니 웹 앱과 테스트를 실행합니다. 실습 코드는 표준 라이브러리만 사용하므로 추가 패키지를 설치하지 않습니다.</li><li>Git: 실습 저장소를 내려받고 변경 이력을 확인합니다.</li><li>Claude Code: 실습에서 에이전트를 실행합니다. Claude Code는 Pro 이상의 유료 요금제나 Claude Console의 API 키로 사용하며, 무료 요금제에는 포함되지 않습니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</li></ul>
+<p>Windows에서는 PowerShell에서 다음 명령으로 Claude Code를 설치합니다. macOS와 Linux의 설치 명령은 Claude Code 공식 문서를 따릅니다.</p>
+<pre>irm https://claude.ai/install.ps1 | iex</pre>
+<p>Windows에서 Git for Windows를 설치하면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 설치하지 않으면 PowerShell로 실행합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</p>
+<p>설치를 마친 뒤 터미널에서 다음 세 명령으로 도구를 확인합니다.</p>
+<pre>python --version
+git --version
+claude --version</pre>
+<p>세 명령이 모두 버전 번호를 출력하면 실습을 시작할 수 있습니다. macOS와 Linux에서 python 명령을 찾지 못하면 python3 명령을 사용합니다.</p>
+<aside class="footnote"><b>버전 주석 (2026년 10월)</b> 요금제와 설치 방법은 2026년 10월에 확인한 공식 문서 기준입니다. 도입 시점의 문서에서 다시 확인합니다.</aside>
+<h2 id="refs">참고 자료</h2>
+<ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 16일). Plans &amp; pricing. Claude; Set up Claude Code, Terminal guide for new users. Claude Code Docs</li></ul>
