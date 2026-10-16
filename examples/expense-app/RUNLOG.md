@@ -15,11 +15,13 @@ exit=1   (실패: test_1, test_2, test_3. CR-07 구현 전이므로 정상)
 
 ## 실행 대기 실습
 
-| 순서 | 실습 | 상태 | 기록할 것 |
+| 부록 실습 | 내용 | 상태 | 기록할 것 |
 |---|---|---|---|
-| 1 | 하네스 없이 요청(CLAUDE.md, .claude/가 없는 복사본에서 "CR-07을 구현해 줘") | 실행 전 | 수정한 파일, 테스트 실행 여부, data/ 변경 여부 |
-| 2 | 세션 1: CR-07-2, CR-07-4 | 실행 전 | /permissions 화면, 거부와 확인 요청, check.py 출력, 훅 출력, HANDOFF.md, /usage |
-| 3 | 세션 2: HANDOFF.md로 시작, CR-07-3, CR-07-4, CR-07-5 초안 | 실행 전 | check.py 출력, reviewer 보고, /usage |
-| 4 | python app.py로 화면 확인, CR-07-5 승인 판단 | 실행 전 | 승인 판단 |
+| 실습 1 | 기준 상태 확인 | 확인함(위 기록) | 단위 테스트, check.py 출력 |
+| 실습 2 | CLAUDE.md 작성, 수정 범위 질문 | 실행 전 | 질문과 응답 원문 |
+| 실습 3 | settings.json 권한 설정, 금지 동작 요청 | 실행 전 | /permissions 화면 내용, 거부 메시지 원문 |
+| 실습 4 | 훅과 검토 하위 에이전트 | 실행 전 | 훅 출력, reviewer 보고 원문 |
+| 실습 5 | tasks.json, 세션 1(CR-07-2, CR-07-4) | 실행 전 | check.py 출력, tasks.json 변경, commit 확인 요청, /usage |
+| 실습 6 | HANDOFF.md, 세션 2(CR-07-3) | 실행 전 | HANDOFF.md, check.py 출력, /usage |
 
 실행할 때마다 날짜, 모델과 제품 버전, 요청 원문, 출력 원문, 재실행 시 차이를 함께 적는다.

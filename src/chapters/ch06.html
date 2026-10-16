@@ -41,13 +41,13 @@
 <h2 id="example">변경 요청의 작업 단위 분할 예제</h2>
 <p>Chapter 4의 <a href="ch04.html#example">변경 요청 영향 검토 예제</a>에서 다룬 CR-07을 수용하기로 했다고 가정합니다. 이 변경을 구현하는 에이전트는 <a href="ch03.html#example">Chapter 3</a>에서 설계했습니다. 정산 요청 화면에 프로젝트 코드 선택 항목을 추가하는 변경입니다. 표 6-4는 이 변경을 작업 단위로 분할한 결과입니다.</p>
 <figure class="fig" id="tbl-6-4"><div class="table-wrap"><table><thead><tr><th>작업 단위</th><th>담당</th><th>완료 기준</th><th>확인 방법</th></tr></thead><tbody>
-<tr><td>프로젝트 코드 조회 방식 합의</td><td>PM</td><td>인사팀과 조회 방식과 갱신 주기 합의</td><td>합의 내용을 결정 기록에 등록</td></tr>
+<tr><td>프로젝트 코드 조회 방식 합의</td><td>승인자</td><td>인사팀과 조회 방식과 갱신 주기 합의</td><td>합의 내용을 결정 기록에 등록</td></tr>
 <tr><td>데이터 모델에 프로젝트 코드 항목 추가</td><td>에이전트</td><td>정산 요청 데이터에 항목 추가, 기존 데이터 유지</td><td>데이터 변환 시험 통과</td></tr>
 <tr><td>정산 요청 화면에 선택 항목 추가</td><td>에이전트</td><td>화면에서 프로젝트 코드 선택 가능</td><td>화면 시험 통과</td></tr>
 <tr><td>기존 단위 테스트 갱신</td><td>에이전트</td><td>변경된 화면과 데이터 모델의 테스트 반영</td><td>전체 단위 테스트 통과</td></tr>
-<tr><td>통합 테스트 시나리오 추가</td><td>에이전트 작성, PM 승인</td><td>프로젝트별 집계 시나리오 추가</td><td>PM 검토 승인</td></tr>
+<tr><td>통합 테스트 시나리오 추가</td><td>에이전트 작성, 승인자 승인</td><td>프로젝트별 집계 시나리오 추가</td><td>승인자 검토 후 승인</td></tr>
 </tbody></table></div><figcaption><b>표 6-4. CR-07의 작업 단위</b><ul class="capnote"><li>작업 단위별 담당, 완료 기준, 확인 방법</li></ul></figcaption></figure>
-<p>첫 번째 작업 단위는 연동 규격이 없어 다른 조직과의 합의가 필요하므로 PM이 맡습니다. 나머지 작업 단위는 합의 결과를 입력으로 받아 에이전트가 수행합니다. 마지막 작업 단위는 에이전트가 작성하지만, 통합 테스트의 범위를 정하는 판단이므로 PM이 승인합니다.</p>
+<p>첫 번째 작업 단위는 연동 규격이 없어 다른 조직과의 합의가 필요하므로 승인자가 맡습니다. 나머지 작업 단위는 합의 결과를 입력으로 받아 에이전트가 수행합니다. 마지막 작업 단위는 에이전트가 작성하지만, 통합 테스트의 범위를 정하는 판단이므로 승인자가 승인합니다.</p>
 <p>작업 단위 목록은 에이전트가 읽고 상태를 갱신할 수 있는 파일로 저장합니다. Anthropic은 기능 목록을 JSON 형식으로 저장했고, 에이전트가 상태 항목만 수정하도록 지시했습니다. 모델이 Markdown 파일보다 JSON 파일을 부적절하게 변경하거나 덮어쓰는 일이 적었기 때문입니다(<a href="#ref-young-2025">Young, 2025</a>).</p>
 <pre>[
   {
@@ -67,5 +67,6 @@
 ]</pre>
 <p>큰 업무를 한 번에 맡기는 편이 효율적이라는 의견이 있습니다. 한 번에 맡긴 업무가 실패하면, 어느 부분에서 실패했는지 확인할 단위가 없습니다. 작업 단위로 나누면 실패한 단위만 다시 작업합니다.</p>
 <p>위임은 업무를 결과를 확인할 수 있는 단위로 나누는 일에서 시작합니다.</p>
+<p>작업 단위 목록으로 구현을 진행하는 실습은 <a href="../appendix/practice.html#lab-5">부록 실습의 실습 5</a>에 있습니다.</p>
 <h2 id="refs">참고 자료</h2>
 <ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 15일). How Claude Code works, How the agent loop works, Manage costs effectively, Glossary. Claude Code Docs</li><li id="ref-young-2025">Young, J. (2025년 11월 26일). Effective harnesses for long-running agents. Anthropic</li></ul>
