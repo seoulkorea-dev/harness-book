@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m unittest *)",
+      "Bash(python check.py)",
+      "Bash(python3 -m unittest *)",
+      "Bash(python3 check.py)",
+      "Bash(git status)",
+      "Bash(git diff *)"
+    ],
+    "ask": [
+      "Bash(git commit *)"
+    ],
+    "deny": [
+      "Edit(./data/**)",
+      "Edit(./acceptance/**)",
+      "Edit(./check.py)",
+      "Edit(./CLAUDE.md)",
+      "Edit(./DECISIONS.md)",
+      "Edit(./.claude/**)",
+      "Bash(git push *)",
+      "WebFetch",
+      "WebSearch"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "python -m unittest discover tests -q || exit 2" }
+        ]
+      }
+    ]
+  }
+}

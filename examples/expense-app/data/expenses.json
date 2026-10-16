@@ -1,0 +1,5 @@
+[
+  {"number": "REQ-001", "requester": "이서연", "date": "2026-09-28", "amount": 45000, "purpose": "고객 미팅 식대", "status": "승인"},
+  {"number": "REQ-002", "requester": "박준호", "date": "2026-09-30", "amount": 128000, "purpose": "출장 교통비", "status": "요청"},
+  {"number": "REQ-003", "requester": "김도윤", "date": "2026-10-02", "amount": 33000, "purpose": "도서 구입", "status": "요청"}
+]
