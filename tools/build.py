@@ -12,8 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
-BOOK = "에이전트에게 일을 맡기는 관리자의 설계"
-SUB = "프롬프트, 컨텍스트, 하네스로 AI 에이전트 프로젝트 운영하기"
+BOOK = "하네스 엔지니어링: 모델을 에이전트로 만드는 설계"
+SUB = "프롬프트, 컨텍스트, 하네스로 에이전트 설계하기"
 
 site = json.loads((SRC / "site.json").read_text(encoding="utf-8"))
 NAV = site["nav"]
@@ -110,7 +110,7 @@ def page(pid, body):
     m = META[pid]
     cp = m["path"]
     full_title = BOOK if pid == "index" else f"{m['title']} | {BOOK}"
-    foot = f"{BOOK}: {SUB}."
+    foot = f"{BOOK} — {SUB}"
     return f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
