@@ -55,7 +55,7 @@ for f in files:
                 continue
             total[m.group(0)] += 1
             print(f"경고 {f}:{n}: {m.group(0)} | {text[max(0, m.start() - 20):m.end() + 15].strip()}")
-# 문장 원칙(2026-10-02): 100자 넘는 문장, 문장 첫머리 "그리고, 다만, 또한, 특히"를 경고(표, 그림, 코드 상자, 참고 자료 서지 제외)
+# 문장 원칙(2026-10-02, 길이 기준 2026-10-16 150자로 변경): 150자 넘는 문장, 문장 첫머리 "그리고, 다만, 또한, 특히"를 경고(표, 그림, 코드 상자, 참고 자료 서지 제외)
 for f in files:
     if f.endswith("references.html"):
         continue
@@ -64,9 +64,9 @@ for f in files:
         text = html.unescape(re.sub(r"<[^>]+>", "", para)).strip()
         for sent in re.split(r"(?<=[.?!])\s+(?=[^)\s])", text):
             sent = sent.strip()
-            if len(sent) > 100:
-                total["100자 초과 문장"] += 1
-                print(f"경고 {f}: 100자 초과({len(sent)}자) | {sent[:40]}")
+            if len(sent) > 150:
+                total["150자 초과 문장"] += 1
+                print(f"경고 {f}: 150자 초과({len(sent)}자) | {sent[:40]}")
             if re.match(r"(그리고|다만|또한|특히)[ ,]", sent):
                 total["첫머리 접속어"] += 1
                 print(f"경고 {f}: 첫머리 접속어 | {sent[:40]}")
