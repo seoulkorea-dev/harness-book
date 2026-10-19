@@ -6,10 +6,13 @@
 5. 장마다 참고 자료 항목과 본문 링크가 있고, 끊긴 링크가 없음
 """
 import glob, os, re, sys
+from pathlib import Path
 
-ROOT = __file__.rsplit('/lint/', 1)[0]
-pages = ([f'{ROOT}/index.html'] + sorted(glob.glob(f'{ROOT}/chapters/*.html'))
-         + sorted(glob.glob(f'{ROOT}/appendix/*.html')))
+ROOT = Path(__file__).resolve().parent.parent.as_posix()
+# glob 결과의 구분자를 /로 맞춘다(Windows). path[len(ROOT) + 1:]로 이름을 만들기 때문
+glob_ = lambda pat: sorted(p.replace('\\', '/') for p in glob.glob(pat))
+pages = ([f'{ROOT}/index.html'] + glob_(f'{ROOT}/chapters/*.html')
+         + glob_(f'{ROOT}/appendix/*.html'))
 errors = []
 for path in pages:
     s = open(path, encoding='utf-8').read()
@@ -61,8 +64,8 @@ for path in pages:
 # 용어 풀이 표제어가 본문(표지, 장, 마치며)에 1회 이상 나오는지(2026-10-03, 64차)
 import html as _html
 _body = ''
-for _f in ['index.html'] + sorted(glob.glob(f'{ROOT}/chapters/*.html')):
-    _p = _f if _f.startswith('/') else f'{ROOT}/{_f}'
+for _f in ['index.html'] + glob_(f'{ROOT}/chapters/*.html'):
+    _p = _f if os.path.isabs(_f) else f'{ROOT}/{_f}'
     _t = open(_p, encoding='utf-8').read()
     _m = re.search(r'<main\b.*?</main>', _t, re.S)
     _body += _html.unescape(re.sub(r'<[^>]+>', ' ', _m.group(0) if _m else _t))
@@ -77,7 +80,7 @@ for _dt in re.findall(r'<dt[^>]*>(.*?)</dt>', _terms):
 # 참고 자료 링크 검사(1차 검수 25번): 장마다 항목 1개 이상, 항목마다 본문 링크 1개 이상, 끊긴 링크 0, id 형식
 _refp = f'{ROOT}/appendix/references.html'
 _ref_ids = set(re.findall(r'id="(ref-[^"]+)"', open(_refp, encoding='utf-8').read())) if os.path.exists(_refp) else set()
-for _f in sorted(glob.glob(f'{ROOT}/chapters/ch*.html')):
+for _f in glob_(f'{ROOT}/chapters/ch*.html'):
     _n = _f[len(ROOT) + 1:]
     _t = open(_f, encoding='utf-8').read()
     if 'http-equiv="refresh"' in _t:
@@ -109,7 +112,7 @@ for _dt in re.findall(r'<dt[^>]*>(.*?)</dt>', _terms):
         _pairs.append((_m.group(1).strip(), _m.group(2).strip()))
 if _pairs:
     _alt = re.compile('|'.join(re.escape(k) for k, _ in sorted(_pairs, key=lambda x: -len(x[0]))))
-    for _f in sorted(glob.glob(f'{ROOT}/chapters/ch[0-9]*.html')):
+    for _f in glob_(f'{ROOT}/chapters/ch[0-9]*.html'):
         _n = _f[len(ROOT) + 1:]
         _t = open(_f, encoding='utf-8').read()
         _m = re.search(r'<main\b.*?</main>', _t, re.S)
