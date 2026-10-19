@@ -9,7 +9,7 @@
 - 원고는 2026-10-19 결정(장 틀, CR 이름)에 따라 1장부터 다시 쓴다.
 
 ## 다음 할 일
-1. check_structure.py Windows 경로 수정(harness-test 브랜치 별도 커밋) 뒤, 종료 훅 시험(시험 5-3)을 다시 한다.
+1. check_structure.py Windows 경로 수정 완료(F-13, Windows에서 check_all 통과). 종료 훅 시험(시험 5-3)을 다시 해서 실제로 막는지 확인한다.
 2. harness-test 브랜치 push와 PR(작가 확인 후).
 3. 1장 시범: /plan-chapter 1 → /write-chapter 1. flow-reviewer의 1장 첫 절 의견(reviews/agents/2026-10-19-ch01-flow-reviewer.md)을 이때 반영 여부 판단.
 

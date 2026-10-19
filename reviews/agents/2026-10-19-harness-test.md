@@ -44,3 +44,42 @@
 ## 발견한 결함
 
 - lint/check_structure.py가 `__file__.rsplit('/lint/', 1)`로 루트를 구해 Windows 경로(역슬래시)에서 실패한다. check_all의 "구조"와 PostToolUse 훅(hook_lint.py)이 Windows에서 항상 실패한다. 같은 브랜치의 별도 커밋에서 고친다.
+
+## 결함 수정과 확인(F-13)
+
+수정(lint/check_structure.py, 검사 규칙은 그대로):
+- `ROOT = Path(__file__).resolve().parent.parent.as_posix()`
+- glob 결과는 `glob_()`로 받아 구분자를 `/`로 맞춤(`path[len(ROOT) + 1:]` 이름이 맞게 나옴)
+- `_f.startswith('/')` → `os.path.isabs(_f)`
+
+| 확인 | 명령 | 기대 | 실제 출력 원문 | 판정 |
+|---|---|---|---|---|
+| 원고 되돌린 상태의 구조 검사 | `python lint/check_structure.py` | 출력 없음, exit 0 | (출력 없음) `exit=0` | 통과 |
+| 전체 검사 | `python tools/check_all.py` | 구조 통과 | 아래 원문 | 통과 |
+| 실패 시험 | src/chapters/ch01.html 표 1-1 capnote에 `<li>시험용 둘째 줄</li>` 추가 → `python tools/build.py` → `python lint/check_structure.py` | "캡션 설명 2줄"로 실패 | `chapters/ch01.html: 표 1-1 캡션 설명 2줄` `exit=1` (편집 직후 PostToolUse 훅도 `[python lint/check_structure.py] exit=1` `chapters/ch01.html: 표 1-1 캡션 설명 2줄`) | 통과 |
+| 되돌림 | `git checkout -- src/chapters/ch01.html chapters/ch01.html` → 빌드 → `git status --short` | 수정 파일만 남음 | ` M lint/check_structure.py` | 통과 |
+
+check_all 원문:
+
+```
+[경고] 그림 글자 크기(기준 미달, 아직 실패로 보지 않음)
+chapters\ch02.html fig-2-2: 가장 작은 글자 11.0px, 모바일 약 8.1px(기준 11.0)
+chapters\ch04.html fig-4-2: 가장 작은 글자 12.5px, 모바일 약 9.2px(기준 11.0)
+chapters\ch05.html fig-5-2: 가장 작은 글자 12.5px, 모바일 약 9.2px(기준 11.0)
+chapters\ch06.html fig-6-2: 가장 작은 글자 12.0px, 모바일 약 8.8px(기준 11.0)
+chapters\ch07.html fig-7-2: 가장 작은 글자 11.5px, 모바일 약 8.5px(기준 11.0)
+chapters\ch08.html fig-8-2: 가장 작은 글자 12.5px, 모바일 약 9.2px(기준 11.0)
+chapters\ch09.html fig-9-2: 가장 작은 글자 12.5px, 모바일 약 9.2px(기준 11.0)
+chapters\ch11.html fig-11-1: 가장 작은 글자 11.5px, 모바일 약 8.5px(기준 11.0)
+
+검사 요약
+  통과  빌드
+  통과  금칙어
+  통과  번호
+  통과  구조
+  통과  문체
+  통과  그림 안 이름
+exit=0
+```
+
+남은 일: 종료 훅 시험(5-3)을 수정된 상태에서 다시 해서, 오류 출력에 Traceback이 없을 때 exit 2가 실제로 종료를 막는지 확인한다.
