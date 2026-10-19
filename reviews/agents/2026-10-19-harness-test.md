@@ -82,4 +82,36 @@ chapters\ch11.html fig-11-1: 가장 작은 글자 11.5px, 모바일 약 8.5px(�
 exit=0
 ```
 
-남은 일: 종료 훅 시험(5-3)을 수정된 상태에서 다시 해서, 오류 출력에 Traceback이 없을 때 exit 2가 실제로 종료를 막는지 확인한다.
+## 시험 5-3 재시험(수정 뒤)
+
+| 시험 | 명령 | 기대 | 실제 출력 원문 | 판정 |
+|---|---|---|---|---|
+| 편집 직후 검사 | ch02.html 첫 문단 앞에 "잘 되는 " 삽입(Edit) | 금칙어만 알림(Traceback 없음) | `[python tools/hook_lint.py]: [금칙어]` `chapters/ch02.html:47:<p class="lead">잘 되는 에이전트(Agent)는 …` | 통과 |
+| 종료 훅 | 변경을 남긴 채 턴 종료 | stop_check가 종료를 막고 메시지를 세션에 돌려줌 | 아래 원문 | 통과 |
+| 되돌림 | `git checkout -- src/chapters/ch02.html chapters/ch02.html` → `git status --short` | 변경 없음 | (출력 없음) | 통과 |
+
+종료 훅 메시지 원문(세션에 "Stop hook feedback"으로 돌아옴):
+
+```
+[python tools/hooks/stop_check.py]: [검사 실패]
+[경고] 그림 글자 크기(기준 미달, 아직 실패로 보지 않음)
+(그림 8개 경고 줄 생략, 위 check_all 원문과 같음)
+
+검사 요약
+  통과  빌드
+  실패  금칙어
+  통과  번호
+  통과  구조
+  통과  문체
+  통과  그림 안 이름
+
+[금칙어]
+chapters\ch02.html:47: (^|[ >(])잘 
+
+
+[인계] 원고(src/)를 바꿨는데 HANDOFF.md를 갱신하지 않았습니다.
+
+위 문제를 고친 뒤 끝내십시오.
+```
+
+결론: 오류 출력에 `No such file or directory`가 없어지자 exit 2가 정상적으로 종료를 막았다. 첫 시험의 실패 원인이 구조 검사 결함(F-13)이었다는 추정과 맞는다. 다만 훅 오류 출력에 이 문구가 다시 섞이면 같은 일이 생길 수 있다.
