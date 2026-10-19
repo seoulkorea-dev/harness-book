@@ -1,7 +1,9 @@
 ---
-description: 검수 결과 반영. 사용법 /apply-review ch02
+description: 검수 지침 반영: 지침대로 고치고 반영 n / n을 확인한다
 ---
-reviews/$ARGUMENTS-review.md의 "수정 필요" 항목을 writer 에이전트로 반영한다.
-- 항목마다 고친 뒤 훅 결과가 통과해야 다음 항목으로 넘어간다.
-- "사용자 결정 필요" 항목은 고치지 않고 목록으로 남긴다.
-- 끝나면 `git diff --stat`과 항목별 반영 여부 표를 출력한다.
+검수 문서 $ARGUMENTS를 반영한다.
+1. 문서를 읽고, "교체" 코드 상자의 내용만 옮긴다. 표의 이유 칸과 설명은 옮기지 않는다.
+2. 지시하지 않은 변경은 하지 않는다.
+3. python tools/check_all.py와 python tools/check_review.py $ARGUMENTS를 통과시킨다(반영 n / n).
+4. 검수 문서를 reviews/에 별도 커밋으로 등록하고, HANDOFF.md를 갱신한다.
+5. 작가 확인을 받아 같은 PR에 push하고, 출력 원문을 PR에 댓글로 남긴다.

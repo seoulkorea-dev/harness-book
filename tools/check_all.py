@@ -1,0 +1,76 @@
+"""책 저장소 전체 검사: 빌드, 금칙어, lint 3종, 그림 점검(, CI에서는 빌드 결과와 커밋 일치).
+사용: python tools/check_all.py [--ci]
+모든 항목을 실행한 뒤 요약을 출력하고, 하나라도 실패하면 종료 코드 1.
+"""
+import glob, html, re, subprocess, sys
+
+CI = "--ci" in sys.argv
+STRICT_FIG = "--strict-figures" in sys.argv  # 그림 글자 크기를 실패로 볼지(기본은 경고)
+MOBILE_MIN_PX = 11.0      # 모바일에서 보이는 가장 작은 글자(px)
+SVG_MIN_WIDTH = 560       # style.css의 .diagram svg min-width
+FIG_BANNED = ["Claude"]   # 그림 안에 쓰지 않는 이름(D-095)
+
+def run(cmd):
+    r = subprocess.run(cmd, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    return r.returncode, (r.stdout + r.stderr).strip()
+
+results = []
+def add(name, ok, detail=""):
+    results.append((name, ok, detail))
+
+code, out = run("python tools/build.py")
+add("빌드", code == 0, out[-300:])
+
+pats = [l.rstrip("\r\n") for l in open("lint/banned.txt", encoding="utf-8") if l.strip() and not l.startswith("#")]  # 끝 공백도 패턴의 일부
+hits = []
+for f in ["index.html"] + glob.glob("chapters/*.html") + glob.glob("appendix/*.html"):
+    for n, line in enumerate(open(f, encoding="utf-8"), 1):
+        for p in pats:
+            try:
+                if re.search(p, line):
+                    hits.append(f"{f}:{n}: {p}")
+            except re.error:
+                pass
+add("금칙어", not hits, "\n".join(hits[:20]))
+
+for name, cmd in [("번호", "python lint/check_numbers.py"), ("구조", "python lint/check_structure.py")]:
+    code, out = run(cmd)
+    add(name, code == 0, out[-800:])
+
+code, out = run("python lint/check_style.py")
+warns = [l for l in out.splitlines() if l.startswith("경고 ")]
+add("문체", not warns, "\n".join(warns[:20]))
+
+fig_issues = []
+fig_small = []
+for f in sorted(glob.glob("chapters/*.html") + glob.glob("appendix/*.html") + ["index.html"]):
+    t = open(f, encoding="utf-8").read()
+    for m in re.finditer(r'<figure[^>]*id="(fig-[^"]+)"(.*?)</figure>', t, re.S):
+        fid, body = m.group(1), m.group(2)
+        vb = re.search(r'viewBox="0 0 ([\d.]+) [\d.]+"', body)
+        sizes = [float(x) for x in re.findall(r'font-size="([\d.]+)"', body)]
+        if vb and sizes:
+            w = float(vb.group(1)); shown = min(sizes) * SVG_MIN_WIDTH / w if w > SVG_MIN_WIDTH else min(sizes)
+            if round(shown, 1) < MOBILE_MIN_PX:
+                fig_small.append(f"{f} {fid}: 가장 작은 글자 {min(sizes)}px, 모바일 약 {shown:.1f}px(기준 {MOBILE_MIN_PX})")
+        text = html.unescape(re.sub(r"<[^>]+>", " ", body)) + " " + " ".join(re.findall(r'aria-label="([^"]*)"', body))
+        for b in FIG_BANNED:
+            if b in text:
+                fig_issues.append(f"{f} {fid}: 그림 안에 '{b}'")
+add("그림 안 이름", not fig_issues, "\n".join(fig_issues[:30]))
+if STRICT_FIG:
+    add("그림 글자 크기", not fig_small, "\n".join(fig_small[:30]))
+elif fig_small:
+    print("[경고] 그림 글자 크기(기준 미달, 아직 실패로 보지 않음)\n" + "\n".join(fig_small[:30]) + "\n")
+
+if CI:
+    code, out = run("git diff --exit-code --stat -- index.html chapters appendix")
+    add("빌드 결과와 커밋 일치", code == 0, out[-500:])
+
+print("검사 요약")
+for name, ok, _ in results:
+    print(f"  {'통과' if ok else '실패'}  {name}")
+fails = [r for r in results if not r[1]]
+for name, _, detail in fails:
+    print(f"\n[{name}]\n{detail}")
+sys.exit(1 if fails else 0)
