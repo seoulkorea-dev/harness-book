@@ -206,3 +206,9 @@
 - check_all.py의 현재 실행 결과(요약 출력). 이번 조사에서는 실행하지 않았습니다.
 - docs/metrics.md(작업 효과 수치가 있는지).
 - .claude/ 아래 에이전트 정의 8개의 본문 전체(이름, 설명, 도구, 모델 줄만 확인).
+
+## S-C11-8. 이 저장소, 11장 개정 원고 대조(fact-checker, PR #44)
+- URL: 저장소 파일(.claude/agents/*.md, .claude/settings.json, tools/hooks/pre_bash.py, tools/hooks/stop_check.py, tools/check_all.py, .github/workflows/check.yml, verify-site.yml, lint/check_style.py, lint/check_structure.py, FAILURES.md, DECISIONS.md D-001, D-005, D-099~D-118, NEW_BOOK_PLAYBOOK.md 0장, docs/metrics.md)
+- 확인일: 2026-10-20(작업 트리 기준)
+- 사용한 내용: 에이전트 8개, 명령 7개, Skill 5개, 훅 4종, 설정의 금지 규칙(main으로의 push, 강제 옵션), pre_bash 훅(main 커밋, 강제 push, main push 차단), book-check(pull_request, push main, 검사 스크립트의 CI 옵션), verify-site(page_build, workflow_dispatch). editor와 figure-checker의 도구에는 Bash가 있고 Edit, Write는 없음(Bash 제한은 정의 본문 지시). F-08(2026-10-15~18, 원인 기록)과 F-17(2026-10-20, 원인 검증, D-114~D-116)은 다른 실패. D-110, D-100, D-107, D-108의 변경은 대체 열이 비어 있고 D-115, D-116은 대체 번호가 있음. docs/metrics.md는 값이 없어 "검수가 판단 항목에 집중됨"의 근거가 되지 않음. Lopopolo 원문은 열지 못함(S2 기록과 일치만)
+- 확신: 높음(파일 내용), 낮음(Lopopolo, 브랜치 보호, 지난 책 원 기록)
