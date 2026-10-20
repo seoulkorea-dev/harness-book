@@ -4,6 +4,7 @@
 - 브랜치: ch01-figures-rules(그림 1-1, 1-2 확정과 그림 규칙 승격, 명세 먼저 D-106, D-107). v1.0(PR #4)은 main에 병합됨
 
 ## 지금 상태
+- 작업 시작: 이슈 보고에 진행 완료 chapter와 chapter별 작업, 수정 내용 표기(작가 지시), 브랜치 issue-report-format
 - v1.0 작업(D-104, D-105)을 끝까지 진행함. 커밋 순서: F-14 훅 경로 → D-104·D-105 기록 → CR 이름 통일(원고, 그림 3-1·4-1·6-1·8-1, examples/) → 장 틀 스타일과 lint 제외 → 1~11장 보강(장마다 커밋) → 시작하며·마치며.
 - 장마다 하위 에이전트(fact-checker, flow-reviewer, reader-novice, 그림을 바꾼 장은 figure-checker) 점검을 받고 필수만 반영함. 보고서: reviews/agents/2026-10-20-chNN-*.md. 권장과 참고: reviews/agents/v1.1-backlog.md.
 - 시작하며의 새 틀 안내 문단과 마치며 원칙 목록은 에이전트 점검을 받지 않음(backlog에 기록).
