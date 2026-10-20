@@ -1,4 +1,5 @@
 <h1><span class="h-num">Chapter 8</span> <span class="h-title">기록과 인계: 결정, 진행, 규칙의 문서화</span></h1>
+<p class="claim">작업이 이어지는지를 정하는 것은 대화 이력의 길이가 아니라, 결정과 진행 상황이 에이전트가 읽을 수 있는 문서로 남아 있는지입니다.</p>
 <p class="lead">에이전트(Agent)의 세션은 새 컨텍스트(Context)에서 시작하며, 이전 세션의 대화 내용을 기억하지 못합니다. 작업이 이어지는지를 정하는 것은 대화 이력의 길이가 아니라, 결정과 진행 상황이 에이전트가 읽을 수 있는 문서로 남아 있는지입니다. 그래서 대화 안에서만 합의한 내용은 다음 세션에서 사라지고, 같은 논의와 같은 실수가 반복됩니다. 따라서 결정, 진행, 규칙은 저장소의 문서로 기록해야 합니다. 이 장에서는 기록의 세 종류와 결정 기록, 인계 메모의 작성 방법을 다룹니다.</p>
 <ul class="summary"><li>새 세션과 다른 에이전트는 이전 대화를 읽지 못합니다.</li><li>기록은 결정 기록, 진행 기록, 규칙 문서의 세 종류로 관리합니다.</li><li>작업을 다른 세션에 넘길 때는 인계 메모를 작성합니다.</li></ul>
 <h2 id="session">세션이 끝난 뒤 남는 것</h2>
@@ -43,5 +44,25 @@
 <p>이 책은 작성과 검수를 서로 다른 채팅에서 진행하며, 검수 채팅을 시작할 때 인계 메모를 전달합니다. 인계 메모에는 저장소 주소, 최종 커밋, 읽을 문서, 검수 문서의 형식이 들어 있습니다.</p>
 <p>기록과 인계는 세션이 끝나도 남아야 할 결정과 진행 상황을 에이전트가 읽을 수 있는 문서로 옮기는 일입니다.</p>
 <p>인계 메모로 세션을 이어 가는 실습은 <a href="../appendix/practice.html#lab-6">부록 실습의 실습 6</a>에 있습니다.</p>
+<h2 id="fail">실패와 막는 장치</h2>
+<p>결정과 진행 상황을 문서로 남기지 않으면, CR을 두 세션에 나누어 구현할 때 다음 실패가 생길 수 있습니다. 작업 번호는 <a href="ch06.html#example">Chapter 6의 표 6-4</a>에 있는 다섯 작업 단위를 위에서부터 차례로 가리킵니다. 표 8-3은 실패와 원인, 막는 장치입니다.</p>
+<figure class="fig" id="tbl-8-3"><div class="table-wrap"><table><thead><tr><th>실패</th><th>원인</th><th>막는 장치</th></tr></thead><tbody>
+<tr><td>세션 2가 이미 끝난 작업 2를 다시 구현함</td><td>진행 기록이 없음</td><td>tasks.json의 통과 값, 작업 단위마다 commit(부록 실습 5의 확인 방법)</td></tr>
+<tr><td>세션 2가 대체된 결정(D-012)을 근거로 구현함</td><td>결정의 변경을 대화에서만 합의함</td><td>결정 기록에 새 결정과 대체 관계를 남김(이 장의 D-015 예시)</td></tr>
+<tr><td>대화에서만 전달한 수정 범위 지시를 컨텍스트 압축 뒤에 놓침</td><td>계속 지킬 지시를 대화에만 둠</td><td>규칙 문서(CLAUDE.md)에 추가</td></tr>
+<tr><td>새 세션이 어느 문서부터 읽을지 몰라 저장소 전체를 탐색함</td><td>인계 메모가 없음</td><td>HANDOFF.md의 읽을 문서와 다음 작업</td></tr>
+</tbody></table></div><figcaption><b>표 8-3. CR을 세션에 나눌 때 생길 수 있는 실패와 막는 장치</b><ul class="capnote"><li>실패, 원인, 막는 장치</li></ul></figcaption></figure>
+<h2 id="check">확인 방법</h2>
+<p>기록이 제 역할을 하는지는 새 세션이 기록만으로 작업을 이어 가는지로 확인합니다. 명령과 파일은 실습 폴더(examples/expense-app/) 기준입니다. 표 8-4는 확인할 것과 확인 위치입니다.</p>
+<figure class="fig" id="tbl-8-4"><div class="table-wrap"><table><thead><tr><th>확인할 것</th><th>명령이나 파일</th><th>확인 기준</th></tr></thead><tbody>
+<tr><td>인계 메모</td><td>HANDOFF.md</td><td>현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령의 다섯 항목이 있음</td></tr>
+<tr><td>진행 기록</td><td>tasks.json, git log</td><td>부록 실습 5의 확인 방법대로, 통과 값이 true인 작업 단위마다 commit이 있음</td></tr>
+<tr><td>결정 기록</td><td>DECISIONS.md</td><td>변경된 결정이 있으면 대체한 결정의 번호가 적혀 있음. 실습 폴더의 결정 기록에는 D-012 한 건만 있으며, D-015는 이 장의 예시</td></tr>
+<tr><td>이어 받기</td><td>새 세션에서 "HANDOFF.md를 읽고 이어서 작업해 줘" 요청(<a href="../appendix/practice.html#lab-6">부록 실습의 실습 6</a>)</td><td>이전 대화 없이 다음 작업 단위를 선택함</td></tr>
+</tbody></table></div><figcaption><b>표 8-4. 기록과 인계의 확인 방법</b><ul class="capnote"><li>확인할 것, 명령이나 파일, 확인 기준</li></ul></figcaption></figure>
+<h2 id="principle">원칙과 점검 질문</h2>
+<p class="principle">세션이 끝나도 남아야 할 결정과 진행 상황은 대화가 아니라 저장소의 문서로 남깁니다.</p>
+<p>자기 업무에 적용할 때는 다음 세 질문으로 점검합니다.</p>
+<ol><li>지금 대화에서만 합의하고 문서로 남기지 않은 결정이 있습니까?</li><li>새 세션이 인계 메모만 읽고 다음 작업을 시작할 수 있습니까?</li><li>결정을 변경할 때 이전 결정과의 대체 관계를 남기고 있습니까?</li></ol>
 <h2 id="refs">참고 자료</h2>
 <ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 4일). How Claude remembers your project. Claude Code Docs</li><li id="ref-anthropic-2026b">Anthropic. How Claude Code works, How the agent loop works, Manage costs effectively(확인 2026년 10월 15일). Claude Code Docs</li><li id="ref-lopopolo-2026">Lopopolo, R. (2026년 2월 11일). Harness engineering: leveraging Codex in an agent-first world. OpenAI</li><li id="ref-young-2025">Young, J. (2025년 11월 26일). Effective harnesses for long-running agents. Anthropic</li></ul>

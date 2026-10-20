@@ -125,3 +125,10 @@
 - Anthropic, Define success criteria and build evaluations(Claude Platform Docs), https://platform.claude.com/docs/en/test-and-evaluate/develop-tests, 확인일 2026-10-20: LLM 기반 채점의 1~5 척도 예, 예시 답안 비교, 생성 모델과 다른 모델로 평가하는 편이 좋다는 주석(표 7-3 4행 근거)
 - Python 문서 unittest, https://docs.python.org/3/library/unittest.html, 확인일 2026-10-20: Test Discovery 절에 시작 폴더가 없을 때의 동작이 적혀 있지 않음. 그래서 표 7-4 3행 원인을 "시험 파일을 찾지 못해"로 씀
 - 예제 앱 app.py: 등록 화면은 /new, 루트는 목록(표 7-5 4행 근거). acceptance/test_cr07.py test_1은 render_form의 HTML 출력을 확인(표 7-4 1행 근거)
+
+# 2026-10-20 ch08, ch09 v1.0 보강 확인(fact-checker)
+- memory 문서(https://code.claude.com/docs/en/memory): 세션마다 새 컨텍스트, CLAUDE.md와 자동 메모리가 세션 사이 지식 전달. 대화에서만 준 지시는 /compact 뒤 사라질 수 있고 CLAUDE.md에 추가하라는 안내, 루트 CLAUDE.md는 압축 뒤 다시 주입(표 8-3 3행)
+- 예제 파일 대조: CLAUDE.example.md에 commit 지시 없음, 읽는 순서는 CR.md, DECISIONS.md, tasks.json, HANDOFF.md. examples DECISIONS.md는 D-012 한 행(D-015는 8장 예시). "작업 단위마다 commit"은 부록 실습 5 확인 방법이 근거
+- permissions 문서(https://code.claude.com/docs/en/permissions): Edit deny는 내장 도구, Bash의 인식되는 파일 명령, 리다이렉션에 적용되나 스크립트의 간접 쓰기에는 적용 안 됨(샌드박스 필요, 표 9-4 1행). Bash(git push *)는 git -C . push와 불일치
+- sandboxing 문서(https://code.claude.com/docs/en/sandboxing): Bash 등 명령과 하위 프로세스를 운영 체제 수준에서 제한. macOS, Linux, WSL2에서 동작, 네이티브 Windows에서는 샌드박스 없이 실행
+- costs 문서 재확인: /usage Session은 API 사용자용, 정가 기준 추정치(modelPricing 설정 시 계약 요율, 여전히 추정치)
