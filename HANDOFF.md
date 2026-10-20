@@ -4,6 +4,7 @@
 - 브랜치: ch02-flow(2장 흐름 재점검, PR #36). 이후 장마다 작업 브랜치(chNN-flow)
 
 ## 지금 상태
+- 작업 시작: 3장 흐름 재점검(이슈 #31 할 일 4, 브랜치 ch03-flow)
 - 2026-10-20: 2장 흐름 재점검 완료(이슈 #31 할 일 4, PR #36, D-117). 논지 사슬 reviews/flow/ch02-flow.md(끊김 2 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영, 사실 기록은 research/ch02-sources.md 끝 절. 작가 확인 Q-041(원칙의 훅, 그림 2-1 검증 묶음), Q-039 범위 추가. 다음은 3장 흐름 재점검(3장 표 3-2의 "작업 단위마다 검사 스크립트 통과"도 확인).
 - 2026-10-20: 1장 흐름 재점검 완료(이슈 #31 할 일 4, PR #35, D-117). 논지 사슬 reviews/flow/ch01-flow.md(끊김 3 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영, 사실 기록은 research/ch01-sources.md 끝 절. 작가 확인 Q-037(실행 장치 두 뜻), Q-038(CR 적용 절), Q-039(Rajasekaran 글 주체 표기), Q-040(Codex 턴 정의 원문 미확인). 다음은 2장 흐름 재점검.
 - 2026-10-20: .claude/ 반영 완료(이슈 #31, D-117, PR #33, Q-036 처리, F-19 해소). 작가가 .claude/ 쓰기를 허용한 대화형 세션에서 docs/specs/flow-criteria-claude/의 새 판 다섯 개(editor, flow-reviewer, reader-novice, review-chapter, next)를 .claude/에 덮어쓰고 그 폴더를 지움. 이제 장 PR은 장 전체 통독과 논지 사슬 표(reviews/flow/<장>-flow.md)로 검수함. 다음은 1장 흐름 재점검(장마다 PR), 이슈 #34(PC용 autorun 개선)는 이 세션에서 건너뜀
