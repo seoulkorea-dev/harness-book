@@ -12,7 +12,7 @@
 <p>증거로 판정하려면 무엇을 확인할지가 작업을 맡기기 전에 정해져 있어야 합니다. 완료 기준이 문장으로만 있으면 판정하는 사람마다 결과가 달라지기 때문입니다. 완료 기준은 <a href="ch06.html#split">Chapter 6</a>의 작업 단위 목록에 적는 칸이고, 수용 기준(Acceptance Criteria)은 <a href="ch03.html#example">Chapter 3</a>에서 사람이 정한 완료 조건입니다. 이 책은 완료 기준을 통과, 실패로 갈리는 검사로 변경하는 일을 변환이라고 정리합니다.</p>
 <p>변환한 기준은 누가 판정해도 같은 결과가 나와야 합니다. 표 7-1은 문장으로 작성된 완료 기준을 검사로 변환한 예입니다. 수용 시험(Acceptance Test)은 수용 기준을 충족하는지 확인하는 시험이고, 응답 코드 200은 웹 서버가 요청을 정상으로 처리했다는 뜻입니다. 구조 검사 스크립트는 오류를 찾을 때만 출력하므로, 출력이 비어 있으면 통과입니다.</p>
 <figure class="fig" id="tbl-7-1"><div class="table-wrap"><table><thead><tr><th>문장으로 작성된 완료 기준</th><th>검사로 변환한 기준</th></tr></thead><tbody>
-<tr><td>목록에 없는 코드는 거부할 것</td><td>거부를 확인하는 수용 시험 통과</td></tr>
+<tr><td>목록에 없는 코드는 거부할 것(이 장 예제의 기준)</td><td>거부를 확인하는 수용 시험 통과</td></tr>
 <tr><td>문서 형식을 지킬 것</td><td>구조 검사 스크립트의 출력이 비어 있음</td></tr>
 <tr><td>기존 기능에 영향이 없을 것</td><td>전체 단위 테스트 통과</td></tr>
 <tr><td>사이트가 정상 배포될 것</td><td>모든 쪽과 정적 자원(그림, 스타일 파일)의 응답 코드가 200</td></tr>
@@ -32,7 +32,7 @@
 <p>표 7-3은 세 방법이 각각 어떤 확인에 알맞은지 보여 줍니다.</p>
 <figure class="fig" id="tbl-7-3"><div class="table-wrap"><table><thead><tr><th>방법</th><th>적합한 대상</th><th>예</th></tr></thead><tbody>
 <tr><td>자동 검사</td><td>기준이 명확하고 반복되는 확인</td><td>수치 대조, 금칙어 검사, 단위 테스트</td></tr>
-<tr><td>출력 확인</td><td>자동화되지 않았지만 결과가 명확한 확인</td><td>빌드 출력, 화면 캡처, 배포 상태</td></tr>
+<tr><td>출력 확인</td><td>자동화되지 않았지만 결과가 명확한 확인</td><td>빌드 출력의 경고를 사람이 읽고 판단, 화면 캡처, 배포 상태</td></tr>
 <tr><td>독립 검수</td><td>판단이 필요한 확인</td><td>문장의 논리, 설계의 타당성, 사실 확인</td></tr>
 </tbody></table></div><figcaption><b>표 7-3. 검증 방법별 적합한 대상</b><ul class="capnote"><li>세 가지 검증 방법과 적합한 대상의 예</li></ul></figcaption></figure>
 <p>반복되는 확인을 자동 검사로 옮긴 사례도 있습니다. Codex로 제품을 개발한 팀은 문서 구조를 전용 lint와 CI로 기계적으로 검사했다고 밝혔습니다. 사람은 작업의 우선순위를 정하고 결과를 검증하는 역할을 맡았습니다(<a href="#ref-lopopolo-2026">Lopopolo, 2026</a>). 반복되는 확인은 자동 검사에 맡기고, 사람은 판단이 필요한 확인에 시간을 사용하는 구성입니다.</p>
@@ -59,12 +59,12 @@
 <h2 id="example">변경 요청의 검증 설계 예제</h2>
 <p>지금까지의 원리를 <a href="ch03.html#example">Chapter 3</a>의 경비 정산 시스템 개편 변경 요청(Change Request) CR에 적용합니다. CR은 정산 요청에 프로젝트 코드를 목록에서 선택해 입력하게 하는 변경이고, 수용 기준은 다섯 가지입니다. 등록 화면에서 목록의 코드를 선택할 수 있어야 하고, 목록에 없는 코드는 거부하고 사유에 입력한 코드를 표시해야 합니다. 목록 화면에 프로젝트 코드를 표시하고, 코드가 없는 기존 요청도 그대로 표시하며, 프로젝트 코드 목록 파일은 변경하지 않아야 합니다. 표 7-6은 CR의 기준마다 검증 방법과 통과 조건을 정한 결과입니다.</p>
 <figure class="fig" id="tbl-7-6"><div class="table-wrap"><table><thead><tr><th>기준(출처)</th><th>검증 방법</th><th>판정하는 쪽</th><th>판정 형식</th><th>통과 조건</th></tr></thead><tbody>
-<tr><td>수용 기준 1~5(Chapter 3)</td><td>자동 검사</td><td>수용 시험 1~5(check.py로 실행)</td><td>통과, 실패</td><td>다섯 시험 모두 통과, 실행 0건이 아님</td></tr>
+<tr><td>수용 기준 1~5(Chapter 3)</td><td>자동 검사</td><td>수용 시험 1~5(check.py로 실행)</td><td>통과, 실패</td><td>다섯 시험 모두 통과, 실행 0건이 아님(표 아래 설명)</td></tr>
 <tr><td>수용 기준 1~5의 대조(추가 장치)</td><td>독립 검수(LLM 기반 채점)</td><td>검토 하위 에이전트</td><td>기준마다 충족, 미충족, 확인 불가와 근거 파일, 줄 번호</td><td>모두 충족. 미충족이나 확인 불가가 있으면 사용자가 근거를 확인</td></tr>
 <tr><td>수용 기준 1의 화면(등록 화면에서 코드 선택)</td><td>출력 확인</td><td>사용자(브라우저)</td><td>선택할 수 있음, 없음</td><td>목록의 코드를 선택할 수 있음</td></tr>
 <tr><td>통합 시나리오의 범위(Chapter 6 작업 5의 완료 기준)</td><td>독립 검수(사람 채점)</td><td>승인자</td><td>승인, 반려</td><td>승인</td></tr>
 </tbody></table></div><figcaption><b>표 7-6. CR의 검증 설계</b><ul class="capnote"><li>기준마다 검증 방법, 판정하는 쪽, 판정 형식, 통과 조건</li></ul></figcaption></figure>
-<p>기준마다 방법 하나를 선택하는 것이 기본입니다. 둘째 행은 같은 수용 기준을 한 번 더 보는 추가 장치입니다. 시험이 통과해도 기준을 모두 충족했다고 증명되지는 않을 수 있어, 근거 파일과 줄 번호로 다시 대조합니다. 넷째 행의 통합 시나리오는 수용 기준이 아니라 <a href="ch06.html#example">Chapter 6</a>의 작업 5에서 승인자가 승인하는 단위입니다.</p>
+<p>기준마다 방법 하나를 선택하는 것이 기본입니다. 둘째 행은 같은 수용 기준을 한 번 더 보는 추가 장치입니다. 시험은 기준마다 정해진 경우만 확인하므로, 시험이 통과해도 시험이 다루지 않는 경우가 남을 수 있습니다. 그래서 근거 파일과 줄 번호로 기준을 다시 대조합니다. 넷째 행의 통합 시나리오는 수용 기준이 아니라 <a href="ch06.html#example">Chapter 6</a>의 작업 5에서 승인자가 승인하는 단위입니다.</p>
 <p>첫째 행의 수용 시험을 실행하는 파일이 <a href="ch03.html#example">Chapter 3</a>의 검사 스크립트 check.py입니다. 보고 대신 출력 원문으로 판정하려면 스크립트가 무엇을 출력하는지가 중요하므로, 핵심 부분을 봅니다. 아래 코드는 따라 입력할 필요 없이 읽기만 하면 됩니다.</p>
 <pre>import sys, unittest
 
@@ -78,12 +78,12 @@ for folder, (count, failed) in results.items():
     print(f"{folder}: 실행 {count}건, 실패 {failed}건")
 sys.exit(0 if all(count &gt; 0 and failed == 0 for count, failed in results.values()) else 1)</pre>
 <p>코드는 세 덩어리입니다. 첫 덩어리는 단위 테스트 폴더(tests)와 수용 시험 폴더(acceptance)에서 시험을 찾아 실행하고, 폴더마다 실행 건수와 실패 건수를 셉니다. 둘째 덩어리는 판정 근거인 두 건수를 폴더별로 출력합니다. 마지막 줄은 두 폴더 모두 실행 건수가 0보다 크고 실패가 0건일 때만 종료 코드 0(성공)으로, 아니면 1로 끝냅니다. 종료 코드는 명령이 끝날 때 돌려주는 값입니다(<a href="ch03.html#files">Chapter 3</a>).</p>
-<p>실행 건수가 0건인 폴더를 실패로 판정하는 이유가 있습니다. 시험 파일을 찾지 못해 하나도 실행되지 않으면 실패 건수도 0건이 되어, 통과로 보이기 때문입니다. 다음은 CR을 구현하기 전의 기준 상태에서 python check.py를 실행한 출력입니다(<a href="../appendix/practice.html#lab-1">부록 실습의 실습 1</a>). 구현 전이므로 수용 시험 1~3이 실패하고 종료 코드는 1입니다. 구현을 마치면 두 줄의 실패가 모두 0건이어야 합니다.</p>
+<p>실행 건수가 0건인 폴더를 실패로 판정하는 이유가 있습니다. 시험 파일을 찾지 못해 하나도 실행되지 않으면 실패 건수도 0건이 되어, 통과로 보이기 때문입니다. 다음은 CR을 구현하기 전의 기준 상태에서 python check.py를 실행한 출력입니다(<a href="../appendix/practice.html#lab-1">부록 실습의 실습 1</a>). 구현 전이므로 수용 시험 1~3이 실패하고 종료 코드는 1입니다. 구현을 마치면 둘째 줄이 "acceptance: 실행 5건, 실패 0건"이 되고, 종료 코드는 0이어야 합니다.</p>
 <pre>tests: 실행 3건, 실패 0건
 acceptance: 실행 5건, 실패 3건</pre>
-<p>둘째 행의 검토 하위 에이전트(Subagent)는 Chapter 3에서 읽기 도구만 사용하도록 정의한 검토자입니다. 결과를 만든 구현 에이전트와 다른 새 컨텍스트에서, CR의 수용 기준을 기준표로 삼아 변경 내용을 대조합니다. 판정값은 기준마다 충족, 미충족, 확인 불가와 근거 파일, 줄 번호이고, 통과 조건은 표 7-6처럼 채점 전에 정합니다. 예시 답안은 두지 않습니다.</p>
-<p>판정 기준이 되는 수용 시험과 check.py는 권한 설정의 금지 규칙으로 수정을 막습니다(<a href="ch02.html#instruct-enforce">Chapter 2의 지시와 강제</a>). Claude Code 문서에 따르면 파일 수정 금지 규칙은 파일 편집 도구와, 셸에서 파일 이름이 드러나는 명령에 적용됩니다. 파일을 스스로 여는 스크립트를 실행해 간접으로 수정하는 경우에는 적용되지 않습니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>). 그래서 확인 방법에서 git status로 두 파일에 변경이 없는지 다시 확인합니다.</p>
-<p>예제의 훅(Hook)은 파일을 편집한 뒤마다 단위 테스트를 실행하고, 실패하면 종료 코드 2로 끝나 실패 출력을 모델에 돌려줍니다(<a href="ch03.html#files">Chapter 3</a>). 편집은 이미 실행된 뒤이므로 훅이 편집을 막지는 못하고, 다시 작업하게 합니다(<a href="#ref-anthropic-2026d">Anthropic, 2026d</a>). 수용 시험은 check.py로 확인합니다. 검사가 통과할 때까지 응답을 끝내지 못하게 하는 Stop 훅도 있으며, Claude Code 문서는 이를 결정적인 관문으로 설명합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). 훅과 검토 하위 에이전트를 직접 만드는 실습은 <a href="../appendix/practice.html#lab-4">부록 실습의 실습 4</a>에 있습니다.</p>
+<p>둘째 행의 검토 하위 에이전트(Subagent)는 <a href="ch03.html#files">Chapter 3</a>에서 읽기 도구만 사용하도록 정의한 검토자입니다. 결과를 만든 구현 에이전트와 다른 새 컨텍스트에서, CR의 수용 기준을 기준표로 삼아 변경 내용을 대조합니다. 판정값은 기준마다 충족, 미충족, 확인 불가와 근거 파일, 줄 번호이고, 통과 조건은 표 7-6처럼 채점 전에 정합니다. 예시 답안은 두지 않습니다.</p>
+<p>에이전트는 시험 통과를 목표로 삼아, 실패하는 시험 쪽을 수정할 수 있습니다. 그래서 판정 기준이 되는 수용 시험과 check.py는 권한 설정의 금지 규칙으로 수정을 막습니다(<a href="ch02.html#instruct-enforce">Chapter 2의 지시와 강제</a>). Claude Code 문서에 따르면 파일 수정 금지 규칙은 파일 편집 도구와, 셸에서 파일 이름이 드러나는 명령에 적용됩니다. 에이전트가 Python 스크립트를 만들어 실행하고, 그 스크립트가 시험 파일을 여는 식으로 간접으로 수정하는 경우에는 적용되지 않습니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>). 그래서 확인 방법에서 git status로 두 파일에 변경이 없는지 다시 확인합니다.</p>
+<p>check.py는 작업 단위를 마칠 때 사용자가 판정하려고 실행하는 검사이고, 에이전트가 작업하는 동안에는 훅(Hook)이 검사를 자동으로 실행합니다. 예제의 훅은 파일을 편집한 뒤마다 단위 테스트를 실행하고, 실패하면 종료 코드 2로 끝나 실패 출력을 모델에 돌려줍니다(<a href="ch03.html#files">Chapter 3</a>). 편집은 이미 실행된 뒤이므로 훅이 편집을 막지는 못하고, 다시 작업하게 합니다(<a href="#ref-anthropic-2026d">Anthropic, 2026d</a>). 수용 시험 전체는 단위를 마칠 때 check.py로 확인합니다. 검사가 통과할 때까지 에이전트가 응답을 끝내지 못하게 하는 Stop 훅(<a href="ch01.html#loop">Chapter 1</a>)도 있으며, Claude Code 문서는 이를 결정적인 관문으로 설명합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). 훅과 검토 하위 에이전트를 직접 만드는 실습은 <a href="../appendix/practice.html#lab-4">부록 실습의 실습 4</a>에 있습니다.</p>
 <h2 id="fail">실패와 막는 장치</h2>
 <p>CR의 검증을 설계하지 않으면, 보고만 믿고 동작하지 않는 결과를 완료로 처리합니다. 표 7-7은 CR에서 생길 수 있는 실패와 원인, 막는 장치입니다.</p>
 <figure class="fig" id="tbl-7-7"><div class="table-wrap"><table><thead><tr><th>실패</th><th>원인</th><th>막는 장치</th></tr></thead><tbody>
@@ -96,11 +96,11 @@ acceptance: 실행 5건, 실패 3건</pre>
 <p>판정은 보고가 아니라 출력 원문으로 합니다. 명령은 실습 폴더(examples/expense-app/)에서 실행합니다. 표 7-8은 CR의 완료를 판정할 때 확인할 것과 확인 위치입니다.</p>
 <figure class="fig" id="tbl-7-8"><div class="table-wrap"><table><thead><tr><th>확인할 것</th><th>명령이나 화면</th><th>확인 기준</th></tr></thead><tbody>
 <tr><td>판정 근거</td><td>python check.py의 출력 원문</td><td>tests와 acceptance의 실행 건수가 0보다 크고, 두 줄 모두 실패 0건</td></tr>
-<tr><td>종료 코드</td><td>python check.py 실행 직후 Git Bash에서는 echo $?, PowerShell에서는 $LASTEXITCODE</td><td>0(성공). 1이면 출력 원문에서 실패한 폴더를 확인</td></tr>
+<tr><td>종료 코드</td><td>python check.py 실행 직후, 사용하는 터미널에 맞춰 Git Bash에서는 echo $?, PowerShell에서는 $LASTEXITCODE</td><td>0(성공). 1이면 출력 원문에서 실패한 폴더를 확인</td></tr>
 <tr><td>검증 기준의 보호</td><td>git status</td><td>변경된 파일 목록에 acceptance/ 폴더와 check.py가 없음</td></tr>
 <tr><td>화면 동작</td><td>python app.py로 서버를 실행한 뒤 브라우저에서 http://localhost:8000/new(등록 화면)를 열고, 확인 뒤 터미널에서 Ctrl+C로 서버를 종료</td><td>등록 화면에서 목록의 프로젝트 코드를 선택할 수 있음</td></tr>
 <tr><td>검토 보고</td><td>검토 하위 에이전트의 대조 보고</td><td>수용 기준 다섯 가지 모두 충족, 근거 파일과 줄 번호가 있음</td></tr>
-<tr><td>사람 승인</td><td>작업 5의 통합 시나리오</td><td>승인자의 승인 기록이 있음</td></tr>
+<tr><td>사람 승인</td><td>작업 단위 목록의 작업 5</td><td>승인자가 승인하고 작업 5의 통과 값을 true로 변경함</td></tr>
 </tbody></table></div><figcaption><b>표 7-8. CR 완료의 확인 방법</b><ul class="capnote"><li>확인할 것, 명령이나 화면, 확인 기준</li></ul></figcaption></figure>
 <h2 id="principle">원칙과 점검 질문</h2>
 <p class="principle">완료 기준은 작업을 맡기기 전에 검사로 변환하고, 완료 보고가 아니라 검사 출력 원문으로 판정합니다.</p>
