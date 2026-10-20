@@ -1,9 +1,10 @@
 # 인계(HANDOFF)
 
-- 갱신: 2026-10-20(1장 흐름 재점검, ch01-flow)
-- 브랜치: ch01-flow(1장 흐름 재점검, PR #35). 이후 장마다 작업 브랜치(chNN-flow)
+- 갱신: 2026-10-20(2장 흐름 재점검, ch02-flow)
+- 브랜치: ch02-flow(2장 흐름 재점검, PR #36). 이후 장마다 작업 브랜치(chNN-flow)
 
 ## 지금 상태
+- 2026-10-20: 2장 흐름 재점검 완료(이슈 #31 할 일 4, PR #36, D-117). 논지 사슬 reviews/flow/ch02-flow.md(끊김 2 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영, 사실 기록은 research/ch02-sources.md 끝 절. 작가 확인 Q-041(원칙의 훅, 그림 2-1 검증 묶음), Q-039 범위 추가. 다음은 3장 흐름 재점검(3장 표 3-2의 "작업 단위마다 검사 스크립트 통과"도 확인).
 - 2026-10-20: 1장 흐름 재점검 완료(이슈 #31 할 일 4, PR #35, D-117). 논지 사슬 reviews/flow/ch01-flow.md(끊김 3 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영, 사실 기록은 research/ch01-sources.md 끝 절. 작가 확인 Q-037(실행 장치 두 뜻), Q-038(CR 적용 절), Q-039(Rajasekaran 글 주체 표기), Q-040(Codex 턴 정의 원문 미확인). 다음은 2장 흐름 재점검.
 - 2026-10-20: .claude/ 반영 완료(이슈 #31, D-117, PR #33, Q-036 처리, F-19 해소). 작가가 .claude/ 쓰기를 허용한 대화형 세션에서 docs/specs/flow-criteria-claude/의 새 판 다섯 개(editor, flow-reviewer, reader-novice, review-chapter, next)를 .claude/에 덮어쓰고 그 폴더를 지움. 이제 장 PR은 장 전체 통독과 논지 사슬 표(reviews/flow/<장>-flow.md)로 검수함. 다음은 1장 흐름 재점검(장마다 PR), 이슈 #34(PC용 autorun 개선)는 이 세션에서 건너뜀
 - 2026-10-20: 흐름과 이해도 검수 기준 완료(이슈 #31 할 일 1~3, PR #32, D-117, F-18). AUTHOR_PREFS 맨 위 기준 셋과 검수 방법, 논지 사슬 표 형식(reviews/flow/README.md). .claude/ 쓰기가 허용되지 않아 editor, flow-reviewer, reader-novice, review-chapter, next의 새 판은 docs/specs/flow-criteria-claude/에 둠(Q-036). 다음은 작업 목록 첫 항목 .claude/ 반영(쓰기 허용 세션), 그다음 1~5장 흐름 재점검(장마다 PR). 반영 전에는 장 PR(#30 포함)을 병합하지 않음. 이슈 #31은 1~5장이 끝날 때 닫음
@@ -52,7 +53,7 @@
 - [x] 5장 개정(그림 5-2 글자 크기 포함, Q-029~Q-031)
 - [x] .claude/ 반영(이슈 #31, D-117, PR #33): docs/specs/flow-criteria-claude/의 editor, flow-reviewer, reader-novice, review-chapter, next 새 판을 .claude/에 덮어쓰고 그 폴더를 지움(쓰기 권한을 허용한 세션에서)
 - [x] 1장 흐름 재점검(이슈 #31 할 일 4, PR #35): 장 전체 통독, reviews/flow/ch01-flow.md, 끊긴 곳 수정, 장마다 PR
-- [ ] 2장 흐름 재점검(같음, ch02-flow.md)
+- [x] 2장 흐름 재점검(PR #36, 같음, ch02-flow.md)
 - [ ] 3장 흐름 재점검(같음, ch03-flow.md)
 - [ ] 4장 흐름 재점검(같음, ch04-flow.md, "요청의 네 요소" 절을 이슈 #31의 순서로)
 - [ ] 5장 흐름 재검수(이슈 #31 할 일 5, ch05-flow.md). 1~5장이 끝나면 이슈 #31을 닫음
@@ -87,6 +88,7 @@
 | 2026-10-20 | 흐름과 이해도 검수 기준(이슈 #31 할 일 1~3) | #32 | 병합 가능(2차, 필수 0, reviews/2026-10-20-flow-criteria-editor-2.md) | 통과 | Q-036 |
 | 2026-10-20 | .claude/ 반영(이슈 #31) | #33 | 병합 가능(필수 0, reviews/2026-10-20-claude-flow-apply-editor.md) | 통과 | 없음 |
 | 2026-10-20 | 1장 흐름 재점검(이슈 #31 할 일 4) | #35 | 병합 가능(2차, 필수 0, reviews/2026-10-20-ch01-flow-editor-2.md) | 통과 | Q-037~Q-040 |
+| 2026-10-20 | 2장 흐름 재점검(이슈 #31 할 일 4) | #36 | 병합 가능(2차, 필수 0, reviews/2026-10-20-ch02-flow-editor-2.md) | 통과 | Q-041 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
