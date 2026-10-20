@@ -94,3 +94,14 @@
 ## 보강 6: 정보를 제공하는 시점과 긴 작업의 기법(2026-10-15)
 - Rajasekaran 외, Effective context engineering for AI agents(재확인, 수정일 2026-01-06): 많은 애플리케이션이 임베딩 기반 사전 검색 사용, "just in time" 방식은 파일 경로, 저장된 쿼리, 웹 링크 같은 가벼운 식별자를 두고 실행 중 도구로 로드, 탐색은 점진적 공개를 가능하게 하지만 사전 계산 데이터보다 느리고 지침 없이는 컨텍스트 낭비, Claude Code는 혼합 방식(CLAUDE.md는 먼저, glob과 grep으로 필요할 때). 긴 작업 기법 세 가지: 압축(한계 근처에서 요약 후 재시작, 지나친 압축은 나중에 중요해질 세부 정보 손실), 구조화된 노트(에이전트 기억, 컨텍스트 밖 노트를 다시 읽음, Claude Code의 할 일 목록), 하위 에이전트(깨끗한 컨텍스트, 요약 흔히 1,000~2,000 토큰 반환). 선택 기준: 압축은 주고받는 대화가 많은 작업, 노트는 마일스톤이 분명한 반복 개발, 다중 에이전트는 병렬 탐색이 효과적인 조사와 분석(3장)
 - 비교 도서의 저장 계층 4분류는 가져오지 않음. 구조화된 노트는 7장 진행 기록과 연결
+
+# 2026-10-20 ch03 v1.0 보강 확인(fact-checker)
+
+## S-0320a. Anthropic, Commands / Create custom subagents(Claude Code Docs), /agents 동작
+- URL: https://code.claude.com/docs/en/commands , https://code.claude.com/docs/en/sub-agents
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 3장 확인 방법 절(표 3-6)에서 사용한 내용
+  - /agents: 현재 버전에서는 하위 에이전트 생성과 관리를 Claude에게 요청하거나 .claude/agents/를 직접 편집하라는 안내만 출력. 목록과 도구를 보여 주는 대화형 화면은 v2.1.197 이전 동작. 그래서 표 3-6은 reviewer.md의 tools 줄과 /context의 하위 에이전트 항목으로 확인하게 함
+  - 하위 에이전트 tools 필드는 허용 목록. 생략하면 모든 도구 상속
+  - 미확인: /context가 개별 하위 에이전트의 도구 제한까지 보여 주는지(그래서 도구는 파일로 확인)

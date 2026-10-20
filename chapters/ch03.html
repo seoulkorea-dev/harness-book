@@ -44,6 +44,7 @@
 <main id="main">
 <article>
 <h1><span class="h-num">Chapter 3</span> <span class="h-title">하네스로 에이전트 설계하기</span></h1>
+<p class="claim">에이전트의 동작을 정하는 것은 요청 문장이 아니라, 목적부터 승인 지점까지 하네스에 정해 둔 항목입니다.</p>
 <p class="lead">같은 모델과 같은 제품이라도, 맡길 업무에 맞게 하네스(Harness)의 설정을 정해야 그 업무를 위한 에이전트(Agent)가 됩니다. 에이전트의 동작을 정하는 것은 요청 문장이 아니라, 목적부터 승인 지점까지 하네스의 설정에 정해 둔 항목입니다. 그래서 항목 하나가 비어 있으면 그 부분은 모델의 추측이나 제품의 기본값으로 채워집니다. 따라서 에이전트를 만들기 전에 명세서로 항목을 모두 정해야 합니다. 이 장에서는 에이전트 명세서를 작성하고, 작은 웹 서비스에 기능을 추가하는 에이전트를 설계해 제품 파일로 옮기는 방법을 다룹니다.</p>
 <ul class="summary"><li>에이전트 명세서는 목적, 역할, 입력, 도구, 권한, 기록, 검증, 종료 조건, 승인 지점의 아홉 항목입니다.</li><li>명세서는 업무 한 건에 적용해 항목마다 값을 정합니다. 에이전트가 수정할 수 있는 파일과 수정할 수 없는 파일을 나누면 검증 기준을 보호할 수 있습니다.</li><li>명세서의 항목은 규칙 문서, 권한 설정, 하위 에이전트, 훅 같은 제품 파일로 옮깁니다.</li></ul>
 <h2 id="spec">에이전트 명세서</h2>
@@ -62,7 +63,7 @@
 <p>종료 조건은 명세서에서 누락되기 쉬운 항목입니다. Agent SDK 문서는 상한이 없으면 열린 요청에서 루프가 오래 실행될 수 있다고 설명합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>). 명세서의 각 항목은 다음 절의 예제처럼 업무 한 건에 적용해 채웁니다.</p>
 <h2 id="example">기능 추가 에이전트: CR 구현</h2>
 <p>이 절은 명세서를 작은 웹 서비스의 기능 추가에 적용합니다. 소재는 가상 프로젝트인 경비 정산 시스템 개편의 미니 웹 앱입니다. 앱은 정산 요청을 등록하고 목록으로 보여 주며, Python 표준 라이브러리만으로 동작합니다.</p>
-<p>추가할 기능은 경비 정산 시스템 개편 변경 요청(Change Request) CR입니다. CR은 재무팀이 2026년 10월 5일 요청한 변경으로, 정산 요청 화면에 프로젝트 코드 선택 항목을 추가합니다. 요청 사유는 프로젝트별 경비 집계를 월말 결산에 반영하는 것입니다. CR의 영향 검토는 <a href="ch04.html#example">Chapter 4</a>, 작업 단위 분할은 <a href="ch06.html#example">Chapter 6</a>, 결정 기록은 <a href="ch08.html#decisions">Chapter 8</a>에서 이어집니다.</p>
+<p>추가할 기능은 경비 정산 시스템 개편 변경 요청(Change Request) CR이 요구하는 기능입니다. 경비 정산 시스템 개편은 가상 프로젝트의 이름이고, CR은 이 프로젝트에 들어온 변경 요청 한 건입니다. CR은 재무팀이 2026년 10월 5일 요청한 변경으로, 정산 요청 화면에 프로젝트 코드 선택 항목을 추가합니다. 요청 사유는 프로젝트별 경비 집계를 월말 결산에 반영하는 것입니다. CR의 영향 검토는 <a href="ch04.html#example">Chapter 4</a>, 작업 단위 분할은 <a href="ch06.html#example">Chapter 6</a>, 결정 기록은 <a href="ch08.html#decisions">Chapter 8</a>에서 이어집니다.</p>
 <p>이 변경은 한 번의 응답으로 끝나지 않습니다. 데이터 구조, 화면, 테스트를 차례로 수정하고, 수정할 때마다 기존 기능이 깨지지 않았는지 확인해야 합니다. 그래서 명세서의 아홉 항목이 모두 필요합니다. CR의 수용 기준은 다섯 가지입니다.</p>
 <ul><li>등록 화면에서 프로젝트 코드 목록의 코드를 선택할 수 있습니다.</li><li>목록에 없는 코드로 등록하면 거부하고 사유를 표시합니다.</li><li>목록 화면에 프로젝트 코드를 표시합니다.</li><li>프로젝트 코드가 없는 기존 요청도 목록에 그대로 표시합니다.</li><li>프로젝트 코드 원본 파일은 변경하지 않습니다.</li></ul>
 <p>표 3-2는 이 업무에 명세서를 적용한 결과입니다.</p>
@@ -146,6 +147,27 @@ docs/CR.md의 수용 기준을 읽고, 변경된 코드와 테스트가
 근거 파일과 줄 번호를 함께 보고해 줘. 파일은 수정하지 마.</pre>
 <p>이 구성을 직접 만들어 보는 실습은 <a href="../appendix/practice.html#lab-1">부록 실습의 실습 1</a>(기준 상태)과 <a href="../appendix/practice.html#lab-5">실습 5</a>(작업 단위로 구현)에 있습니다.</p>
 <p>에이전트 설계는 명세서의 아홉 항목을 정하고, 각 항목을 하네스의 설정으로 옮기는 일입니다.</p>
+<h2 id="fail">실패와 막는 장치</h2>
+<p>명세서의 항목이 비어 있거나 제품 파일로 옮겨지지 않으면, CR 구현에서 다음 실패가 생길 수 있습니다. 표 3-5는 실패와 원인이 되는 명세서 항목, 실패를 막는 장치입니다.</p>
+<figure class="fig" id="tbl-3-5"><div class="table-wrap"><table><thead><tr><th>실패</th><th>원인</th><th>막는 장치</th></tr></thead><tbody>
+<tr><td>실패하는 수용 시험을 수정해 통과시킴</td><td>권한, 검증: 검증 기준(수용 시험, 검사 스크립트)을 에이전트가 수정할 수 있음</td><td>settings.json의 deny 규칙(acceptance/, check.py), 검사 스크립트 통과를 완료 기준으로 사용</td></tr>
+<tr><td>같은 시험의 실패를 끝없이 반복함</td><td>종료 조건: 중단 기준이 없음</td><td>CLAUDE.md의 중단 규칙(같은 시험이 세 번 연속 실패하면 중단하고 인계 메모 작성)</td></tr>
+<tr><td>검토 하위 에이전트가 코드를 수정함</td><td>역할: 검토 에이전트의 도구를 제한하지 않음</td><td>reviewer.md의 도구를 Read, Grep, Glob로 제한</td></tr>
+<tr><td>사람의 확인 없이 commit하거나 push함</td><td>승인 지점: 확인할 동작을 정하지 않음</td><td>ask 규칙(git commit), deny 규칙(git push)</td></tr>
+<tr><td>두 번째 세션이 끝난 작업 단위를 다시 구현함</td><td>기록: 진행 상황을 남기지 않음</td><td>tasks.json의 통과 값, HANDOFF.md</td></tr>
+</tbody></table></div><figcaption><b>표 3-5. CR 구현에서 생길 수 있는 실패와 막는 장치</b><ul class="capnote"><li>실패, 원인이 되는 명세서 항목, 막는 장치</li></ul></figcaption></figure>
+<h2 id="check">확인 방법</h2>
+<p>명세서를 제품 파일로 옮긴 뒤에는, 파일이 실제로 적용되었는지 제품 화면과 검사 출력으로 확인합니다. 표 3-6은 CR 구현 에이전트를 확인하는 위치입니다. 직접 실행하는 순서는 <a href="../appendix/practice.html#lab-1">부록 실습의 실습 1</a>부터 실습 5까지에 있습니다. 표의 python check.py는 실습 폴더(examples/expense-app/)에서 실행합니다. 수용 시험 5건은 앞의 수용 기준 다섯 가지에 하나씩 대응하며, 구현 전에는 기존 동작에 해당하는 기준 4와 5만 통과합니다. 종료 코드는 명령이 끝날 때 돌려주는 값이며, 0은 성공, 0이 아닌 값은 실패를 뜻합니다.</p>
+<figure class="fig" id="tbl-3-6"><div class="table-wrap"><table><thead><tr><th>확인할 것</th><th>명령이나 화면</th><th>확인 기준</th></tr></thead><tbody>
+<tr><td>권한 규칙</td><td>Claude Code의 /permissions</td><td>deny에 data/, acceptance/, check.py, CLAUDE.md의 수정과 git push가 있고, ask에 git commit이 있음</td></tr>
+<tr><td>검토 하위 에이전트</td><td>.claude/agents/reviewer.md, Claude Code의 /context</td><td>파일의 도구 줄(tools)이 Read, Grep, Glob이고, /context의 하위 에이전트 항목에 reviewer가 보임</td></tr>
+<tr><td>구현 전 기준 상태</td><td>python check.py</td><td>수용 시험 5건 가운데 3건이 실패하고 종료 코드 1로 끝남</td></tr>
+<tr><td>수용 기준 충족</td><td>python check.py</td><td>단위 테스트와 수용 시험의 실패가 0건이고 종료 코드 0으로 끝남</td></tr>
+</tbody></table></div><figcaption><b>표 3-6. CR 구현 에이전트의 확인 방법</b><ul class="capnote"><li>확인할 것, 명령이나 화면, 확인 기준</li></ul></figcaption></figure>
+<h2 id="principle">원칙과 점검 질문</h2>
+<p class="principle">명세서의 아홉 항목을 모두 정하고, 검증 기준(수용 시험, 검사 스크립트)은 에이전트가 수정할 수 없는 파일에 둡니다.</p>
+<p>자기 업무에 적용할 때는 다음 세 질문으로 점검합니다.</p>
+<ol><li>맡길 업무의 명세서에서 아직 값을 정하지 않은 항목은 무엇입니까?</li><li>에이전트가 검증 기준을 수정할 수 있는 경로가 남아 있습니까?</li><li>명세서의 각 항목이 어느 제품 파일에 옮겨져 있는지 말할 수 있습니까?</li></ol>
 <h2 id="refs">참고 자료</h2>
 <ul><li id="ref-anthropic-2026">Anthropic. (확인 2026년 10월 15일). How the agent loop works. Claude Code Docs</li><li id="ref-anthropic-2026b">Anthropic. (확인 2026년 10월 16일). Automate actions with hooks, Hooks reference, Create custom subagents. Claude Code Docs</li></ul>
 
@@ -156,6 +178,9 @@ docs/CR.md의 수용 기준을 읽고, 변경된 코드와 테스트가
 <li><a href="#spec">에이전트 명세서</a></li>
 <li><a href="#example">기능 추가 에이전트: CR 구현</a></li>
 <li><a href="#files">제품 파일로 옮기기</a></li>
+<li><a href="#fail">실패와 막는 장치</a></li>
+<li><a href="#check">확인 방법</a></li>
+<li><a href="#principle">원칙과 점검 질문</a></li>
 <li><a href="#refs">참고 자료</a></li>
 </ol></aside>
 </div>
