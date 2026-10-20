@@ -78,3 +78,62 @@ exit=0
 - /home/user/harness-book/reviews/agents/2026-10-20-front-back-flow-reviewer-v2.md
 - /home/user/harness-book/docs/AUTHOR_QUEUE.md
 - /home/user/harness-book/HANDOFF.md
+
+
+---
+
+# 검수 2차: 시작하며, 마치며, 부록 정리(PR #45, 브랜치 front-back-write)
+
+판정: 병합 가능. 필수 0, 권장 2, 작가 확인 0.
+
+범위와 방법: `git diff 0496328..HEAD`로 src/appendix/practice.html, src/appendix/terms.html, src/chapters/prologue.html, docs/AUTHOR_QUEUE.md, reviews/flow/front-back-flow.md, HANDOFF.md, 처리 표를 읽었습니다. 1차에서 통독한 본문(prologue, epilogue, practice)에 이번에 바뀐 문장만 더해졌고, 장 본문(ch01~ch11)은 바뀌지 않았습니다.
+
+## 1차 항목별 반영 확인
+| 1차 # | 분류 | 반영 확인 | 판정 |
+|---|---|---|---|
+| 1 | 필수 | 실습 4 따라 하기 4단계에 "수정 대상이 expense/ 안인지 확인하고 승인, 승인해야 적용되고 그 뒤에 훅이 실행, 권한 모드에 따라 확인 화면 없이 적용될 수도 있음"이 들어갔습니다. 실습 5에는 "수정 대상이 CLAUDE.md의 수정 범위 안인지 보고 승인합니다"가 들어갔습니다. 실습 4의 둘째 요청(되돌리기)도 같은 단계 안이라 같은 기준이 적용됩니다. | 반영됨 |
+| 2 | 필수 | 실습 3의 "설정을 읽지 못합니다" 단정을 "반영되지 않을 수 있으므로, 3단계에서 /permissions로 규칙이 보이는지 확인합니다"로 바꿨습니다. 3단계에 실제로 /permissions 확인이 있어 앞뒤가 맞습니다. | 반영됨 |
+| 3 | 필수 | AUTHOR_QUEUE.md에 Q-070이 있습니다. 시안 A 선택 이유(읽는 방향이 장 순서와 같음, 점선이 Chapter 4~9를 건너뛰는 모양이 드러남), 번원 삭제, 점선 도착점을 Chapter 10으로 한정, 점선 라벨 보강을 적었고 시안 파일(2026-10-20-front-figures.html)과 alt-reviewer 보고서 경로가 실재합니다. | 반영됨 |
+| 4a | 필수 | reviews/flow/front-back-flow.md가 생겼습니다. 시작하며 6절, 마치며 3절의 논지 사슬 표와 부록 실습 순서(먼저 읽을 장) 표가 있고 끊긴 곳은 0입니다. 실습 순서와 장 순서가 다르다는 점도 적었습니다. | 반영됨 |
+| 4b | 필수 | HANDOFF.md의 "지금 상태"를 완료 상태로 바꾸고, 작업 목록 체크와 이력 표에 PR #45 행을 넣었습니다. 남은 일(실습 2~6 실행, v1.1-backlog, Q-066~Q-070)도 있습니다. 새 지적 1을 보십시오. | 반영됨 |
+| 5 | 필수 | terms.html "저장소" 항목에 `practice.html#lab-1` 링크를 붙였고, 앵커 `id="lab-1"`이 실재합니다. 다른 항목의 링크와 위치·모양이 같은 계열입니다. | 반영됨 |
+| 6 | 권장 | 캡션을 "표. 그림 '이 책의 구성과 읽는 순서'의 요소"로 바꿨습니다. 그림과의 대응이 드러납니다. | 반영됨 |
+| 7 | 권장 | 실습 4의 2단계 설명 문장을 1단계로 합치고 번호를 다시 매겼습니다(ol start="2"부터 에이전트 폴더, /hooks 확인, 요청 입력). 흐름이 자연스럽습니다. | 반영됨 |
+| 8 | 권장 | 터미널 여는 법을 Win+X(PowerShell), Cmd+Space(Spotlight)로 바꾸고 2026b(Terminal guide)를 인용했습니다. 이 내용은 fact-checker v2 L12가 공식 안내로 확인한 것과 일치합니다. 새 지적 2를 보십시오. | 반영됨 |
+| 9 | 권장 | 실습 6의 작업 5 요청을 코드 블록 "CLAUDE.md의 규칙대로 tasks.json의 다음 작업 단위를 수행해 줘."로 적었습니다. 뒤 목록은 `ol start="5"`로 이어져 번호가 맞습니다. | 반영됨 |
+| 10 | 권장 | 활용법에 "실습 순서는 장 순서와 다르므로, 각 실습은 해당 장을 먼저 읽은 뒤에 합니다"를 더했습니다. 앞뒤 문장과 모순이 없습니다. | 반영됨 |
+| 11 | 권장 | 그림 소개 문장을 "장 묶음 네 개의 순서를 보여 줍니다"로 다듬었습니다. 1차 제안과 거의 같고 도구 도입 경로는 뒤 문장이 말해 중복도 없습니다. | 반영됨 |
+
+처리 표(disposition) 끝의 "editor 1차 검수 처리" 절은 위 확인과 일치합니다. 사소 묶음 재확인도 적혀 있습니다.
+
+## 새 지적
+| # | 분류 | 위치 | 발견 | 근거 | 제안 |
+|---|---|---|---|---|---|
+| 1 | 권장 | HANDOFF.md 이력 표 PR #45 행 | 행이 "병합 가능(2차, reviews/2026-10-20-front-back-editor.md)"으로 이 2차 판정을 미리 적었습니다. 필수 건수도 없고, 가리키는 문서는 1차 검수 파일입니다. 이 2차 결과를 같은 파일에 저장하는 경우에만 맞습니다. | CLAUDE.md(끝낼 때 HANDOFF 갱신), 이전 장 행 형식("병합 가능(2차, 필수 0, 경로)") | 이 문서를 `reviews/2026-10-20-front-back-editor.md`에 2차로 이어 붙이거나 별도 경로(예: -editor-2.md)로 저장한 뒤, 행을 "병합 가능(2차, 필수 0, 경로)"로 맞춥니다. |
+| 2 | 권장 | practice.html 실습 준비 터미널 문단 "Git Bash는 Git for Windows를 설치하면 시작 메뉴에 생깁니다" | 새로 들어간 이 문장은 2026b로 확인한 내용이 아닙니다. 일반 지식입니다. 오류 가능성은 낮지만, 같은 문단의 앞 문장은 출처가 있고 이 문장만 없습니다. | AUTHOR_PREFS(사실은 1차 출처 확인 뒤 기록), fact-checker v2 L12 | 문장을 지우거나("Windows에서는 Git for Windows를 설치한다고 전제하고…"에 합침) Git for Windows 설치 안내로 출처를 답니다. 병합을 막지 않습니다. |
+
+흐름·문체·링크·그림 체계에서 새로 생긴 필수 문제는 없습니다. 그림 fig-0-1은 이번에 바뀌지 않았고 1차에서 확인한 대로입니다. 표 캡션만 바뀌었고 번호 없는 캡션은 D-060과 Q-066으로 허용됩니다. 링크는 `#lab-1`, `#setup`, `#ref-anthropic-2026b`, `ch10.html#criteria` 모두 앵커가 실재합니다.
+
+## check_all
+```
+검사 요약
+  통과  빌드
+  통과  금칙어
+  통과  번호
+  통과  구조
+  통과  문체
+  통과  그림 안 이름
+```
+경고와 실패는 없습니다. CI(`gh pr checks`)는 확인하지 않았습니다. 1차에서 이 환경의 GraphQL 접근이 막혔습니다.
+
+## 필수 건수: 0
+1차 필수 1~5와 권장 6~11은 모두 원고와 기록에 실제로 반영되었습니다. 새 지적은 권장 2건이며 병합을 막지 않습니다.
+
+관련 파일
+- /home/user/harness-book/src/appendix/practice.html
+- /home/user/harness-book/src/appendix/terms.html
+- /home/user/harness-book/src/chapters/prologue.html
+- /home/user/harness-book/docs/AUTHOR_QUEUE.md
+- /home/user/harness-book/reviews/flow/front-back-flow.md
+- /home/user/harness-book/reviews/agents/2026-10-20-front-back-v2-disposition.md
+- /home/user/harness-book/HANDOFF.md

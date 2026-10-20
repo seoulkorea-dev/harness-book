@@ -53,7 +53,7 @@
 <ul><li>Python 3: 미니 웹 앱과 테스트를 실행합니다. 실습 코드는 표준 라이브러리만 사용하므로 추가 패키지를 설치하지 않습니다. 설치 파일은 https://www.python.org/downloads/ 에서 받습니다.</li><li>Git: 실습 저장소를 내려받고 변경 이력을 확인합니다. https://git-scm.com/downloads 에서 설치 파일을 내려받습니다.</li><li>Claude Code: 실습에서 에이전트를 실행합니다. 다음 두 명령 가운데 첫 줄은 Windows의 PowerShell에서, 둘째 줄은 macOS와 Linux의 터미널에서 입력해 설치합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</li></ul>
 <pre>irm https://claude.ai/install.ps1 | iex
 curl -fsSL https://claude.ai/install.sh | bash</pre>
-<p>명령은 터미널에 입력합니다. Anthropic의 터미널 안내에 따르면 Windows에서는 Win+X 메뉴에서 PowerShell을, macOS에서는 Cmd+Space로 Spotlight를 열어 Terminal을 찾아 엽니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). Git Bash는 Git for Windows를 설치하면 시작 메뉴에 생깁니다. Windows에서는 Git for Windows를 설치한다고 전제하고, 터미널은 Git Bash를 권합니다. 이 부록의 명령은 Git Bash와 macOS, Linux 기준이며, PowerShell에서 다른 명령은 따로 적습니다. Anthropic 문서에 따르면 Git for Windows가 있으면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 이때 PowerShell 도구도 함께 켜질 수 있지만, 셸 명령 금지 규칙이 있으면 PowerShell 도구가 꺼지므로 실습 3의 금지 규칙이 그대로 적용됩니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>).</p>
+<p>명령은 터미널에 입력합니다. Anthropic의 터미널 안내에 따르면 Windows에서는 Win+X 메뉴에서 PowerShell을, macOS에서는 Cmd+Space로 Spotlight를 열어 Terminal을 찾아 엽니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). Windows에서는 Git for Windows를 설치한다고 전제하고, 터미널은 Git Bash를 권합니다. 이 부록의 명령은 Git Bash와 macOS, Linux 기준이며, PowerShell에서 다른 명령은 따로 적습니다. Anthropic 문서에 따르면 Git for Windows가 있으면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 이때 PowerShell 도구도 함께 켜질 수 있지만, 셸 명령 금지 규칙이 있으면 PowerShell 도구가 꺼지므로 실습 3의 금지 규칙이 그대로 적용됩니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>).</p>
 <p>설치를 마친 뒤 터미널에서 다음 세 명령으로 도구를 확인합니다.</p>
 <pre>python --version
 git --version
