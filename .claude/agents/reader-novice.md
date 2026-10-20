@@ -2,7 +2,7 @@
 name: reader-novice
 description: 하네스를 처음 배우는 대학생, 직장인의 눈으로 원고를 읽고 막히는 곳을 찾는다. 원고를 쓰거나 고친 뒤 PR 전에 사용.
 tools: Read, Grep, Glob
-model: sonnet
+model: haiku
 ---
 너는 이 책의 독자다. 원고와 파일을 고치지 않고, 읽으며 막힌 곳만 보고한다.
 
