@@ -168,3 +168,23 @@ Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 
 ## S38. Anthropic, How Claude Code works
 - URL: https://code.claude.com/docs/en/how-claude-code-works, 확인일: 2026-10-20
 - 루프는 gather context, take action, verify results. MCP 도구 정의는 기본 지연 로드, 이름과 서버 지시만 컨텍스트에 둠
+
+# 2026-10-20 ch02-accuracy 사실 확인(fact-checker, 이슈 #10)
+
+## S39. Model Context Protocol, Specification: Tools (revision 2026-07-28)
+- URL: https://modelcontextprotocol.io/specification/latest/server/tools, 확인일: 2026-10-20
+- tools/list는 도구 정의 전체를 페이지 단위로 돌려줌. 정의를 미루거나 도구를 검색하는 규정은 없음(S30의 "규약이 아니라 Claude Code의 기능" 판정의 보조 근거, 부재 확인)
+
+## S30 보강(mcp 문서 "Scale with MCP tool search", 확인일 2026-10-20)
+- 도구 검색 기본 켜짐: 시작 때 도구 이름과 서버 지시만 로드, 정의는 필요할 때. ENABLE_TOOL_SEARCH, 서버별 alwaysLoad로 조절
+- 예외: 이전 세대 모델, 비공식 ANTHROPIC_BASE_URL, Azure의 Foundry 배포는 처음부터 로드
+
+## S37 보강(agent-loop, 확인일 2026-10-20)
+- "Evaluate and respond"에서 모델이 도구 호출을 요청, "Execute tools"에서 SDK가 실행. 문서는 harness라는 말을 쓰지 않음
+- 세션 ID로 재개하면 이전 컨텍스트가 복원됨
+
+## S25 보강(permissions, 확인일 2026-10-20)
+- 이름만 쓴 deny는 도구를 컨텍스트에서 제거, Bash(*)도 같음, EndConversation은 제외. 범위 규칙은 도구를 남기고 호출 시 차단
+
+## S26 보강(memory, 확인일 2026-10-20)
+- 세션은 새 컨텍스트로 시작. 재개는 claude --resume, /resume 등 사용자 동작
