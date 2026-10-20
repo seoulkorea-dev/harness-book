@@ -23,13 +23,14 @@
 |---|---|---|
 | 작가 | 결정, 승인, PR 병합 | 전부(바꾸면 DECISIONS.md에 기록) |
 | 메인 세션(이 세션) | 원고 작성, 하위 에이전트 호출, 보고서 저장, PR | src/, assets/, examples/, HANDOFF.md, FAILURES.md, reviews/, research/, DECISIONS.md(작가 확인 후) |
-| researcher, fact-checker, flow-reviewer, figure-checker, reader-novice, reader-expert | 조사와 점검 | 없음(읽기만, 결과는 보고서 문안으로 돌려줌) |
+| researcher, fact-checker, flow-reviewer, figure-checker, reader-novice, reader-expert, alt-reviewer | 조사와 점검 | 없음(읽기만, 결과는 보고서 문안으로 돌려줌) |
 | 검수 Project(Claude App) | 정식 검수 문서 | 없음(작가가 전달, 메인 세션이 reviews/에 등록) |
 - 주고받기는 파일로만 한다. 하위 에이전트의 보고 문안은 메인 세션이 reviews/agents/YYYY-MM-DD-<장>-<에이전트>.md로 저장한다. 형식: 발견 | 위치 | 근거 | 제안 | 확신(높음, 중간, 낮음)
 - 원고(src/)를 쓰는 주체는 한 번에 하나다. 하위 에이전트는 동시에 여러 개 불러도 된다. 다른 장을 동시에 진행하려면 장마다 브랜치와 작업 폴더(git worktree)를 따로 쓴다.
 - 하위 에이전트는 이 대화를 모른다. 부를 때 범위(파일과 절), 기준 문서, 보고 형식을 넘긴다.
 - 하위 에이전트 의견은 그대로 반영하지 않는다. 반영, 보류, 작가 확인으로 나누어 PR 설명에 표로 적는다. 의견이 부딪히면 DECISIONS.md > 검수 Project 지침 > 하위 에이전트 의견 순서로 따르고, 그래도 정해지지 않으면 작가에게 묻는다.
-- 호출 시점: 장 계획 때 researcher, 원고 작성 뒤 PR 전에 fact-checker, flow-reviewer, figure-checker, reader-novice, 마무리 단계에 reader-expert
+- 호출 시점: 장 계획 때 researcher, 원고 작성 뒤 PR 전에 fact-checker, flow-reviewer, figure-checker, reader-novice, alt-reviewer, 마무리 단계에 reader-expert
+- 명세 먼저: 장은 templates/chapter-spec.md, 그림은 templates/figure-spec.md로 명세를 먼저 쓰고 작가 확인을 받는다. 그림은 배치가 다른 시안 두 개를 만들어 작가가 고르게 한다(확인용은 SVG를 넣은 HTML 한 장).
 
 ## 먼저 작가에게 물을 일
 - 목차, 장의 주장, 핵심 정의와 용어, 그림 방침, 문체 규칙을 바꾸는 일
