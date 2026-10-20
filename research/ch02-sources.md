@@ -188,3 +188,20 @@ Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 
 
 ## S26 보강(memory, 확인일 2026-10-20)
 - 세션은 새 컨텍스트로 시작. 재개는 claude --resume, /resume 등 사용자 동작
+
+# 2026-10-20 표 2-2 새 행과 그림 2-2 사실 확인(fact-checker, 이슈 #21)
+
+## S25 보강(permissions, 확인일 2026-10-20)
+- "Ask rules prompt for confirmation whenever Claude Code tries to use the specified tool." ask 규칙은 auto 모드에서도 프롬프트로 남음(Bash 절의 git clean 예). 이름만 쓴 deny는 도구를 컨텍스트에서 제거, Bash(*)도 같음, EndConversation은 예외
+
+## S40. Anthropic, Configure permissions(Agent SDK, Claude Code Docs)
+- URL: https://code.claude.com/docs/en/agent-sdk/permissions, 확인일 2026-10-20
+- 평가 흐름: 훅 → deny 규칙 → ask 규칙 → 권한 모드 → allow 규칙 → canUseTool 콜백. dontAsk 모드는 프롬프트가 필요한 호출을 거부로 바꿈(S25 재확인의 미확인 해소)
+
+## S41. Anthropic, Handle approvals and user input(Agent SDK, Claude Code Docs)
+- URL: https://code.claude.com/docs/en/agent-sdk/user-input, 확인일 2026-10-20
+- 승인이 필요한 호출에서 사용자 확인을 받음. deny 응답이면 "tool doesn't execute, Claude sees the message"
+- 한계: 대화형 CLI 대화상자의 거절이 기록되는 방식은 이 문서 대상이 아님(미확인)
+
+## S37 보강(agent-loop)
+- "When a tool is denied, Claude receives a rejection message as the tool result". 핵심 내장 도구의 정의는 매 요청, MCP 도구와 그 밖의 내장 도구는 도구 검색이 기본 지연 로드
