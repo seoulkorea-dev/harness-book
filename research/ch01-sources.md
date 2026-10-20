@@ -250,3 +250,37 @@
 - ResultMessage subtype: success, error_max_turns, error_max_budget_usd, error_during_execution 등
 - 모든 subtype에 total_cost_usd, usage, num_turns, session_id 포함
 - max_turns, max_budget_usd 기본값은 제한 없음. 운영 환경에 예산 설정을 권함. 변경 없음
+
+# 2026-10-20 ch01-flow 사실 확인(fact-checker)
+확인일: 2026-10-20. 원문을 직접 열어 확인한 내용만 적는다.
+
+## S23. Anthropic, Agent SDK overview(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/agent-sdk/overview
+- 게시일: 표기 없음, 확인일: 2026-10-20, 작성: Anthropic
+- 사용한 내용: Agent SDK는 Claude Code를 구동하는 것과 같은 도구, 에이전트 루프, 컨텍스트 관리를 Python과 TypeScript로 프로그램에서 쓰게 하는 라이브러리(1장 "Agent SDK" 풀이)
+
+## S5 재확인(Agent SDK, How the agent loop works), 2026-10-20
+- 루프 문장: "Without limits, the loop runs until Claude finishes on its own"(조건은 상한 없음, Stop 훅과 무관)
+- 거부된 도구 호출: 거부 메시지가 도구 결과로 돌아가고 Claude는 "typically" 다른 방법을 찾거나 진행 불가를 보고
+- 루프 5단계 원문 표기는 Receive prompt, Evaluate and respond, Execute tools, Repeat, Return result(권한 확인 단계는 이 책의 정리)
+- 상한 강제 동작(하위 에이전트 포함)은 Claude Code v2.1.217 이상
+
+## S17 재확인(Hooks reference), 2026-10-20(앞 200,000자)
+- Stop: 응답을 마칠 때 발동, decision "block"(reason 필수) 또는 exit 2로 종료를 막고 계속. 연속 차단 상한 8회, stop_hook_active
+- PreToolUse permissionDecision 값: allow, deny, ask, defer
+
+## S24. Anthropic, How tool use works(Claude Platform Docs)
+- URL: https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works
+- 게시일: 표기 없음, 확인일: 2026-10-20, 작성: Anthropic
+- 사용한 내용: "The model never executes anything on its own." 클라이언트 도구는 호출한 애플리케이션이 실행해 tool_result로 돌려줌. 도구 결과를 보낼 때 원래 메시지, 어시스턴트 응답, tool_result를 담은 새 요청을 보냄(1장 "기억" 항목). 대화 상태 일반의 "stateless" 문장은 없음(S8 미확인 3 유지)
+
+## S25. Anthropic, API overview(Claude Platform Docs)
+- URL: https://platform.claude.com/docs/en/api/overview
+- 확인일: 2026-10-20
+- 사용한 내용: Claude API는 Claude 모델에 프로그램으로 접근하게 하는 REST API(1장 "API" 풀이)
+
+## S9 재확인(Effective context engineering), 2026-10-20
+- 게시 2025-09-29, 저자 Anthropic Applied AI 팀. 에이전트 정의, "natural progression", "treating context as a precious, finite resource will remain central". 발표 주체는 Anthropic(본문의 "Claude Code" 표기는 Q-039)
+
+## 미확인
+- S3(OpenAI Unrolling the Codex agent loop): 2026-10-20 접근 불가(DNS). Codex 턴 정의 원문 미확인 유지

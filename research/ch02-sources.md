@@ -205,3 +205,29 @@ Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 
 
 ## S37 보강(agent-loop)
 - "When a tool is denied, Claude receives a rejection message as the tool result". 핵심 내장 도구의 정의는 매 요청, MCP 도구와 그 밖의 내장 도구는 도구 검색이 기본 지연 로드
+
+# 2026-10-20 ch02-flow 사실 확인(fact-checker)
+
+## S42. Anthropic, Configure permissions(Claude Code Docs). S25 재확인
+- URL: https://code.claude.com/docs/en/permissions, 확인일: 2026-10-20, 작성: Anthropic
+- "Permission rules are enforced by Claude Code, not by the model." 프롬프트와 CLAUDE.md의 지시는 시도에 영향을 주지만 허용 범위를 바꾸지 않음
+- 평가 순서 deny, ask, allow, 처음 일치가 결정. 도구 이름만 지정한 deny는 도구를 컨텍스트에서 제거
+- /permissions는 모든 규칙과 규칙이 나온 settings.json을 보여 줌
+
+## S43. Anthropic, How Claude remembers your project(Claude Code Docs). S26 재확인
+- URL: https://code.claude.com/docs/en/memory, 확인일: 2026-10-20
+- "Claude reads them at the start of every session." CLAUDE.md와 자동 메모리는 "context, not enforced configuration"
+- CLAUDE.md 계열이 없을 때만 AGENTS.md를 읽음(v2.1.277 이상, 10장에서 필요하면 근거), 하위 폴더의 CLAUDE.md는 필요할 때 읽음
+
+## S44. Anthropic, Hooks reference(Claude Code Docs). S28 재확인
+- URL: https://code.claude.com/docs/en/hooks, 확인일: 2026-10-20(앞 100,000자)
+- 훅 핸들러는 command, http, mcp_tool, prompt, agent. command와 http는 모델을 호출하지 않음(2장은 셸 명령 훅만 다룬다고 밝힘)
+- PostToolUse 종료 코드 2: stderr를 Claude에 보여 줌, 도구는 이미 실행됨
+
+## S45. Anthropic, Debug your configuration(Claude Code Docs). S27 재확인
+- URL: https://code.claude.com/docs/en/debug-your-config, 확인일: 2026-10-20
+- Permissions와 hooks는 "enforce limits regardless of what Claude decides"(2장 "판단과 관계없이"의 근거)
+- /context 범주: system prompt, system tools, MCP tools, custom subagents, memory files, skills, conversation messages
+
+## 확인하지 못한 것
+- 대화형 CLI의 사람 거절이 거부 결과로 기록되는 방식(Agent SDK 문서만 확인, 본문은 "Agent SDK 문서에 따르면"으로 한정)

@@ -10,6 +10,7 @@
 ## 범위와 개정 방향
 - 지금 원고를 바탕으로 장 틀을 보강하고(v1.1-backlog 4장, 2026-10-20 점검 보고의 권장), 그림 4-1, 4-2를 1장 기준 시각 체계(FIGURE_STYLE 7절, D-111)로 다시 그린다. 그림 안 예제 표기(D-114), 그림 4-2 글자 크기 경고 해소
 - 절과 앵커 유지: elements, techniques, example(example-before, example-after), limits, fail, check, principle, refs(다른 장이 #elements, #example을 링크)
+- 절 순서(PR #38, 흐름 재점검): elements, techniques, limits, example, fail, check, principle. limits를 example 앞으로 옮겨 CR 적용, 실패 표, 확인 방법이 이어지게 함(앵커와 번호 변동 없음)
 - 2~3장과 같은 방식으로 첫 문단의 주장 줄 중복 문장을 지움(Q-004, Q-009와 같음, 이번 Q-018)
 
 ## 장 틀
