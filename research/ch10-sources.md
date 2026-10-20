@@ -280,3 +280,15 @@ Claude Code 문서 5건은 원문을 직접 열어 확인했습니다. 긴 페�
 | 관리형 설정은 조직이 파일, MDM, 관리 콘솔로 배포하는 설정이며, 사용자와 프로젝트 설정으로 덮어쓸 수 없다(일부 보안 키는 예외). | S-C10-9 | 높음(예외 범위는 중간) |
 | 작업 디렉터리 밖 파일 수정은 기본(Manual)에서 거부가 아니라 확인 요청이다. 모드에 따라 acceptEdits는 확인, auto는 분류기 판단, dontAsk는 거부, bypassPermissions는 허용이다. | S-C10-6, S-C10-10 | 높음 |
 | Codex에서 on-request와 network_access=false 조합이 네트워크 명령을 승인 요청으로 넘기는지는 원문으로 확인하지 못했다. | 열기 실패 | 해당 없음(미확인) |
+
+### S-C10-11. Anthropic, Claude Code Docs 5건 재확인(ch10 fact-checker, PR #43)
+- URL: https://code.claude.com/docs/en/memory , /permissions , /permission-modes , /sandboxing , /settings
+- 게시일: 표기 없음, 확인일: 2026-10-20(원문 열어 확인)
+- 작성: Anthropic
+- 사용한 내용: sandboxing "Hosts outside your allowed domains" 표(대화형 터미널 기준, Manual과 acceptEdits는 확인, auto는 거부이나 명령이 호스트를 적고 분류기가 승인하면 예외, dontAsk 거부, bypassPermissions 허용). permission-modes의 작업 폴더 밖 쓰기 모드별 처리. memory의 v2.1.281 이전 Bedrock, 텔레메트리 비활성 세션은 CLAUDE.md만 읽음. permissions와 settings의 관리형 설정 예외(일부 보안 민감 키). sandboxing 확인 절(touch 성공 시 /sandbox와 의존성 확인)
+- 확신: 높음
+
+### S-C10-12. OpenAI, Codex 문서(ch10 fact-checker)
+- URL: https://developers.openai.com/codex/agent-approvals-security
+- 확인일: 2026-10-20 시도(getaddrinfo ENOTFOUND, 열기 실패). 판정은 S-C10-5와 S6(2026-10-04) 기록 일치만 근거
+- 확신: 낮음
