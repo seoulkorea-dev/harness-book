@@ -113,18 +113,19 @@ def write_stop(reason, st):
     pr = first_pr(st)
     if pr:
         br = pr["headRefName"]
-        sh(["git", "switch", br], True); sh(["git", "pull", "-q", "--ff-only", "origin", br], True)
+        sh(["git", "fetch", "-q", "origin", br], True); sh(["git", "switch", br], True); sh(["git", "pull", "-q", "--ff-only", "origin", br], True)
     else:
         br = "autorun-stop-" + datetime.datetime.now().strftime("%Y%m%d-%H%M")
         sh(["git", "switch", "main"], True); sh(["git", "pull", "-q", "--ff-only", "origin", "main"], True); sh(["git", "switch", "-c", br], True)
     cur = sh(["git", "branch", "--show-current"], True).stdout.strip()
     if cur != br or cur == "main":
         raise RuntimeError(f"현재 브랜치가 {cur!r}라 기록하지 않음(기대 {br!r})")
-    p = os.path.join(ROOT, "HANDOFF.md"); t = open(p, encoding="utf-8").read()
-    if "## 지금 상태\n" not in t:
+    # newline=""로 원래 줄 끝을 그대로 둠(Windows에서 파일 전체가 CRLF로 바뀌지 않게)
+    p = os.path.join(ROOT, "HANDOFF.md"); t = open(p, encoding="utf-8", newline="").read()
+    m = re.search(r"## 지금 상태(\r?\n)", t)
+    if not m:
         raise RuntimeError('HANDOFF.md에 "## 지금 상태"가 없음')
-    i = t.index("## 지금 상태\n") + len("## 지금 상태\n")
-    open(p, "w", encoding="utf-8").write(t[:i] + f"- 멈춤(autorun, {now()}): {reason}\n" + t[i:])
+    open(p, "w", encoding="utf-8", newline="").write(t[:m.end()] + f"- 멈춤(autorun, {now()}): {reason}{m.group(1)}" + t[m.end():])
     sh(["git", "add", "HANDOFF.md"], True)
     sh(["git", "commit", "-q", "-m", f"autorun 멈춤 기록: {reason}\n\n{CO_AUTHOR}"], True)
     sh(["git", "push", "-q", "-u", "origin", br], True)
@@ -162,12 +163,13 @@ def run_unit(args):
 
 def failure_reason(out):
     """실행 결과에서 실패 이유를 뽑음(없으면 None)"""
-    res = str(out.get("result") or "") + " " + str(out.get("stderr") or "")
-    if re.search(r"usage limit|rate limit|사용량 한도|limit reached", res, re.I):
-        return "사용량 한도"
     if out.get("timeout"):
         return "실행 오류(시간 초과)"
     if out.get("code") not in (0, None) or out.get("is_error"):
+        # 한도 문구는 실패한 실행에서만 봄(정상 보고에 "usage limit"이 들어 있어도 멈추지 않게)
+        res = str(out.get("result") or "") + " " + str(out.get("stderr") or "")
+        if re.search(r"usage limit|rate limit|사용량 한도|limit reached", res, re.I):
+            return "사용량 한도"
         sub = out.get("subtype") or f"종료 코드 {out.get('code')}"
         return f"실행 오류({sub})"
     return None
@@ -229,6 +231,7 @@ def selftest():
     assert failure_reason({"code": 1, "result": "x", "subtype": "error_max_turns"}) == "실행 오류(error_max_turns)"
     assert failure_reason({"code": 1, "timeout": True}) == "실행 오류(시간 초과)"
     assert failure_reason({"code": 0, "result": "ok", "is_error": False}) is None
+    assert failure_reason({"code": 0, "result": "보고: usage limit 판정 수정", "is_error": False}) is None
     # 진전 없음, CI 실패, 검사 실패
     pr_a = {"number": 9, "headRefOid": "a1", "body": "", "statusCheckRollup": [{"name": "check", "conclusion": "SUCCESS"}]}
     pr_b = dict(pr_a, headRefOid="b2")
@@ -246,9 +249,10 @@ def selftest():
     record_stop("할 일 없음(selftest)", empty)
     assert "할 일 없음(selftest)" in open(LOG, encoding="utf-8").read()
     # 멈춤 기록: 임시 원격과 복제본에서 main이 아닌 PR 브랜치에 HANDOFF.md만 커밋, push
-    remote, ROOT = os.path.join(tmp, "remote.git"), os.path.join(tmp, "work")
+    remote, work = os.path.join(tmp, "remote.git"), os.path.join(tmp, "work")
     calls = []; gh = lambda *a: calls.append(a)
-    sh(["git", "init", "-q", "--bare", remote], True); sh(["git", "clone", "-q", remote, ROOT], True)
+    sh(["git", "init", "-q", "--bare", remote], True); sh(["git", "clone", "-q", remote, work], True)  # cwd는 있는 폴더(tmp)여야 함
+    ROOT = work
     for c in (["config", "user.name", "selftest"], ["config", "user.email", "selftest@example.com"], ["symbolic-ref", "HEAD", "refs/heads/main"]):
         sh(["git", *c], True)
     open(os.path.join(ROOT, "HANDOFF.md"), "w", encoding="utf-8").write("# 인계\n\n## 지금 상태\n- 이전\n")
@@ -263,7 +267,7 @@ def selftest():
     assert sh(["git", "branch", "--show-current"]).stdout.strip() == "work"
     assert "멈춤(autorun" in sh(["git", "show", "origin/work:HANDOFF.md"], True).stdout
     assert "멈춤" not in sh(["git", "show", "origin/main:HANDOFF.md"], True).stdout
-    assert sh(["git", "show", "--stat", "--format=%s", "HEAD"], True).stdout.count("|") == 1  # HANDOFF.md 하나만
+    assert sh(["git", "show", "--numstat", "--format=", "HEAD"], True).stdout.split() == ["1", "0", "HANDOFF.md"]  # HANDOFF.md 한 줄만 추가
     assert calls and calls[0][:3] == ("pr", "edit", "7")
     assert open(calls[0][-1], encoding="utf-8").read().startswith('멈춤: 시험 이유 "따옴표" & 기호\n\n본문')
     print("selftest 통과")
