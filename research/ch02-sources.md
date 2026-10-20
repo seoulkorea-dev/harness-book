@@ -22,3 +22,26 @@
 - 2장에서 사용한 내용
   - 프롬프트 엔지니어링 전에 성공 기준의 명확한 정의, 그 기준으로 시험하는 방법, 첫 초안이 있어야 함
   - 모든 성공 기준이나 실패한 평가가 프롬프트 엔지니어링으로 가장 잘 해결되는 것은 아님. 지연 시간과 비용은 다른 모델 선택으로 더 쉽게 개선되기도 함
+
+# 2026-10-20 ch02 v1.0 보강 확인(fact-checker)
+
+## S23. Anthropic, Hooks reference / Automate actions with hooks(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/hooks , https://code.claude.com/docs/en/hooks-guide
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 2장 확인 방법 절(표 2-5 검증 행)에서 사용한 내용
+  - PostToolUse 훅이 종료 코드 2로 끝나면 도구는 이미 실행된 뒤이므로 차단하지 못하고 오류 출력을 모델에 전달
+  - 성공한 훅의 출력은 디버그 로그로 가며 대화 기록에 나타나지 않음. 대화 기록에는 차단이나 실패 때 hook error 알림이 보임
+  - 훅 확인: /hooks는 읽기 전용 목록, 실행 기록은 claude --debug
+  - 훅 명령은 현재 디렉터리에서 실행, CLAUDE_PROJECT_DIR은 프로젝트 루트
+
+## S24. Anthropic, Configure permissions(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/permissions
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 사용한 내용
+  - Edit 규칙은 파일을 수정하는 내장 도구 전체에 적용
+  - Read, Edit deny는 Bash의 인식되는 파일 명령과 리다이렉션에도 적용되나, Python 스크립트 같은 간접 접근은 막지 못함. 운영 체제 수준 강제는 샌드박스
+  - 이름만 쓴 WebFetch deny는 도구를 제거함
+  - ./path는 현재 디렉터리 기준
+  - /permissions는 규칙과 규칙이 나온 설정 파일을 보여 줌
