@@ -94,3 +94,48 @@
 ## 보강 6: 정보를 제공하는 시점과 긴 작업의 기법(2026-10-15)
 - Rajasekaran 외, Effective context engineering for AI agents(재확인, 수정일 2026-01-06): 많은 애플리케이션이 임베딩 기반 사전 검색 사용, "just in time" 방식은 파일 경로, 저장된 쿼리, 웹 링크 같은 가벼운 식별자를 두고 실행 중 도구로 로드, 탐색은 점진적 공개를 가능하게 하지만 사전 계산 데이터보다 느리고 지침 없이는 컨텍스트 낭비, Claude Code는 혼합 방식(CLAUDE.md는 먼저, glob과 grep으로 필요할 때). 긴 작업 기법 세 가지: 압축(한계 근처에서 요약 후 재시작, 지나친 압축은 나중에 중요해질 세부 정보 손실), 구조화된 노트(에이전트 기억, 컨텍스트 밖 노트를 다시 읽음, Claude Code의 할 일 목록), 하위 에이전트(깨끗한 컨텍스트, 요약 흔히 1,000~2,000 토큰 반환). 선택 기준: 압축은 주고받는 대화가 많은 작업, 노트는 마일스톤이 분명한 반복 개발, 다중 에이전트는 병렬 탐색이 효과적인 조사와 분석(3장)
 - 비교 도서의 저장 계층 4분류는 가져오지 않음. 구조화된 노트는 7장 진행 기록과 연결
+
+# 2026-10-20 ch03 v1.0 보강 확인(fact-checker)
+
+## S-0320a. Anthropic, Commands / Create custom subagents(Claude Code Docs), /agents 동작
+- URL: https://code.claude.com/docs/en/commands , https://code.claude.com/docs/en/sub-agents
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 3장 확인 방법 절(표 3-6)에서 사용한 내용
+  - /agents: 현재 버전에서는 하위 에이전트 생성과 관리를 Claude에게 요청하거나 .claude/agents/를 직접 편집하라는 안내만 출력. 목록과 도구를 보여 주는 대화형 화면은 v2.1.197 이전 동작. 그래서 표 3-6은 reviewer.md의 tools 줄과 /context의 하위 에이전트 항목으로 확인하게 함
+  - 하위 에이전트 tools 필드는 허용 목록. 생략하면 모든 도구 상속
+  - 미확인: /context가 개별 하위 에이전트의 도구 제한까지 보여 주는지(그래서 도구는 파일로 확인)
+
+# 2026-10-20 ch05 v1.0 보강 확인(fact-checker)
+
+## S-0520a. Anthropic, How Claude remembers your project(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/memory
+- 확인일: 2026-10-20, 작성: Anthropic
+- 사용한 내용: CLAUDE.md는 파일당 200줄 미만 목표(길면 컨텍스트를 더 차지하고 준수율이 낮아짐). CLAUDE.md는 강제 설정이 아닌 컨텍스트이며 막으려면 PreToolUse 훅. CLAUDE.md가 없고 AGENTS.md만 있으면 AGENTS.md를 읽음(v2.1.277 이상, 5장 버전 주석의 근거). 자동 메모리 MEMORY.md의 첫 200줄 또는 25KB 제한은 규칙 문서 기준과 별개
+
+## S-0520b. Anthropic, Manage costs effectively, Subagents, Explore the context window(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/costs , https://code.claude.com/docs/en/sub-agents , https://code.claude.com/docs/en/context-window
+- 확인일: 2026-10-20, 작성: Anthropic
+- 사용한 내용: 테스트처럼 출력이 많은 작업을 하위 에이전트에 맡기면 출력은 하위 에이전트 컨텍스트에 남고 요약만 주 대화로 돌아옴(하위 에이전트 요청도 사용량에 포함). Read 도구 호출은 대화에 한 줄로 표시됨(context-window 시뮬레이션)
+
+# 2026-10-20 ch06 v1.0 보강 확인(fact-checker)
+- S3(Young, 2025) 재확인: 에이전트에게 passes 필드의 상태만 바꾸도록 지시했다는 문장을 원문에서 다시 확인(6장 작업 단위 분할, 예제 절). 원문은 커밋을 "기능마다 하나"로 쓰지 않고, 설명 있는 커밋과 세션 종료 때의 커밋으로 적음(6장 표 6-6의 "작업 단위마다 commit 하나"는 이 책 실습의 확인 방법이며 Young의 사실이 아님)
+
+# 2026-10-20 ch07 v1.0 보강 확인(fact-checker)
+- Anthropic, Define success criteria and build evaluations(Claude Platform Docs), https://platform.claude.com/docs/en/test-and-evaluate/develop-tests, 확인일 2026-10-20: LLM 기반 채점의 1~5 척도 예, 예시 답안 비교, 생성 모델과 다른 모델로 평가하는 편이 좋다는 주석(표 7-3 4행 근거)
+- Python 문서 unittest, https://docs.python.org/3/library/unittest.html, 확인일 2026-10-20: Test Discovery 절에 시작 폴더가 없을 때의 동작이 적혀 있지 않음. 그래서 표 7-4 3행 원인을 "시험 파일을 찾지 못해"로 씀
+- 예제 앱 app.py: 등록 화면은 /new, 루트는 목록(표 7-5 4행 근거). acceptance/test_cr07.py test_1은 render_form의 HTML 출력을 확인(표 7-4 1행 근거)
+
+# 2026-10-20 ch08, ch09 v1.0 보강 확인(fact-checker)
+- memory 문서(https://code.claude.com/docs/en/memory): 세션마다 새 컨텍스트, CLAUDE.md와 자동 메모리가 세션 사이 지식 전달. 대화에서만 준 지시는 /compact 뒤 사라질 수 있고 CLAUDE.md에 추가하라는 안내, 루트 CLAUDE.md는 압축 뒤 다시 주입(표 8-3 3행)
+- 예제 파일 대조: CLAUDE.example.md에 commit 지시 없음, 읽는 순서는 CR.md, DECISIONS.md, tasks.json, HANDOFF.md. examples DECISIONS.md는 D-012 한 행(D-015는 8장 예시). "작업 단위마다 commit"은 부록 실습 5 확인 방법이 근거
+- permissions 문서(https://code.claude.com/docs/en/permissions): Edit deny는 내장 도구, Bash의 인식되는 파일 명령, 리다이렉션에 적용되나 스크립트의 간접 쓰기에는 적용 안 됨(샌드박스 필요, 표 9-4 1행). Bash(git push *)는 git -C . push와 불일치
+- sandboxing 문서(https://code.claude.com/docs/en/sandboxing): Bash 등 명령과 하위 프로세스를 운영 체제 수준에서 제한. macOS, Linux, WSL2에서 동작, 네이티브 Windows에서는 샌드박스 없이 실행
+- costs 문서 재확인: /usage Session은 API 사용자용, 정가 기준 추정치(modelPricing 설정 시 계약 요율, 여전히 추정치)
+
+# 2026-10-20 ch10, ch11 v1.0 보강 확인(fact-checker)
+- OpenAI Codex 문서 주소(developers.openai.com/codex/...)는 learn.chatgpt.com/docs/...로 308 이전됨
+- OpenAI, Slash commands(https://learn.chatgpt.com/docs/cli/slash-commands/), 확인일 2026-10-20: /status는 활성 모델, 승인 정책, 쓰기 가능 경로(writable roots), 남은 컨텍스트 용량을 보여 줌. 샌드박스 모드 항목은 없음(표 10-4 2행)
+- OpenAI, Rules(https://learn.chatgpt.com/docs/agent-configuration/rules), Agent approvals and security(https://learn.chatgpt.com/docs/agent-approvals-security), 확인일 2026-10-20: forbidden은 확인 없이 차단, 규칙은 실험 단계, 규칙 파일 ~/.codex/rules/default.rules. 네트워크 기본 꺼짐, on-request에서는 네트워크가 필요한 명령에 승인 요청, untrusted는 폐지
+- Anthropic, Sandboxing, memory, permissions(Claude Code Docs), 확인일 2026-10-20: 샌드박스 기본 꺼짐, sandbox.enabled로 켬, 네이티브 Windows에서는 샌드박스 없이 실행. CLAUDE.md와 AGENTS.md가 함께 있으면 CLAUDE.md만 읽고, CLAUDE.md에서 @AGENTS.md로 불러옴
+- 이 책 저장소(11장 표 11-4): .github/workflows/check.yml(book-check)은 PR과 main push에서 check_all.py --ci 실행. verify-site.yml(verify-site)은 page_build 또는 수동 실행에서 배포된 사이트 확인. check_all.py 요약 항목은 빌드, 금칙어, 번호, 구조, 문체, 그림 안 이름이고 --ci에서 빌드 결과와 커밋 일치 추가

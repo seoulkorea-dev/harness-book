@@ -120,6 +120,7 @@ if _pairs:
         _t = re.split(r'<h2 id="refs"', _t)[0]
         _t = re.sub(r'<(h[1-6]|table|figure|figcaption|pre|aside|svg)\b.*?</\1>', ' ', _t, flags=re.S)
         _t = re.sub(r'<ul class="summary">.*?</ul>', ' ', _t, flags=re.S)
+        _t = re.sub(r'<p class="(claim|principle)">.*?</p>', ' ', _t, flags=re.S)  # 주장 제목과 원칙(D-104)은 제목처럼 병기 제외
         _t = _html.unescape(re.sub(r'<[^>]+>', '', _t))
         _seen = set()
         for _mm in _alt.finditer(_t):

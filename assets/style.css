@@ -104,6 +104,10 @@ h2 { font-size: 30px; line-height: 1.35; margin: 3rem 0 1rem; padding-top: 1rem;
 h3 { font-size: 25px; line-height: 1.4; margin: 2rem 0 0.7rem; }
 h1 + .lead { margin-top: 0; }
 .lead { font-size: 22px; color: var(--muted); }
+/* 장 틀(D-104): h1 아래 주장 한 줄, 장 끝 원칙 한 문장 */
+.claim { font-size: 23px; font-weight: 700; line-height: 1.5; margin: 0 0 1.1rem; word-break: keep-all; }
+h1 + .claim { margin-top: 0; }
+p.principle { background: var(--panel); border-left: 4px solid var(--accent); padding: 0.9rem 1.2rem; font-weight: 700; }
 .eyebrow-part { color: var(--muted); font-size: 17px; margin: 0 0 0.3rem; }
 
 p, ul, ol, dl { margin: 0 0 1.1rem; }

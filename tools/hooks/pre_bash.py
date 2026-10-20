@@ -1,5 +1,6 @@
 """PreToolUse 훅(Bash): main 브랜치에서의 커밋과 강제 push를 막는다. 막으면 종료 코드 2."""
-import json, re, subprocess, sys
+import os, json, re, subprocess, sys
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # 저장소 루트 기준으로 실행(F-14)
 data = json.load(sys.stdin)
 cmd = (data.get("tool_input") or {}).get("command", "")
 branch = subprocess.run("git branch --show-current", shell=True, capture_output=True, text=True).stdout.strip()

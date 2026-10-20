@@ -4,6 +4,7 @@
 - 같은 멈춤에서 두 번째 호출(stop_hook_active)이면 무한 반복을 막기 위해 통과시키고, 실패 내용을 .claude/last_check_failed.txt에 남긴다(다음 세션 시작 때 표시).
 """
 import json, os, subprocess, sys
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # 저장소 루트 기준으로 실행(F-14)
 data = json.load(sys.stdin)
 again = bool(data.get("stop_hook_active"))
 changed = subprocess.run("git status --porcelain", shell=True, capture_output=True, text=True).stdout.splitlines()
