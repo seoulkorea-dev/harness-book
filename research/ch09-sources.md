@@ -122,3 +122,20 @@ OpenAI Codex 문서(developers.openai.com, learn.chatgpt.com)는 이 환경에�
 2. "사고의 크기를 정하는 것은 판단력이 아니라 권한 범위와 승인 지점"이라는 장 주장은 S-C9-1의 "규칙은 모델이 아니라 Claude Code가 강제한다"와 "prompt injection이 뚫어도 샌드박스는 남는다"가 가장 가까운 직접 근거다. 현재 본문에는 둘 다 인용되지 않았다.
 3. 격리 효과 중 샌드박스 기본 꺼짐과 네이티브 Windows 미지원이 본문에 없어 "샌드박스로 보완"이 기본 설정에서는 성립하지 않는다(backlog 항목과 일치).
 4. Codex 쪽 문장은 오늘 원문 대조가 불가능했으므로 Codex 관련 판정은 모두 잠정이다.
+
+## 2026-10-20 fact-checker 점검(9장 개정 원고, PR #42)
+
+### S-C9-8. 원문 재대조 결과 (Claude Code Docs, 4건과 Anthropic Prompting best practices)
+- URL: https://code.claude.com/docs/en/permissions, /permission-modes, /sandboxing, /costs, https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 확인한 내용
+  - permissions: 평가 순서 단락의 "rule specificity doesn't change the order"와 예시는 Bash(aws *) 대 Bash(aws s3 ls)이며 git 예시는 원문에 없음(본문의 git 예시는 책의 적용). Permission system Note: "Permission rules are enforced by Claude Code, not by the model". Bash 규칙 한계 표에 git -C . push origin main, git -c push.default=current push, git 'push'가 불일치로 있음. Read and Edit deny는 내장 파일 도구, 인식된 셸 파일 명령(cat, head, tail, sed, tee), 리다이렉션 대상에 적용되고 Python이나 Node 스크립트의 간접 쓰기에는 미적용. Warning: WebFetch만으로는 네트워크 접근이 막히지 않고 Bash가 허용되면 curl로 도달 가능.
+  - sandboxing: off by default, /sandbox 또는 sandbox.enabled. 대상은 Bash, PowerShell, Monitor와 하위 프로세스, 파일 도구와 MCP와 훅은 밖. 지원은 macOS, Linux, WSL2(네이티브 Windows는 샌드박스 없이 실행, WSL1 미지원). Linux와 WSL2는 bubblewrap과 socat 필요. 검증 표의 touch ~/sandbox-probe는 macOS Operation not permitted, Linux와 WSL2 Read-only file system. 허용 도메인은 비어 있는 상태로 시작하고 새 도메인은 권한 모드에 따라 처리. Edit 규칙과 sandbox 설정의 경로는 샌드박스 설정에 합쳐진다.
+  - permission-modes: bypassPermissions는 "disables permission prompts and safety checks", "Deny rules block in every mode, including bypassPermissions", 인터넷 없는 컨테이너, VM, 개발 컨테이너에서만 사용. 명시적 ask 규칙은 이 모드에서도 묻는다.
+  - costs: 개요에 여섯 가지(토큰 추적, 팀 지출 한도, 컨텍스트 관리, 모델 선택, 확장 사고 설정, 전처리 훅). Teams와 Enterprise 한도는 사용 크레딧을 켠 뒤 조직, 그룹, 개인 단위. Console은 워크스페이스 한도. /usage 첫 화면 위쪽 Session 블록은 API 사용자용, 정가 기준 추정치(modelPricing 설정 시 계약 요율 기준 추정치, v2.1.242 이상). 구독자는 같은 화면에서 요금제 사용량 막대 등을 봄.
+  - Prompting best practices "Balancing autonomy and safety": Claude Opus 4.6 대상 안내, 세 분류와 예시, 로컬 되돌릴 수 있는 동작 권장.
+- 본문 사용: 위 문장 모두 일치 또는 단순화 허용 범위. 필요한 보강은 보고서 18, 19, 22, 23, 24행.
+
+### S-C9-6 보강(Codex). 확인일 2026-10-20
+- developers.openai.com/codex/agent-approvals-security와 .md 주소를 다시 열었으나 DNS 오류(ENOTFOUND). 웹 검색 발췌(2차)는 승인 정책과 샌드박스를 독립 설정으로 설명. 본문 Codex 문장은 여전히 미확인(원문 미개봉). 참고 자료의 확인일 10월 4일은 유지.
