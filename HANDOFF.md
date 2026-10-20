@@ -4,6 +4,7 @@
 - 브랜치: ch01-figures-rules(그림 1-1, 1-2 확정과 그림 규칙 승격, 명세 먼저 D-106, D-107). v1.0(PR #4)은 main에 병합됨
 
 ## 지금 상태
+- 작업 시작: 그림 2-2의 MCP 항목 빼기, 그림 안 "CR" 표기를 예제로 밝히기(이슈 #18), 브랜치 fig-cr-label
 - 2026-10-20: 이슈 보고 형식(작가 지시, D-113, 초안 PR #17). 이슈 댓글에 진행 완료 chapter 표와 chapter별 작업, 수정 내용(templates/issue-report.md). 닫힌 이슈 #9, #10에 같은 형식의 정리 댓글. 다음은 4장 개정.
 - v1.0 작업(D-104, D-105)을 끝까지 진행함. 커밋 순서: F-14 훅 경로 → D-104·D-105 기록 → CR 이름 통일(원고, 그림 3-1·4-1·6-1·8-1, examples/) → 장 틀 스타일과 lint 제외 → 1~11장 보강(장마다 커밋) → 시작하며·마치며.
 - 장마다 하위 에이전트(fact-checker, flow-reviewer, reader-novice, 그림을 바꾼 장은 figure-checker) 점검을 받고 필수만 반영함. 보고서: reviews/agents/2026-10-20-chNN-*.md. 권장과 참고: reviews/agents/v1.1-backlog.md.
