@@ -132,3 +132,10 @@
 - permissions 문서(https://code.claude.com/docs/en/permissions): Edit deny는 내장 도구, Bash의 인식되는 파일 명령, 리다이렉션에 적용되나 스크립트의 간접 쓰기에는 적용 안 됨(샌드박스 필요, 표 9-4 1행). Bash(git push *)는 git -C . push와 불일치
 - sandboxing 문서(https://code.claude.com/docs/en/sandboxing): Bash 등 명령과 하위 프로세스를 운영 체제 수준에서 제한. macOS, Linux, WSL2에서 동작, 네이티브 Windows에서는 샌드박스 없이 실행
 - costs 문서 재확인: /usage Session은 API 사용자용, 정가 기준 추정치(modelPricing 설정 시 계약 요율, 여전히 추정치)
+
+# 2026-10-20 ch10, ch11 v1.0 보강 확인(fact-checker)
+- OpenAI Codex 문서 주소(developers.openai.com/codex/...)는 learn.chatgpt.com/docs/...로 308 이전됨
+- OpenAI, Slash commands(https://learn.chatgpt.com/docs/cli/slash-commands/), 확인일 2026-10-20: /status는 활성 모델, 승인 정책, 쓰기 가능 경로(writable roots), 남은 컨텍스트 용량을 보여 줌. 샌드박스 모드 항목은 없음(표 10-4 2행)
+- OpenAI, Rules(https://learn.chatgpt.com/docs/agent-configuration/rules), Agent approvals and security(https://learn.chatgpt.com/docs/agent-approvals-security), 확인일 2026-10-20: forbidden은 확인 없이 차단, 규칙은 실험 단계, 규칙 파일 ~/.codex/rules/default.rules. 네트워크 기본 꺼짐, on-request에서는 네트워크가 필요한 명령에 승인 요청, untrusted는 폐지
+- Anthropic, Sandboxing, memory, permissions(Claude Code Docs), 확인일 2026-10-20: 샌드박스 기본 꺼짐, sandbox.enabled로 켬, 네이티브 Windows에서는 샌드박스 없이 실행. CLAUDE.md와 AGENTS.md가 함께 있으면 CLAUDE.md만 읽고, CLAUDE.md에서 @AGENTS.md로 불러옴
+- 이 책 저장소(11장 표 11-4): .github/workflows/check.yml(book-check)은 PR과 main push에서 check_all.py --ci 실행. verify-site.yml(verify-site)은 page_build 또는 수동 실행에서 배포된 사이트 확인. check_all.py 요약 항목은 빌드, 금칙어, 번호, 구조, 문체, 그림 안 이름이고 --ci에서 빌드 결과와 커밋 일치 추가
