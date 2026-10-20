@@ -117,3 +117,6 @@
 - URL: https://code.claude.com/docs/en/costs , https://code.claude.com/docs/en/sub-agents , https://code.claude.com/docs/en/context-window
 - 확인일: 2026-10-20, 작성: Anthropic
 - 사용한 내용: 테스트처럼 출력이 많은 작업을 하위 에이전트에 맡기면 출력은 하위 에이전트 컨텍스트에 남고 요약만 주 대화로 돌아옴(하위 에이전트 요청도 사용량에 포함). Read 도구 호출은 대화에 한 줄로 표시됨(context-window 시뮬레이션)
+
+# 2026-10-20 ch06 v1.0 보강 확인(fact-checker)
+- S3(Young, 2025) 재확인: 에이전트에게 passes 필드의 상태만 바꾸도록 지시했다는 문장을 원문에서 다시 확인(6장 작업 단위 분할, 예제 절). 원문은 커밋을 "기능마다 하나"로 쓰지 않고, 설명 있는 커밋과 세션 종료 때의 커밋으로 적음(6장 표 6-6의 "작업 단위마다 commit 하나"는 이 책 실습의 확인 방법이며 Young의 사실이 아님)
