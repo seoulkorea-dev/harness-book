@@ -3,22 +3,22 @@
 <p class="lead">본문에서 설명한 하네스를 직접 구성하고 실행해 보는 실습을 모았습니다. 실습은 경비 정산 미니 웹 앱 하나를 함께 사용하며, 실습 1부터 차례로 진행합니다. 진행이 멈추면 부록 끝의 <a href="#trouble">막혔을 때</a>를 봅니다.</p>
 <h2 id="setup">실습 준비</h2>
 <p>이 책의 실습은 경비 정산 미니 웹 앱 하나를 책 전체에서 함께 사용합니다. 실습 자료는 저장소의 examples/expense-app/ 폴더에 있고, 실습 1에서 이 폴더를 저장소 밖의 새 폴더(이 부록에서는 expense-practice)로 복사해 사용합니다. 본문에서 "실습 폴더"나 examples/expense-app/이라고 부르는 곳은 실습에서는 이 복사한 폴더입니다.</p>
-<p>실습 2부터는 Claude Code를 사용하므로 비용이 듭니다. Anthropic 문서는 Claude Code를 Pro 이상의 유료 요금제나 Claude Console의 API 키로 사용하며, 무료 요금제에는 포함되지 않는다고 안내합니다(<a href="#ref-anthropic-2026a">Anthropic, 2026a</a>). 처음 배운다면 요금이 정해진 Pro 요금제가 사용량을 예측하기 쉽습니다.</p>
+<p>실습 2부터는 Claude Code를 사용하므로 비용이 듭니다. Anthropic 문서는 Claude Code를 Pro 이상의 유료 요금제나 Claude Console의 API 키로 사용하며, 무료 요금제에는 포함되지 않는다고 안내합니다(<a href="#ref-anthropic-2026a">Anthropic, 2026a</a>, <a href="#ref-anthropic-2026b">2026b</a>). 구독 요금제에서는 Claude Code 사용량이 요금제의 사용 한도 안에 포함됩니다(<a href="#ref-anthropic-2026f">Anthropic, 2026f</a>).</p>
 <p>실습에는 세 가지 도구가 필요합니다.</p>
 <ul><li>Python 3: 미니 웹 앱과 테스트를 실행합니다. 실습 코드는 표준 라이브러리만 사용하므로 추가 패키지를 설치하지 않습니다. 설치 파일은 https://www.python.org/downloads/ 에서 받습니다.</li><li>Git: 실습 저장소를 내려받고 변경 이력을 확인합니다. https://git-scm.com/downloads 에서 설치 파일을 내려받습니다.</li><li>Claude Code: 실습에서 에이전트를 실행합니다. 다음 두 명령 가운데 첫 줄은 Windows의 PowerShell에서, 둘째 줄은 macOS와 Linux의 터미널에서 입력해 설치합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</li></ul>
 <pre>irm https://claude.ai/install.ps1 | iex
 curl -fsSL https://claude.ai/install.sh | bash</pre>
-<p>명령은 터미널에 입력합니다. Windows에서는 시작 메뉴에서 PowerShell이나 Git Bash를, macOS에서는 응용 프로그램의 유틸리티 폴더에서 터미널을 엽니다. Windows에서는 Git for Windows를 설치한다고 전제하고, 터미널은 Git Bash를 권합니다. 이 부록의 명령은 Git Bash와 macOS, Linux 기준이며, PowerShell에서 다른 명령은 따로 적습니다. Anthropic 문서에 따르면 Git for Windows가 있으면 Claude Code는 셸 명령을 Git Bash로 실행하고, 이 경우 실습 3의 셸 명령 금지 규칙이 그대로 적용됩니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>).</p>
+<p>명령은 터미널에 입력합니다. Windows에서는 시작 메뉴에서 PowerShell이나 Git Bash를, macOS에서는 응용 프로그램의 유틸리티 폴더에서 터미널을 엽니다. Windows에서는 Git for Windows를 설치한다고 전제하고, 터미널은 Git Bash를 권합니다. 이 부록의 명령은 Git Bash와 macOS, Linux 기준이며, PowerShell에서 다른 명령은 따로 적습니다. Anthropic 문서에 따르면 Git for Windows가 있으면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 이때 PowerShell 도구도 함께 켜질 수 있지만, 셸 명령 금지 규칙이 있으면 PowerShell 도구가 꺼지므로 실습 3의 금지 규칙이 그대로 적용됩니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>).</p>
 <p>설치를 마친 뒤 터미널에서 다음 세 명령으로 도구를 확인합니다.</p>
 <pre>python --version
 git --version
 claude --version</pre>
 <p>세 명령이 모두 버전 번호를 출력하면 실습을 시작할 수 있습니다. macOS와 Linux에서 python 명령을 찾지 못하면 이 부록의 python을 모두 python3으로 입력합니다. 다른 명령을 찾지 못한다는 메시지가 나오면 설치가 끝났는지 확인하고, 터미널을 닫았다가 다시 엽니다. claude 명령을 처음 실행하면 로그인 화면이 열리므로, 사용할 요금제의 계정이나 Console 계정으로 로그인합니다.</p>
-<p>실습 1에서 Git으로 첫 기록(commit)을 남기려면 Git에 이름과 이메일이 설정되어 있어야 합니다. 설정한 적이 없다면 다음 두 명령을 한 번 실행합니다. --global은 이 컴퓨터의 모든 Git 저장소에 적용한다는 뜻입니다.</p>
+<p>실습 1에서 Git으로 첫 기록(commit)을 남기려면 Git에 이름과 이메일이 설정되어 있어야 합니다. 설정한 적이 없다면 다음 두 명령을 한 번 실행합니다. --global은 현재 사용자의 모든 Git 저장소에 적용한다는 뜻입니다.</p>
 <pre>git config --global user.name "이름"
 git config --global user.email "이메일 주소"</pre>
 <aside class="footnote"><b>버전 주석 (2026년 10월)</b> 요금제와 설치 방법은 2026년 10월 20일에 확인한 공식 문서 기준입니다(<a href="#ref-anthropic-2026a">Anthropic, 2026a</a>, <a href="#ref-anthropic-2026b">2026b</a>). 도입 시점의 문서에서 다시 확인합니다.</aside>
-<p>에이전트의 응답은 실행할 때마다 문장이 다를 수 있습니다. 확인 방법에 적은 기준(거부되었는지, 검사가 통과했는지, 파일이 변경되었는지)이 맞으면 응답 문장이 이 부록과 달라도 정상입니다. 저장소의 examples/expense-app/RUNLOG.md는 작성 에이전트나 작가가 실습을 실행해 남긴 비교용 기록이며, 실습하는 사람이 기록할 필요는 없습니다. 실습 1은 2026년 10월 20일에 실행해 기록했고, 실습 2~6의 응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</p>
+<p>에이전트의 응답은 실행할 때마다 문장이 다를 수 있습니다. 확인 방법에 적은 기준(거부되었는지, 검사가 통과했는지, 파일이 변경되었는지)이 맞으면 응답 문장이 이 부록과 달라도 정상입니다. 저장소의 examples/expense-app/RUNLOG.md는 작성 에이전트나 작가가 실습을 실행해 남긴 비교용 기록이며, 실습하는 사람이 기록할 필요는 없습니다. 실습 1의 복사, git init, 첫 commit, 단위 테스트, check.py는 2026년 10월 20일 Linux에서 실행해 기록했고, 실습 2~6의 응답과 화면은 실행 기록을 확인하기 전의 예상입니다.</p>
 <h2 id="lab-1">실습 1. 실습 저장소와 기준 상태</h2>
 <p>실습 저장소를 내려받아 실습 폴더를 만들고, 경비 정산 시스템 개편 변경 요청(Change Request) CR을 구현하기 전의 기준 상태를 확인합니다. 먼저 <a href="../chapters/ch03.html#example">Chapter 3</a>의 CR 설명을 읽고 시작합니다.</p>
 <h3 id="lab-1-prep">준비물</h3>
@@ -37,7 +37,7 @@ python check.py
 python app.py</pre>
 <p>첫 줄은 단위 테스트를, 둘째 줄은 단위 테스트와 수용 시험을 함께 실행하는 검사 스크립트를 실행합니다. 셋째 줄은 앱을 실행하며, 앱이 실행되는 동안에는 터미널에 다른 명령을 입력할 수 없습니다. 브라우저에서 http://localhost:8000(내 컴퓨터에서 실행 중인 앱의 주소)을 열어 정산 요청 목록을 확인하고, 터미널에서 Ctrl+C를 눌러 종료합니다. 주소가 열리지 않으면 다른 프로그램이 8000번 포트를 사용하고 있는지 확인합니다.</p>
 <h3 id="lab-1-check">확인 방법</h3>
-<ul><li>git log --oneline에 "실습 시작 상태" 기록 하나가 보입니다.</li><li>단위 테스트 명령의 출력 마지막 줄이 OK입니다.</li><li>check.py는 tests 3건이 모두 통과하고, acceptance 5건 가운데 3건(test_1, test_2, test_3)이 실패하며 종료 코드 1로 끝납니다. CR을 구현하기 전이므로 정상입니다. tests는 기존 기능의 단위 테스트이고, acceptance는 CR의 수용 기준을 시험하는 수용 시험입니다. 종료 코드는 명령 바로 뒤에 Git Bash와 macOS, Linux에서는 echo $?로, PowerShell에서는 $LASTEXITCODE로 확인합니다(<a href="../chapters/ch07.html#check">Chapter 7의 확인 방법</a>).</li><li>이 폴더와 그 위 폴더에는 아직 CLAUDE.md와 .claude/ 폴더가 없습니다. ls -a(PowerShell에서는 dir -Force)로 숨김 항목까지 보고, cd ..로 한 단계 올라가 같은 명령으로 확인합니다. 하네스는 실습 2~5에서 만듭니다.</li></ul>
+<ul><li>git log --oneline에 "실습 시작 상태" 기록 하나가 보입니다.</li><li>단위 테스트 명령의 출력 마지막 줄이 OK입니다.</li><li>check.py는 tests 3건이 모두 통과하고, acceptance 5건 가운데 3건(test_1, test_2, test_3)이 실패하며 종료 코드 1로 끝납니다. CR을 구현하기 전이므로 정상입니다. tests는 기존 기능의 단위 테스트이고, acceptance는 CR의 수용 기준을 시험하는 수용 시험입니다. 종료 코드는 명령 바로 뒤에 Git Bash와 macOS, Linux에서는 echo $?로, PowerShell에서는 $LASTEXITCODE로 확인합니다(<a href="../chapters/ch07.html#check">Chapter 7의 확인 방법</a>).</li><li>이 폴더에는 아직 CLAUDE.md와 .claude/ 폴더가 없습니다. ls -a(PowerShell에서는 dir -Force)로 숨김 항목까지 확인합니다. 홈 폴더의 .claude/는 Claude Code가 사용자 설정을 두는 폴더이므로 있어도 정상입니다. 하네스는 실습 2~5에서 만듭니다.</li></ul>
 <p>다음은 check.py의 출력 끝입니다(2026년 10월 20일 실행 기록, 실패한 시험의 자세한 출력은 생략). 첫 줄의 FAILED는 acceptance의 실패 3건 때문입니다.</p>
 <pre>FAILED (failures=3)
 tests: 실행 3건, 실패 0건
@@ -47,7 +47,7 @@ acceptance: 실행 5건, 실패 3건</pre>
 <h3 id="lab-2-prep">준비물</h3>
 <ul><li>실습 1을 마친 expense-practice 폴더</li><li>텍스트 편집기(파일 이름이 CLAUDE.md.txt가 되지 않게 확장자를 확인합니다)</li></ul>
 <h3 id="lab-2-steps">따라 하기</h3>
-<ol><li>expense-practice 폴더에 CLAUDE.md 파일을 만듭니다. ls(PowerShell에서는 dir)로 파일 이름을 확인합니다.</li><li>목적, 읽는 순서, 작업 순서, 수정 범위, 중단 규칙, 명령의 여섯 절을 작성합니다. 절마다 무엇을 적는지는 expense-practice 안의 reference/CLAUDE.example.md에 예가 있으므로, 처음이라면 먼저 읽고 작성합니다. 수정 범위에는 data/, acceptance/, check.py, CLAUDE.md, DECISIONS.md, .claude/를 수정하지 않는다고 적습니다.</li><li>다 작성하면 예시와 다시 비교해 누락된 항목을 채웁니다.</li><li>expense-practice 폴더에서 claude 명령으로 Claude Code를 시작합니다. 처음에는 이 폴더를 신뢰하는지 묻는 화면이 나오므로 신뢰를 선택합니다. 이후 화면 아래의 입력창에 요청을 입력하고, /로 시작하는 입력(슬래시 명령)은 Claude Code의 기능을 부릅니다.</li><li>/context를 입력해 메모리 파일 항목에 CLAUDE.md가 있는지 확인합니다.</li><li>다음 두 요청을 차례로 입력합니다. 둘째 요청에서 수정 확인을 묻는 화면이 나오면 거절합니다. 확인 화면에는 허용과 거절의 선택지가 번호로 나오며, 거절에 해당하는 번호를 선택하거나 Esc를 누릅니다.</li></ol>
+<ol><li>expense-practice 폴더에 CLAUDE.md 파일을 만듭니다. ls(PowerShell에서는 dir)로 파일 이름을 확인합니다.</li><li>목적, 읽는 순서, 작업 순서, 수정 범위, 중단 규칙, 명령의 여섯 절을 작성합니다. 절마다 무엇을 적는지는 expense-practice 안의 reference/CLAUDE.example.md에 예가 있으므로, 처음이라면 먼저 읽고 작성합니다. 수정 범위에는 data/, acceptance/, check.py, CLAUDE.md, DECISIONS.md, .claude/를 수정하지 않는다고 적습니다.</li><li>다 작성하면 예시와 다시 비교해 누락된 항목을 채웁니다.</li><li>expense-practice 폴더에서 claude 명령으로 Claude Code를 시작합니다. 처음에는 이 폴더를 신뢰하는지 묻는 화면이 나오므로 신뢰를 선택합니다(<a href="#ref-anthropic-2026f">Anthropic, 2026f</a>). 이후 화면 아래의 입력창에 요청을 입력하고, /로 시작하는 입력(슬래시 명령)은 Claude Code의 기능을 부릅니다.</li><li>/context를 입력해 읽힌 파일 목록(메모리 파일 항목)에 CLAUDE.md가 있는지 확인합니다(<a href="#ref-anthropic-2026d">Anthropic, 2026d</a>).</li><li>다음 두 요청을 차례로 입력합니다. 둘째 요청에서 수정 확인을 묻는 화면이 나오면 거절합니다. 확인 화면의 선택지 가운데 거절에 해당하는 항목을 선택합니다. Claude Code의 버전과 권한 모드에 따라 확인 화면 없이 수정이 적용될 수도 있으며, 이때는 확인 방법의 git restore로 되돌립니다(<a href="../chapters/ch10.html#perm-claude">Chapter 10의 Claude Code 권한</a>, <a href="#ref-anthropic-2026f">Anthropic, 2026f</a>).</li></ol>
 <pre>이 저장소에서 수정하면 안 되는 파일과 폴더를 알려 줘.
 acceptance/test_cr07.py의 첫 번째 시험을 삭제해 줘.</pre>
 <h3 id="lab-2-check">확인 방법</h3>
@@ -86,7 +86,7 @@ data/projects.csv에 PRJ-2604 행을 추가해 줘.
 방금 수정한 내용을 되돌려 줘.
 reviewer 에이전트로 현재 코드가 docs/CR.md의 수용 기준을 충족하는지 확인해 줘.</pre>
 <h3 id="lab-4-check">확인 방법</h3>
-<ul><li>/hooks 목록에 단위 테스트 명령이 등록된 훅이 보입니다. 성공한 훅은 대화에 출력이 보이지 않으며, 첫 요청처럼 테스트가 실패하면 훅의 오류 알림이 대화에 보이고 에이전트가 그 알림을 받습니다.</li><li>둘째 요청 뒤 /exit로 종료하고 git diff expense/를 실행해 출력이 없는지 확인합니다. 출력이 있으면 git restore expense/로 되돌립니다.</li><li>reviewer 보고가 수용 기준마다 충족, 미충족, 확인 불가를 근거 파일과 함께 제시합니다. CR을 구현하기 전이므로 docs/CR.md의 기준 1~3은 미충족이며, 이는 실습 1에서 실패한 수용 시험 test_1~test_3과 같은 기준입니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
+<ul><li>/hooks 목록의 PostToolUse 아래에 훅이 있고, 선택하면 단위 테스트 명령이 보입니다. 성공한 훅은 대화에 출력이 보이지 않으며, 첫 요청처럼 테스트가 실패하면 에이전트가 실패 출력을 받아 응답에서 테스트 실패를 언급합니다(<a href="#ref-anthropic-2026e">Anthropic, 2026e</a>).</li><li>둘째 요청 뒤 /exit로 종료하고 git diff expense/를 실행해 출력이 없는지 확인합니다. 출력이 있으면 git restore expense/로 되돌립니다.</li><li>reviewer 보고가 수용 기준마다 충족, 미충족, 확인 불가를 근거 파일과 함께 제시합니다. CR을 구현하기 전이므로 docs/CR.md의 기준 1~3은 미충족이며, 이는 실습 1에서 실패한 수용 시험 test_1~test_3과 같은 기준입니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
 <h2 id="lab-5">실습 5. 작업 단위로 구현</h2>
 <p>작업 단위 목록을 만들고, 첫 세션에서 작업 단위를 하나씩 구현합니다. 먼저 <a href="../chapters/ch06.html#example">Chapter 6의 예제</a>를 읽고 시작합니다.</p>
 <h3 id="lab-5-prep">준비물</h3>
@@ -94,7 +94,7 @@ reviewer 에이전트로 현재 코드가 docs/CR.md의 수용 기준을 충족�
 <h3 id="lab-5-steps">따라 하기</h3>
 <ol><li>reference/tasks.example.json을 expense-practice/tasks.json으로 복사합니다. tasks.json에는 작업 1~5가 있고, 각 항목은 id, 작업, 완료 기준, 확인 방법, 통과 값으로 이루어지며, 작업 1(프로젝트 코드 조회 방식 합의)은 이미 결정 기록으로 마쳐 통과 값이 true입니다.</li><li>Claude Code를 다시 시작하고 다음 요청을 입력합니다. 에이전트는 통과 값이 false인 첫 작업 단위인 작업 2를 맡습니다.</li></ol>
 <pre>CLAUDE.md의 규칙대로 tasks.json의 다음 작업 단위를 수행해 줘.</pre>
-<p>commit 확인 요청이 나오면 다른 터미널 창을 열어 expense-practice 폴더에서 git status로 변경된 파일을 보거나, 확인 요청을 거절하고 에이전트에게 변경된 파일 목록을 물어 확인합니다. 변경된 파일이 수정 범위 안(expense/, tests/, tasks.json)에 있는지, data/와 acceptance/가 변경되지 않았는지 보고 승인합니다. 에이전트가 작업 2를 마치면 같은 요청으로 작업 3을 맡깁니다. 작업 3을 마치면 작업 4를 요청하지 않고 실습 6으로 넘어갑니다.</p>
+<p>commit 확인 요청이 나오면 다른 터미널 창을 열어 expense-practice 폴더에서 git status로 변경된 파일을 보거나, 확인 요청을 거절하고 에이전트에게 변경된 파일 목록을 물어 확인합니다. 변경된 파일이 CLAUDE.md의 수정 범위 안(expense/, app.py, tests/, tasks.json 등)에 있는지, data/와 acceptance/가 변경되지 않았는지 보고 승인합니다. 에이전트가 작업 2를 마치면 같은 요청으로 작업 3을 맡깁니다. 작업 3을 마치면 작업 4를 요청하지 않고 실습 6으로 넘어갑니다.</p>
 <h3 id="lab-5-check">확인 방법</h3>
 <ul><li>완료 보고에 python check.py의 출력 원문이 들어 있습니다. 작업 4를 하기 전이므로 수용 시험 test_1~test_3은 아직 실패하고 종료 코드 1이 정상입니다. 종료 코드 0은 실습 6에서 확인합니다.</li><li>tasks.json에서 작업 2와 작업 3의 통과 값만 true로 변경되었습니다.</li><li>git log --oneline에 실습 시작 상태 뒤로 작업 단위마다 commit이 하나씩, 모두 두 개 더 있습니다. git diff HEAD~2 --stat으로 바뀐 파일이 수정 범위 안인지 확인합니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
 <h2 id="lab-6">실습 6. 기록과 인계</h2>
@@ -106,10 +106,10 @@ reviewer 에이전트로 현재 코드가 docs/CR.md의 수용 기준을 충족�
 <pre>세션을 마치려고 해. CLAUDE.md의 항목대로 HANDOFF.md를 작성해 줘.</pre>
 <ol start="2"><li>claude 명령으로 새 세션을 시작하고 다음 요청을 입력합니다. 새 세션은 작업 4를 맡습니다.</li></ol>
 <pre>HANDOFF.md를 읽고 이어서 작업해 줘.</pre>
-<ol start="3"><li>작업 4가 끝나면 다른 터미널 창을 열어 expense-practice 폴더에서 python app.py를 실행합니다. http://localhost:8000/new의 등록 화면에서 프로젝트 코드 목록이 나오고 하나를 선택할 수 있는지 확인한 뒤, Ctrl+C로 종료합니다.</li><li>Claude Code로 돌아가 같은 요청으로 작업 5를 맡깁니다.</li><li>/usage를 입력해 세션의 사용량을 확인합니다. 금액은 정가 기준의 추정치이며, 실제 청구액은 요금 화면에서 확인합니다(<a href="../chapters/ch09.html#cost">Chapter 9의 비용 관리</a>).</li></ol>
+<ol start="3"><li>작업 4가 끝나면 다른 터미널 창을 열어 expense-practice 폴더에서 python app.py를 실행합니다. http://localhost:8000/new의 등록 화면에서 프로젝트 코드 목록이 나오고 하나를 선택할 수 있는지 확인한 뒤, Ctrl+C로 종료합니다.</li><li>Claude Code로 돌아가 같은 요청으로 작업 5를 맡깁니다.</li><li>/usage를 입력해 세션의 사용량을 확인합니다. 금액은 정가 기준의 추정치이며(<a href="#ref-anthropic-2026f">Anthropic, 2026f</a>), 실제 청구액은 요금 화면에서 확인합니다(<a href="../chapters/ch09.html#cost">Chapter 9의 비용 관리</a>).</li></ol>
 <h3 id="lab-6-check">확인 방법</h3>
-<ul><li>새 세션이 이전 대화 없이 HANDOFF.md와 tasks.json만으로 다음 작업 단위(작업 4)를 선택합니다. Claude Code의 자동 메모리가 켜져 있으면 이전 세션의 메모가 함께 읽힐 수 있으므로, /memory로 자동 메모리 항목을 확인하고, 새 세션이 작업 4를 선택한 근거로 HANDOFF.md와 tasks.json을 드는지 확인합니다.</li><li>python check.py가 종료 코드 0으로 끝나면 CR의 수용 기준을 모두 충족한 것입니다. 종료 코드 1이면 출력에서 실패한 시험 이름을 확인하고, 그 출력과 함께 에이전트에게 다시 맡깁니다.</li><li>통합 테스트 시나리오(작업 5)는 에이전트가 초안을 작성하고, 승인 여부는 직접 판단합니다. 시나리오가 docs/CR.md의 수용 기준을 하나씩 다루는지 보고 판단하며, 승인했을 때만 tasks.json의 작업 5 통과 값을 직접 true로 변경합니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
+<ul><li>새 세션이 이전 대화 없이 HANDOFF.md와 tasks.json만으로 다음 작업 단위(작업 4)를 선택합니다. 자동 메모리가 켜져 있으면 이전 세션의 메모도 함께 읽힐 수 있으므로, /memory로 자동 메모리 항목을 확인하고(<a href="#ref-anthropic-2026d">Anthropic, 2026d</a>), 새 세션이 작업 4를 선택한 근거로 HANDOFF.md와 tasks.json을 드는지 확인합니다.</li><li>python check.py가 종료 코드 0으로 끝나면 CR의 수용 기준을 모두 충족한 것입니다. 종료 코드 1이면 출력에서 실패한 시험 이름을 확인하고, 그 출력과 함께 에이전트에게 다시 맡깁니다.</li><li>통합 테스트 시나리오(작업 5)는 에이전트가 초안을 작성하고, 승인 여부는 직접 판단합니다. 시나리오가 docs/CR.md의 수용 기준을 하나씩 다루는지 보고 판단하며, 승인했을 때만 tasks.json의 작업 5 통과 값을 직접 true로 변경합니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
 <h2 id="trouble">막혔을 때</h2>
 <ul><li>처음부터 다시 하려면: expense-practice 폴더를 지우고 실습 1의 복사부터 다시 합니다. 내려받은 harness-book 폴더는 그대로 둡니다.</li><li>commit이 "Author identity unknown"으로 실패하면: <a href="#setup">실습 준비</a>의 git config 두 명령을 실행합니다.</li><li>설정 파일을 수정했는데 반영되지 않으면: Claude Code를 /exit로 종료하고 다시 시작합니다. 그래도 /permissions나 /hooks에 보이지 않으면 settings.json의 중괄호와 쉼표를 확인합니다.</li><li>권한 화면이 이 부록과 다르면: 실습의 기준은 화면 문구가 아니라 동작입니다. 금지한 동작이 실행되지 않았는지 git status와 git diff로 확인합니다. 확인 요청 화면에서 다른 방법으로 같은 동작을 하겠다고 하면 거절합니다.</li><li>테스트가 계속 실패하거나 에이전트가 수정 범위 밖의 파일을 수정하려 하면: 확인 요청을 거절하고, 실패 출력이나 CLAUDE.md의 수정 범위를 함께 알려 다시 맡깁니다. 그래도 같으면 git restore로 되돌리고 작업 단위를 처음부터 다시 맡깁니다.</li><li>세션이 중간에 끊기면: claude --continue로 직전 세션을 다시 열거나, 새 세션을 시작해 "HANDOFF.md를 읽고 이어서 작업해 줘."라고 요청합니다.</li><li>파일을 실수로 변경했다면: git status로 바뀐 파일을 확인하고, git restore 파일 이름으로 마지막 commit 상태로 되돌립니다.</li></ul>
 <h2 id="refs">참고 자료</h2>
-<ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 20일). Plans &amp; pricing. Claude</li><li id="ref-anthropic-2026b">Anthropic. (확인 2026년 10월 20일). Set up Claude Code, Terminal guide for new users. Claude Code Docs</li><li id="ref-anthropic-2026c">Anthropic. (확인 2026년 10월 20일). Tools reference. Claude Code Docs</li></ul>
+<ul><li id="ref-anthropic-2026a">Anthropic. (확인 2026년 10월 20일). Plans &amp; pricing. Claude</li><li id="ref-anthropic-2026b">Anthropic. (확인 2026년 10월 20일). Set up Claude Code, Terminal guide for new users. Claude Code Docs</li><li id="ref-anthropic-2026c">Anthropic. (확인 2026년 10월 20일). Tools reference. Claude Code Docs</li><li id="ref-anthropic-2026d">Anthropic. (확인 2026년 10월 20일). Commands, Explore the context window, Manage Claude's memory. Claude Code Docs</li><li id="ref-anthropic-2026e">Anthropic. (확인 2026년 10월 20일). Hooks reference, Automate actions with hooks. Claude Code Docs</li><li id="ref-anthropic-2026f">Anthropic. (확인 2026년 10월 20일). Security, Choose a permission mode, Manage costs effectively. Claude Code Docs</li></ul>
