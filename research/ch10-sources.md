@@ -142,3 +142,141 @@
 2. 같은 정책이라는 예제 대비: Claude 예제가 네트워크를 완전히 막지 못해 두 설정이 같은 정책이 아님(위 표 참조).
 3. "Codex는 push를 금지하지 않고 확인을 요청"하는 결론은 on-request 동작에 대한 이전 기록에 의존. 표 10-4 3행의 확인 기준도 마찬가지.
 4. "선택 기준은 격리 기본 요구 여부 또는 도구별 규칙 관리"는 책의 해석이며 출처 없음.
+
+
+## 보충 조사(2026-10-20, editor 명세 검토 필수 2~4 대응)
+Claude Code 문서 5건은 원문을 직접 열어 확인했습니다. 긴 페이지(sandboxing, memory, settings, permissions)는 WebFetch가 요약 대신 원문 파일로 저장했고, 해당 구절을 원문 파일에서 읽었습니다. Codex 문서는 이번에도 열기 실패입니다. 맨 끝에 적었습니다.
+
+## S-C10-6. Anthropic, Choose a permission mode (Claude Code Docs)
+- URL: https://code.claude.com/docs/en/permission-modes
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 이 장에서 사용할 내용
+  - 모드별 "묻지 않고 하는 일 / 판단 주체" 요약표(원문 표).
+    - default(Manual): 읽기만 묻지 않음. 판단 주체는 사용자.
+    - acceptEdits: 읽기, 파일 수정, 흔한 파일 시스템 명령(`mkdir`, `touch`, `mv`, `cp`, `sed`)을 작업 범위 안에서 묻지 않음. 범위 밖은 사용자가 판단.
+    - plan: 읽기만 함. 사용자가 계획을 승인하기 전에는 수정이 막힘. auto를 쓸 수 있으면 분류기(classifier)가 명령을 검토함.
+    - auto: 분류기가 승인한 것은 모두 묻지 않음. 판단 주체는 "A classifier model, not you".
+    - dontAsk: 작업 디렉터리 읽기와 미리 승인한 도구만 실행함. 판단 주체는 없음(Nobody).
+    - bypassPermissions: 모두 실행. 판단 주체는 없음(일부만 예외로 여전히 확인).
+  - default 원문: "In Manual mode, Claude Code stops and asks you before most actions that edit files, run shell commands, or reach the network."
+  - acceptEdits 원문: "`acceptEdits` mode lets Claude create and edit files in your working directory without prompting." 그 밖의 Bash 명령은 읽기 전용 기본 집합이 아니면 계속 확인함.
+  - plan 원문: "Claude reads files, runs shell commands to explore, and writes a plan, but does not edit your source."
+  - auto 원문: "A separate classifier model reviews actions before they run, blocking anything that escalates beyond your request, targets unrecognized infrastructure, or appears driven by hostile content Claude read." 명시적 ask 규칙은 auto에서도 확인을 강제함. 차단된 행동은 `/permissions`의 Recently denied에 표시됨. 연속 3회 또는 합계 20회 차단되면 auto가 멈추고 다시 사용자에게 묻기 시작함.
+  - dontAsk 원문: "Claude Code auto-denies every tool call that would otherwise prompt you." CI와 잠금 스크립트용. 명시적 allow 규칙은 실행됨.
+  - bypassPermissions 원문: "disables permission prompts and safety checks so tool calls execute immediately, including writes to protected paths." 격리된 컨테이너나 VM에서만 쓰라고 안내함. deny 규칙은 여전히 막음.
+  - 작업 디렉터리 밖 쓰기(이 문서 기준).
+    - default와 acceptEdits는 확인을 요청함.
+    - plan은 계획 승인 전까지 수정이 없음.
+    - auto는 작업 디렉터리 안 파일 작업은 허용하고, 그 밖은 분류기가 판단함. 심볼릭 링크가 작업 디렉터리 밖으로 풀리는 쓰기는 분류기가 아니라 사용자에게 확인함(permissions 문서 479행도 같은 내용).
+    - dontAsk는 거부함.
+    - bypassPermissions는 허용함.
+  - 보호 경로(`.git`, `.claude`, `.bashrc`, `.mcp.json` 등)는 default와 acceptEdits에서 확인, auto에서는 분류기, dontAsk에서는 거부, bypassPermissions에서는 허용임.
+  - 이 문서는 마지막 262자를 읽지 못했습니다(WebFetch 길이 한도). 표와 모드 설명에는 영향이 없을 가능성이 높습니다.
+- 확신: 높음
+
+## S-C10-7. Anthropic, Configure the sandboxed Bash tool, 허용 목록 밖 호스트 (Claude Code Docs)
+- URL: https://code.claude.com/docs/en/sandboxing (절 "Hosts outside your allowed domains", "Sandbox modes", "Per-command allowed domains in auto mode")
+- 게시일: 표기 없음, 확인일: 2026-10-20 (원문 파일의 해당 구절을 직접 읽음)
+- 작성: Anthropic
+- 이 장에서 사용할 내용
+  - 허용 도메인은 처음에 비어 있음. 허용 목록 밖 호스트에 연결하는 샌드박스 명령은 "stays in the sandbox and waits for a decision"이고, 결정은 대화형 터미널에서 권한 모드에 따라 달라짐.
+  - 모드별 처리(원문 표).
+    - bypassPermissions는 확인 없이 허용함. plan에서 bypass를 쓸 수 있는 경우도 같음.
+    - Manual(default), acceptEdits, 그 밖의 plan은 사용자에게 확인을 요청함.
+    - auto는 거부함. 단, 명령이 호스트를 직접 적어 두었고 분류기가 그 목록을 승인한 경우는 예외임.
+    - dontAsk는 거부함.
+  - `strictAllowlist` 또는 `allowManagedDomainsOnly`가 켜져 있으면 모든 모드에서 프록시가 거부함. `deniedDomains`에 있는 호스트도 모든 모드에서 거부됨.
+  - auto의 호스트 지정(v2.1.271 이상): 명령 하나가 필요한 호스트를 명령에 적고 분류기가 명령과 함께 검토함. 승인되면 "that one command alone" 동안만 열림. 세션 허용 목록이나 설정에는 추가되지 않음.
+  - `autoAllowBashIfSandboxed`(auto-allow 모드, 기본 true)와의 관계.
+    - 샌드박스 안에서 실행되는 명령은 프롬프트 없이 자동 승인됨. 이것은 "명령 실행" 승인이고, 허용 목록 밖 도메인 연결은 위 표의 권한 모드가 따로 결정함.
+    - 원문 구절: "A sandboxed command that connects to a host you haven't allowed stays in the sandbox."
+    - auto-allow는 권한 모드와 별개로 동작하지만 예외가 셋임: plan 모드, 호스트를 지정한 auto 명령, auto 모드의 서버 측 분류기 검토.
+    - false로 하면(Regular permissions) 샌드박스 명령도 일반 권한 흐름을 거침.
+    - auto-allow에서도 deny 규칙과 내용 지정 ask 규칙(`Bash(git push *)`)은 유효함. 핵심 경로 `rm`/`rmdir`은 일반 권한 흐름을 거침.
+  - 따라서 "default에서는 묻고, auto에서는 거부(호스트 지정 승인 시 예외)"가 원문 근거 있는 표현임.
+  - 확인 방법에 쓸 수 있는 점: 샌드박스가 네트워크 연결을 막으면 Claude Code가 결과에 거부된 호스트 이름을 알려 줌.
+  - 설정 키 `sandbox.network.allowedDomains`, `sandbox.network.deniedDomains`가 원문에 실제로 있음(예시 JSON의 `"network": {"allowedDomains": [...]}`). 이전 미확인 항목이 해소됨.
+  - 파일 도구, WebFetch, WebSearch는 샌드박스 밖에서 권한 규칙을 따름. 원문: "`allowedDomains` doesn't limit WebFetch".
+- 확신: 높음
+
+## S-C10-8. Anthropic, How Claude remembers your project, /memory (Claude Code Docs)
+- URL: https://code.claude.com/docs/en/memory (절 "View and edit with /memory", "Troubleshoot memory issues", "AGENTS.md")
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 이 장에서 사용할 내용
+  - `/memory`: CLAUDE.md, CLAUDE.local.md, 그 밖의 메모리 파일 위치를 사용자와 프로젝트 범위로 나열함. 아직 없는 사용자와 프로젝트 CLAUDE.md 항목도 보여 주고, 선택하면 편집기로 열며 없으면 만듦. auto memory 켜기와 끄기, auto memory 폴더 열기도 제공함.
+  - `/context`: 원문 "To check which `CLAUDE.md` and rules files loaded at launch, run `/context`." 목록의 **Memory files** 항목을 확인하라고 함. 거기에 없으면 "Claude can't see it". 하위 디렉터리 CLAUDE.md는 필요할 때 읽으므로 시작 목록에 없고, 읽히면 `Loaded` 줄이 나옴.
+  - AGENTS.md 확인(원문): "To check whether Claude read your `AGENTS.md`, run `/memory` and look for its path in the list." v2.1.280 이전에는 `/memory`와 `/context`가 직접 읽은 AGENTS.md를 나열하지 않으므로 Claude에게 지침 내용을 물어보라고 안내함.
+  - 세션 시작 때 대화형 세션에 한 줄이 나옴. 예: `no CLAUDE.md found; AGENTS.md loaded: /home/you/repo/AGENTS.md`.
+  - `Instruction file not loaded` 알림이 뜨면 errors 문서를 보라고 안내함. `InstructionsLoaded` 훅으로 로드 시점과 이유를 기록할 수 있음.
+  - 주의: 이전 기록 S-C10-1에 쓴 v2.1.277 이상(AGENTS.md 직접 읽기)과 별개로 `/memory`와 `/context`가 AGENTS.md를 나열하는 것은 v2.1.280 이상임. 두 버전을 구분해 적어야 함.
+  - `--add-dir`로 추가한 디렉터리의 CLAUDE.md는 기본적으로 읽지 않음.
+- 확신: 높음
+
+## S-C10-9. Anthropic, Settings files and precedence, 관리형 설정 (Claude Code Docs)
+- URL: https://code.claude.com/docs/en/settings (참고: https://code.claude.com/docs/en/managed-settings, 이번에 열지 않음)
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 이 장에서 사용할 내용
+  - 한 문장 요약: 관리형 설정은 조직이 `managed-settings.json` 파일, MDM 정책, claude.ai 콘솔의 서버 관리 설정, 또는 SDK 임베딩 호스트로 배포하는 설정이며, 설정 우선순위에서 최상위라 사용자, 프로젝트, 로컬 설정이나 `--settings`로 덮어쓸 수 없음.
+  - 원문 근거: 우선순위 순서(높은 쪽부터)는 관리형, 명령줄(`--settings`), 프로젝트 로컬, 공유 프로젝트, 사용자임. "Organization settings override everything", "Managed is the top level."
+  - 원문: "If your organization manages Claude Code, some settings are decided for you and nothing you put in your own files changes them."
+  - 적용 대상은 "Everyone your organization deploys it to"이고, 용도는 "Security policy and compliance requirements"임.
+  - 예외: 일부 보안 민감 키는 관리형 값보다 낮은 단계의 더 엄격한 값을 따름(원문 "Exceptions to managed settings precedence"). 이 장에서는 "일부 예외가 있음" 정도로만 쓰는 것을 권함. 예외 키 목록은 열지 않음.
+  - 확인 방법: `/status`의 `Setting sources` 줄이 관리형 출처와 전달 경로를 보여 줌. 단 어느 파일이 어느 키를 줬는지는 보여 주지 않음.
+  - 클라우드 세션에는 서버 관리 설정만 도달함. Cowork 세션 등은 조건이 다름. 이 장에서는 불필요함.
+  - 관리형 도메인 잠금(`allowManagedDomainsOnly`)과 관리형 CLAUDE.md도 있음(S-C10-1, S-C10-7).
+- 확신: 높음(우선순위와 배포 방식). 중간(예외 범위, 전체 페이지는 열지 않음)
+
+## S-C10-10. Anthropic, Configure permissions, 작업 디렉터리 밖 수정 (Claude Code Docs)
+- URL: https://code.claude.com/docs/en/permissions (절 "Permission system", "Working directories", 쓰기 해석 구절)
+- 게시일: 표기 없음, 확인일: 2026-10-20 (원문 파일의 해당 구절 확인)
+- 작성: Anthropic
+- 이 장에서 사용할 내용
+  - 기본(Manual) 표: 파일 수정은 승인 필요이고 "Yes, and don't ask again"은 세션 끝까지임. 읽기는 작업 디렉터리와 추가 디렉터리 안에서는 승인이 필요 없음. 따라서 작업 디렉터리 밖 수정은 거부가 아니라 확인 요청임(permission-modes 문서와 함께 확인).
+  - 추가 디렉터리(`--add-dir`, `/add-dir`, `permissions.additionalDirectories`)의 파일은 원래 작업 디렉터리와 같은 규칙을 따름. 읽기는 확인 없이 되고 수정 권한은 현재 권한 모드를 따름. 추가 디렉터리는 파일 접근만 넓히고 설정 루트가 되지는 않음.
+  - 요청 경로는 작업 디렉터리 안인데 실제 파일은 밖으로 풀리는 경우(심볼릭 링크 등)는 acceptEdits에서 자동 승인되지 않음. auto에서는 허용 규칙이 없으면 분류기가 아니라 사용자에게 확인하며, 프롬프트에 풀린 경로가 표시됨.
+  - `permissions.blockReadsOutsideWorkingDirectories`를 켜면 모든 모드에서 파일 도구가 밖의 읽기를 거부함. auto는 작업 디렉터리 밖을 처음 읽을 때 이 설정을 켜자고 제안함.
+  - `tee`로 쓰는 대상도 작업 디렉터리와 보호 경로 검사를 받음. `Bash(tee *)` 허용 규칙으로도 작업 디렉터리 밖 대상은 허용되지 않음(v2.1.269 이상).
+  - 작업 디렉터리 밖 쓰기의 모드별 차이는 S-C10-6 표 참조.
+- 확신: 높음
+
+---
+
+## Codex(OpenAI) 문서
+- 열기 실패. developers.openai.com/codex/agent-approvals-security를 이번에 다시 한 번 시도했고 `getaddrinfo ENOTFOUND`로 실패함. 지시대로 sandbox, config 경로와 learn.chatgpt.com은 추가 시도하지 않음(이전 시도에서 같은 오류).
+- 따라서 다음 두 가지는 미확인임.
+  - on-request에서 `network_access=false`인 workspace-write 샌드박스의 네트워크 명령이 승인 요청으로 넘어가는지.
+  - 기본 샌드박스와 승인 정책이 프로젝트 신뢰 여부에 따라 달라지는지.
+- S-C10-5의 이전 기록과 단서가 그대로 유효하며, 그 확신 수준(낮음에서 중간)도 바뀌지 않음.
+
+## 미확인 목록
+- Codex 위 두 건 전부(원문 열기 실패).
+- settings-reference 페이지의 `sandbox.network.*` 키 상세. 키 이름 자체는 sandboxing 원문에서 확인됨.
+- managed-settings 문서의 "Exceptions to managed settings precedence" 예외 키 목록.
+- permission-modes 문서의 끝 262자.
+- "auto가 모든 요금제에서 시작 모드"라는 문구는 이번 원문에도 없음(S-C10-3의 기존 판단 유지).
+
+## 근거가 부족한 곳
+1. Codex 쪽 비교(네트워크 명령 승인, 신뢰 여부별 기본값)는 원문 근거가 없어 Claude Code만 확인된 상태로 대비해야 함.
+2. "auto에서 허용 목록 밖 도메인은 거부"는 원문 확인됨. 다만 "default에서는 묻는다"는 대화형 터미널 기준임. `claude -p`와 비대화형은 원문 표가 "interactive terminal session" 기준이라 별도 확인이 없음.
+3. 어느 쪽이 더 낫다는 선택 기준은 책의 해석임(출처 없음).
+
+## 이 장에서 쓸 수 있는 문장 표현
+| 표현 | 근거 | 확신 |
+|---|---|---|
+| default(Manual)는 파일 수정, 셸 명령, 네트워크 접근 대부분을 실행 전에 사용자에게 묻는다. | S-C10-6 원문 | 높음 |
+| acceptEdits는 작업 디렉터리 안의 파일 수정과 흔한 파일 명령을 묻지 않고 하고, 범위 밖은 묻는다. | S-C10-6 | 높음 |
+| plan은 읽고 계획만 쓰며, 사용자가 계획을 승인하기 전에는 소스를 수정하지 않는다. | S-C10-6 | 높음 |
+| auto에서는 사용자가 아니라 별도의 분류기 모델이 실행 전에 행동을 검토한다. 명시적 ask 규칙은 auto에서도 확인을 강제한다. | S-C10-6 | 높음 |
+| 분류기가 연속 3회, 합계 20회 차단하면 auto가 멈추고 다시 묻는다. | S-C10-6 | 높음 |
+| dontAsk는 묻게 될 모든 도구 호출을 자동으로 거부한다. | S-C10-6 | 높음 |
+| 샌드박스 허용 도메인은 처음에 비어 있고, 목록 밖 호스트에 연결하는 명령은 샌드박스 안에서 결정을 기다린다. 결정은 권한 모드에 따라 default와 acceptEdits는 사용자 확인, auto와 dontAsk는 거부다(auto는 명령이 호스트를 적고 분류기가 승인하면 그 명령에 한해 열림). | S-C10-7 | 높음 |
+| autoAllowBashIfSandboxed(기본 true)는 샌드박스 안 명령의 실행 확인만 없앤다. 허용 목록 밖 도메인 연결을 허용한다는 뜻이 아니다. | S-C10-7 | 높음 |
+| WebFetch와 WebSearch는 샌드박스 밖에서 권한 규칙을 따르므로 `allowedDomains`가 WebFetch를 제한하지 않는다. | S-C10-7 | 높음 |
+| 세션에서 시작 때 읽은 규칙 문서는 `/context`의 Memory files 목록으로, AGENTS.md를 직접 읽었는지는 `/memory`에서 경로를 찾아 확인한다(v2.1.280 이상). | S-C10-8 | 높음 |
+| `/memory`는 CLAUDE.md, CLAUDE.local.md와 메모리 파일 위치를 나열하고 편집기로 연다. 아직 없는 파일 항목도 보여 준다. | S-C10-8 | 높음 |
+| 관리형 설정은 조직이 파일, MDM, 관리 콘솔로 배포하는 설정이며, 사용자와 프로젝트 설정으로 덮어쓸 수 없다(일부 보안 키는 예외). | S-C10-9 | 높음(예외 범위는 중간) |
+| 작업 디렉터리 밖 파일 수정은 기본(Manual)에서 거부가 아니라 확인 요청이다. 모드에 따라 acceptEdits는 확인, auto는 분류기 판단, dontAsk는 거부, bypassPermissions는 허용이다. | S-C10-6, S-C10-10 | 높음 |
+| Codex에서 on-request와 network_access=false 조합이 네트워크 명령을 승인 요청으로 넘기는지는 원문으로 확인하지 못했다. | 열기 실패 | 해당 없음(미확인) |
