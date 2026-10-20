@@ -4,6 +4,7 @@
 - 브랜치: ch03-flow(3장 흐름 재점검, PR #37). 이후 장마다 작업 브랜치(chNN-flow)
 
 ## 지금 상태
+- 작업 시작: 4장 흐름 재점검(이슈 #31 할 일 4, 브랜치 ch04-flow)
 - 2026-10-20: 3장 흐름 재점검 완료(이슈 #31 할 일 4, PR #37, D-117, D-118). 논지 사슬 reviews/flow/ch03-flow.md(끊김 2 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영. 작가 방침 D-118(3장 reader-novice 반영 방침: 앞 장 정의는 다시 정의하지 않고 한 줄 상기와 링크, 사실 표현 기준). 예제 작업 단위의 확인 방법을 tasks.example.json에 맞춤(작업 1 결정 기록, 2~4 check.py, 5 사람 승인). 작가 확인 Q-042. 다음은 4장 흐름 재점검(D-118의 2번 방침을 4, 5장에도 적용).
 - 2026-10-20: 2장 흐름 재점검 완료(이슈 #31 할 일 4, PR #36, D-117). 논지 사슬 reviews/flow/ch02-flow.md(끊김 2 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영, 사실 기록은 research/ch02-sources.md 끝 절. 작가 확인 Q-041(원칙의 훅, 그림 2-1 검증 묶음), Q-039 범위 추가. 다음은 3장 흐름 재점검(3장 표 3-2의 "작업 단위마다 검사 스크립트 통과"도 확인).
 - 2026-10-20: 1장 흐름 재점검 완료(이슈 #31 할 일 4, PR #35, D-117). 논지 사슬 reviews/flow/ch01-flow.md(끊김 3 → 0), flow-reviewer 2차, reader-novice, fact-checker 반영, 사실 기록은 research/ch01-sources.md 끝 절. 작가 확인 Q-037(실행 장치 두 뜻), Q-038(CR 적용 절), Q-039(Rajasekaran 글 주체 표기), Q-040(Codex 턴 정의 원문 미확인). 다음은 2장 흐름 재점검.
