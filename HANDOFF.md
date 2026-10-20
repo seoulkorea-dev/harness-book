@@ -1,7 +1,7 @@
 # 인계(HANDOFF)
 
 - 갱신: 2026-10-20(.claude/ 반영, claude-flow-apply)
-- 브랜치: ch01-figures-rules(그림 1-1, 1-2 확정과 그림 규칙 승격, 명세 먼저 D-106, D-107). v1.0(PR #4)은 main에 병합됨
+- 브랜치: claude-flow-apply(.claude/ 반영, PR #33). 이후 장마다 작업 브랜치(chNN-flow 등)
 
 ## 지금 상태
 - 2026-10-20: .claude/ 반영 완료(이슈 #31, D-117, PR #33, Q-036 처리, F-19 해소). 작가가 .claude/ 쓰기를 허용한 대화형 세션에서 docs/specs/flow-criteria-claude/의 새 판 다섯 개(editor, flow-reviewer, reader-novice, review-chapter, next)를 .claude/에 덮어쓰고 그 폴더를 지움. 이제 장 PR은 장 전체 통독과 논지 사슬 표(reviews/flow/<장>-flow.md)로 검수함. 다음은 1장 흐름 재점검(장마다 PR), 이슈 #34(PC용 autorun 개선)는 이 세션에서 건너뜀
@@ -84,7 +84,7 @@
 | 2026-10-20 | 5장 개정 | #27 | 병합 가능(필수 0, reviews/2026-10-20-ch05-editor.md) | 통과(그림 5-1, 5-2 경고 0) | Q-029~Q-031 |
 | 2026-10-20 | 그림은 모두 일반 내용으로(이슈 #28) | #29 | 병합 가능(필수 0, reviews/2026-10-20-all-figures-general-editor.md) | 통과(1~5장 그림 경고 0) | Q-032, Q-033 |
 | 2026-10-20 | 흐름과 이해도 검수 기준(이슈 #31 할 일 1~3) | #32 | 병합 가능(2차, 필수 0, reviews/2026-10-20-flow-criteria-editor-2.md) | 통과 | Q-036 |
-| 2026-10-20 | .claude/ 반영(이슈 #31) | #33 | (editor 검수 후 기입) | 통과 | 없음 |
+| 2026-10-20 | .claude/ 반영(이슈 #31) | #33 | 병합 가능(필수 0, reviews/2026-10-20-claude-flow-apply-editor.md) | 통과 | 없음 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
