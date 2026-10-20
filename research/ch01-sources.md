@@ -216,3 +216,37 @@
 - 이 책의 정의(실행 장치 + 설정)는 Anthropic 용어집 정의와 같은 문장이 아니다. 출처의 정의와 이 책의 정의를 구분해 쓴다(D-055).
 - 실패 표의 층 분류는 출처가 직접 한 분류가 아니라 출처 설명을 근거로 한 제안이다(확신 중간).
 - 참고 자료 표기: "Glossary, How Claude Code works"는 두 항목으로 나누고, "How the agent loop works"는 Agent SDK 문서로 표기한다.
+
+# 2026-10-20 v1.0 보강 확인(fact-checker)
+
+확인일: 2026-10-20. 원문을 직접 열어 확인한 내용만 적는다. 문장은 요약이다.
+
+## S20. Anthropic, Commands(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/commands
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 1장 확인 방법 절(표 1-9)에서 사용한 내용
+  - /context: 컨텍스트 사용량을 보여 줌. 전체화면 모드에서는 항목별 분류를 접고 `/context all`로 펼침
+  - /permissions: allow, ask, deny 규칙을 관리하는 대화 창, 범위별로 규칙을 보여 줌. 별칭 /allowed-tools
+  - /usage: 세션 비용, 요금제 사용량 한도, 활동 통계. /cost, /stats는 별칭
+
+## S21. Anthropic, Debug your configuration(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/debug-your-config
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 사용한 내용
+  - /context 분류 범주: 시스템 프롬프트, 시스템 도구, MCP 도구, 하위 에이전트, 메모리 파일, 스킬, 대화 메시지. 하위 폴더의 CLAUDE.md는 시작 때 읽히지 않아 분류에 나타나지 않음
+  - CLAUDE.md는 지침, 권한과 훅은 강제
+
+## S22. Anthropic, Manage costs effectively(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/costs
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 사용한 내용
+  - /usage의 Session 블록은 현재 세션의 토큰 사용량을 보여 주며 API 사용자용. 구독 사용자는 같은 화면에서 요금제 사용량을 봄
+  - 금액은 토큰 수에 정가를 곱한 추정치. 실제 청구는 Claude Console의 Usage 페이지 기준
+
+## S5 재확인(Agent SDK, How the agent loop works), 2026-10-20
+- ResultMessage subtype: success, error_max_turns, error_max_budget_usd, error_during_execution 등
+- 모든 subtype에 total_cost_usd, usage, num_turns, session_id 포함
+- max_turns, max_budget_usd 기본값은 제한 없음. 운영 환경에 예산 설정을 권함. 변경 없음
