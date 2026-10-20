@@ -1,7 +1,8 @@
 """Claude Code PostToolUse 훅: 원고(src/)를 고치면 빌드와 lint를 바로 실행한다.
 문제가 있으면 종료 코드 2와 함께 오류를 stderr로 보내 Claude가 즉시 고치게 한다.
 """
-import json, subprocess, sys
+import os, json, subprocess, sys
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # 저장소 루트 기준으로 실행(F-14)
 
 data = json.load(sys.stdin)
 path = (data.get("tool_input") or {}).get("file_path", "")

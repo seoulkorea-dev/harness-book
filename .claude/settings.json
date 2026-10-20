@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python tools/hooks/session_start.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hooks/session_start.py\""
           }
         ]
       }
@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python tools/hooks/pre_bash.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hooks/pre_bash.py\""
           }
         ]
       }
@@ -63,7 +63,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python tools/hook_lint.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_lint.py\"",
             "timeout": 120
           }
         ]
@@ -74,7 +74,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python tools/hooks/stop_check.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hooks/stop_check.py\"",
             "timeout": 300
           }
         ]
