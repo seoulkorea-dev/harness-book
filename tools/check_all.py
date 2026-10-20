@@ -58,6 +58,28 @@ for f in sorted(glob.glob("chapters/*.html") + glob.glob("appendix/*.html") + ["
             if b in text:
                 fig_issues.append(f"{f} {fid}: 그림 안에 '{b}'")
 add("그림 안 이름", not fig_issues, "\n".join(fig_issues[:30]))
+
+# 그림 체계(D-111, FIGURE_STYLE 7절): 제목 상자(맨 위 둥근 사각형, 파랑 테두리)와 맨 아래 "*" 한 줄
+fig_system = []
+for f in sorted(glob.glob("chapters/*.html") + glob.glob("appendix/*.html")):
+    t2 = open(f, encoding="utf-8").read()
+    for m in re.finditer(r'<figure[^>]*id="(fig-[^"]+)"(.*?)</figure>', t2, re.S):
+        fid, body = m.group(1), m.group(2)
+        svg = re.search(r"<svg.*?</svg>", body, re.S)
+        if not svg:
+            continue
+        s = svg.group(0)
+        rects = re.findall(r'<rect x="([\d.]+)" y="([\d.]+)"[^>]*rx="14"[^>]*stroke="#0284c7"', s)
+        has_title = any(float(y) <= 24 for _, y in rects)
+        has_star = bool(re.search(r">\* [^<]+</text>", s))
+        if not has_title or not has_star:
+            miss = [n for n, ok in (("제목 상자", has_title), ('"*" 한 줄', has_star)) if not ok]
+            fig_system.append(f"{f} {fid}: 기준 시각 체계와 다름({', '.join(miss)} 없음)")
+STRICT_SYSTEM = "--strict-figures" in sys.argv
+if STRICT_SYSTEM:
+    add("그림 체계", not fig_system, "\n".join(fig_system[:30]))
+elif fig_system:
+    print("[경고] 그림 체계(FIGURE_STYLE 7절, 아직 실패로 보지 않음)\n" + "\n".join(fig_system[:30]) + "\n")
 if STRICT_FIG:
     add("그림 글자 크기", not fig_small, "\n".join(fig_small[:30]))
 elif fig_small:
