@@ -4,6 +4,7 @@
 - 브랜치: claude-flow-apply(.claude/ 반영, PR #33). 이후 장마다 작업 브랜치(chNN-flow 등)
 
 ## 지금 상태
+- 작업 시작: 1장 흐름 재점검(이슈 #31 할 일 4, 브랜치 ch01-flow)
 - 2026-10-20: .claude/ 반영 완료(이슈 #31, D-117, PR #33, Q-036 처리, F-19 해소). 작가가 .claude/ 쓰기를 허용한 대화형 세션에서 docs/specs/flow-criteria-claude/의 새 판 다섯 개(editor, flow-reviewer, reader-novice, review-chapter, next)를 .claude/에 덮어쓰고 그 폴더를 지움. 이제 장 PR은 장 전체 통독과 논지 사슬 표(reviews/flow/<장>-flow.md)로 검수함. 다음은 1장 흐름 재점검(장마다 PR), 이슈 #34(PC용 autorun 개선)는 이 세션에서 건너뜀
 - 2026-10-20: 흐름과 이해도 검수 기준 완료(이슈 #31 할 일 1~3, PR #32, D-117, F-18). AUTHOR_PREFS 맨 위 기준 셋과 검수 방법, 논지 사슬 표 형식(reviews/flow/README.md). .claude/ 쓰기가 허용되지 않아 editor, flow-reviewer, reader-novice, review-chapter, next의 새 판은 docs/specs/flow-criteria-claude/에 둠(Q-036). 다음은 작업 목록 첫 항목 .claude/ 반영(쓰기 허용 세션), 그다음 1~5장 흐름 재점검(장마다 PR). 반영 전에는 장 PR(#30 포함)을 병합하지 않음. 이슈 #31은 1~5장이 끝날 때 닫음
 - 2026-10-20: 그림은 모두 일반 내용으로 완료(이슈 #28, PR #29, D-116: D-115 예외 삭제, D-114 폐지). 그림 3-1을 Neo 보충 이름 기준으로 일반 이름으로(파일 이름, 부제와 캡션의 예제 삭제, 작업 단위 상태(통과 값), 하네스 설정, 검사 스크립트 실행, 세 번 연속 실패는 유지 Q-033), 표 3-3, 3-4와 그림 소개 문장, 규칙 문서(AUTHOR_PREFS, FIGURE_STYLE, 명세 틀, editor, figure-checker), HANDOFF 6장, 8장 항목. 1~5장 그림 9개 예제 흔적 0. 다음은 6장 개정(그림 6-1 일반 내용, 작업 순서 불일치 Q-034 예정).
