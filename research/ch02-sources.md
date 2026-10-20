@@ -45,3 +45,109 @@
   - 이름만 쓴 WebFetch deny는 도구를 제거함
   - ./path는 현재 디렉터리 기준
   - /permissions는 규칙과 규칙이 나온 설정 파일을 보여 줌
+
+
+# 2026-10-20 ch02 개정(구성 요소 깊이 보강) 확인(researcher)
+
+Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 키와 기본값은 확인일 기준이다.
+
+## S25. Anthropic, Configure permissions(Claude Code Docs). S24 보강
+- URL: https://code.claude.com/docs/en/permissions
+- 확인일: 2026-10-20, 작성: Anthropic
+- 평가 순서는 deny, ask, allow이고 처음 일치하는 규칙이 결과를 정함. 구체성은 순서를 바꾸지 않아 allow로 deny의 예외를 만들 수 없음
+- 이름만 쓴 deny(Bash, WebFetch 등)는 도구를 컨텍스트에서 제거함. 범위를 쓴 규칙(Bash(rm *))은 도구를 남기고 일치하는 호출만 막음
+- Edit 규칙은 파일을 수정하는 모든 내장 도구에 적용. Write 같은 도구 이름으로 쓴 경로 규칙은 참조되지 않으므로 Edit(경로)로 씀
+- Read, Edit deny는 내장 파일 도구, Bash가 인식하는 파일 명령(cat, sed, tee 등), 리다이렉션에 적용. 파일을 스스로 여는 Python, Node 스크립트는 막지 못함(샌드박스 필요)
+- Bash 규칙은 명령 문자열 일치. Bash(git push *)는 git -C . push 같은 변형과 일치하지 않음. 확실한 보장은 샌드박스나 PreToolUse 훅
+- 경로 표기: //path 절대 경로, ~/path 홈, /path 설정 파일 출처 기준, path 또는 ./path 현재 디렉터리 기준
+- PreToolUse 훅이 allow를 돌려줘도 일치하는 deny는 막고 ask는 물음
+- /permissions는 모든 규칙과 출처 설정 파일을 보여 주고, 바꾼 규칙은 같은 턴의 다음 도구 호출부터 적용
+
+## S26. Anthropic, How Claude remembers your project(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/memory
+- 확인일: 2026-10-20, 작성: Anthropic
+- 세션은 새 컨텍스트로 시작하고, 지식을 이어 주는 장치는 CLAUDE.md와 자동 메모리
+- 둘 다 "context, not enforced configuration". 동작을 막으려면 PreToolUse 훅. 기술적 강제는 permissions.deny, 행동 안내는 CLAUDE.md
+- 반드시 특정 시점에 실행할 것은 훅으로 씀
+- CLAUDE.md는 파일당 200줄 미만 권장, 모순되는 지시는 임의로 하나를 따를 수 있음, @가져오기는 컨텍스트 비용을 줄이지 않음
+- 자동 메모리: 로컬 세션에서 기본 켜짐, 기기 로컬, MEMORY.md 첫 200줄 또는 25KB 로드
+- git 커밋이 세션 사이에 지식을 전달한다는 직접 설명은 이 문서에 없음(미확인)
+
+## S27. Anthropic, Debug your configuration(Claude Code Docs). S21 보강
+- URL: https://code.claude.com/docs/en/debug-your-config
+- 확인일: 2026-10-20, 작성: Anthropic
+- CLAUDE.md는 좋은 결정을 돕는 안내, 권한과 훅은 Claude의 결정과 무관하게 한계를 강제. 보안 경계와 절대 일어나면 안 되는 일에는 권한이나 훅
+- 확인 명령: /context, /memory, /hooks, /mcp, /permissions, /doctor, /status
+- 설정 병합: managed 먼저, 나머지는 local, project, user 순으로 가까운 범위가 덮어씀
+- 훅은 settings.json의 "hooks" 아래에만 둠. matcher는 한 문자열("Edit|Write"), 대소문자 구분, 철자 오류는 조용히 실패
+- Bash(rm *) deny는 /bin/rm이나 find -delete를 막지 못함
+- 사용자 정의 하위 에이전트는 CLAUDE.md를 로드함(Explore, Plan 제외)
+
+## S28. Anthropic, Hooks reference / Automate actions with hooks(Claude Code Docs). S23 보강
+- URL: https://code.claude.com/docs/en/hooks , https://code.claude.com/docs/en/hooks-guide
+- 확인일: 2026-10-20, 작성: Anthropic
+- 훅은 수명 주기의 정해진 지점에서 실행되는 셸 명령. 모델의 선택에 기대지 않고 정해진 동작이 항상 일어나게 함
+- 종료 코드 2: PreToolUse는 도구 호출을 차단(stderr가 이유), PostToolUse는 차단하지 않고 stderr를 모델에 보여 줌(도구는 이미 실행됨)
+- 성공한 훅의 stdout은 대부분 디버그 로그로 가고 대화 기록에 나타나지 않음. 차단이나 실패 때 hook error 알림. Ctrl+O 대화 기록 보기
+- 구조: settings.json "hooks" → 이벤트 → matcher 그룹 → 처리기(type: command)
+- /hooks는 읽기 전용 목록, 실행 기록은 claude --debug
+- 판단이 필요한 결정에는 prompt 훅이나 agent 훅을 쓸 수 있음
+
+## S29. Anthropic, Manage costs effectively(Claude Code Docs). S22 보강
+- URL: https://code.claude.com/docs/en/costs
+- 확인일: 2026-10-20, 작성: Anthropic
+- MCP 도구 정의는 기본 지연 로드(이름과 서버 지시만 컨텍스트에). /context로 점유 확인
+- 명령줄 도구(gh, aws 등)가 MCP 서버보다 컨텍스트 효율이 좋음. 쓰지 않는 서버는 /mcp에서 끔
+- 특정 작업 절차는 skills로 옮기고 CLAUDE.md는 200줄 미만
+- 출력이 많은 작업은 하위 에이전트에 맡기면 요약만 돌아옴(하위 에이전트 요청도 사용량에 포함)
+
+## S30. Anthropic, Connect Claude Code to tools via MCP(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/mcp
+- 확인일: 2026-10-20, 작성: Anthropic
+- 도구 검색은 기본 켜짐, 시작 때 도구 이름과 서버 지시만 로드. 서버당 도구 상한 없음, 실질 한계는 컨텍스트 예산
+- alwaysLoad: true인 서버의 도구는 매 턴 컨텍스트를 차지
+- MCP 출력 10,000 토큰 넘으면 경고, 기본 25,000 토큰 제한
+- MCP 도구 권한 규칙은 mcp__서버__도구
+
+## S31. Anthropic, Create custom subagents(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/sub-agents
+- 확인일: 2026-10-20(끝 약 9,500자 미열람), 작성: Anthropic
+- 정의 파일은 YAML frontmatter가 있는 Markdown, 필수 name, description. 위치 .claude/agents/, ~/.claude/agents/
+- tools는 허용 목록, 생략하면 모든 도구 상속. disallowedTools는 거부 목록
+- 문서의 읽기 전용 검토 에이전트 예(tools: Read, Grep, Glob)가 reviewer.example.md와 같은 구조
+- 하위 에이전트는 대화 기록을 보지 못하고 CLAUDE.md는 로드, 주 세션의 자동 메모리는 받지 않음. 부모의 permissions.deny는 하위 에이전트에도 적용
+- /agents는 현재 안내 문구를 출력(v2.1.197 이하에서 대화형 화면)
+
+## S32. Anthropic, Explore the context window(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/context-window
+- 확인일: 2026-10-20, 작성: Anthropic
+- 시작 때 로드: 시스템 프롬프트, 자동 메모리, 환경 정보, MCP 도구 이름, 스킬 한 줄 설명, CLAUDE.md. 페이지의 토큰 수는 시뮬레이션 값이라 인용하지 않음
+- "내장 도구 정의가 컨텍스트를 차지"한다는 직접 문장은 이 페이지에 없음(/context의 system tools 범주는 S21)
+
+## S33. Anthropic, Commands(Claude Code Docs). S20 보강
+- URL: https://code.claude.com/docs/en/commands
+- 확인일: 2026-10-20, 작성: Anthropic
+- /agents(현재 안내 문구), /hooks(읽기 전용), /memory, /doctor, /permissions, /context
+
+## S34. Anthropic, Effective context engineering for AI agents
+- URL: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+- 게시일: 2025-09-29, 확인일: 2026-10-20, 작성: Rajasekaran 외
+- 흔한 실패는 도구 집합이 비대해져 어느 도구를 쓸지 모호한 결정 지점이 생기는 것. 최소한의 실행 가능한 도구 집합
+- 구조화된 노트 작성(컨텍스트 밖 파일에 쓰고 나중에 읽음)
+
+## S35. Anthropic, Writing effective tools for agents with agents
+- URL: https://www.anthropic.com/engineering/writing-tools-for-agents
+- 게시일: 2025-09-11, 확인일: 2026-10-20, 작성: Ken Aizawa 외
+- "More tools don't always lead to better outcomes." 소수의 잘 설계한 도구, 겹치는 도구는 혼란을 만듦
+
+## S36. OpenAI, Harness engineering(Lopopolo). S2 재확인 시도
+- URL: https://openai.com/index/harness-engineering/
+- 게시일: 2026-02-11, 확인일: 2026-10-20
+- 403으로 원문 열람 실패. "강제되는 형태로 저장소에 추가"는 ch01-sources.md S2(2026-10-04 열람) 기록에만 근거. 작가가 원문 확인 필요
+
+## 확인하지 못한 것과 근거가 부족한 곳(2026-10-20)
+- git 커밋이 세션 사이 지식을 전달한다는 Anthropic 문서의 직접 설명 없음(이 책의 정리로 밝히거나 Young 2025로 한정)
+- "내장 도구 정의가 컨텍스트를 차지"한다는 직접 문장 없음(/context system tools 범주까지 확인). 지금 2장 본문 "Agent SDK 문서에 따르면 내장 도구의 정의는 요청마다 컨텍스트에 들어가고"의 출처 재확인 필요
+- 다섯 구성 요소 분류는 이 책의 정리(1차 출처에 같은 분류 없음)
+- 예제 훅 `|| exit 2`가 Windows PowerShell에서 그대로 동작하는지 미시험
+- reviewer 호출은 CLAUDE.md 지시뿐이며 강제 장치 없음
