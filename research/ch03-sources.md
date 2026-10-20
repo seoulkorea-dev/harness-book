@@ -63,3 +63,13 @@
 - How the agent loop works: max_turns, max_budget_usd 기본값 제한 없음(SDK 옵션)
 - 예제 파일 대조: settings.example.json(deny 9, ask 1, allow 6, PostToolUse Edit|Write), CLAUDE.example.md(작업 순서에 reviewer 요청, 수정 범위, 중단 규칙), reviewer.example.md(tools: Read, Grep, Glob), tasks.example.json(작업 5 사람 승인), acceptance/test_cr07.py(5건, 4와 5는 구현 전 통과), RUNLOG.md(실패 3건, exit 1)
 - 미확인: /context 화면의 하위 에이전트 항목, /hooks 목록의 matcher 표시. 실습 4 실행 때 화면을 보고 RUNLOG.md에 남길 것
+
+## C3-9. fact-checker 2차 확인(2026-10-20, 흐름 재점검 PR #37, 예제 파일 대조와 문서 재확인)
+- Tools reference(https://code.claude.com/docs/en/tools-reference), 확인 2026-10-20: Read는 파일 읽기, Grep은 파일 내용 패턴 검색, Glob은 이름 패턴으로 파일 찾기, Edit는 지정 부분 편집, Write는 파일 생성 또는 덮어쓰기. macOS, Linux, WSL에서는 Glob과 Grep이 기본 도구 집합에 없고, 하위 에이전트가 tools에 적고 Bash를 빼면 그 하위 에이전트에서만 쓸 수 있음
+- Hooks reference(https://code.claude.com/docs/en/hooks), 확인 2026-10-20: matcher "Edit|Write"는 두 도구 이름과 정확히 일치(Bash나 NotebookEdit로 한 수정에는 실행 안 됨). PostToolUse 종료 코드 2는 stderr를 Claude에 보이고 도구는 이미 실행됨. 뒷부분 미열람
+- How Claude remembers your project(https://code.claude.com/docs/en/memory), 확인 2026-10-20: 각 세션은 새 컨텍스트 창으로 시작, CLAUDE.md는 매 대화 시작에 로드되며 강제 설정이 아닌 컨텍스트
+- Configure permissions(https://code.claude.com/docs/en/permissions), 확인 2026-10-20: 이름만 쓴 규칙은 도구를 컨텍스트에서 제거, Edit 규칙은 내장 편집 도구 전체에 적용, Bash 규칙은 명령 문자열 기준이라 우회 가능(샌드박스 병행, 9장)
+- Create custom subagents(https://code.claude.com/docs/en/sub-agents), 확인 2026-10-20: 정의 위치 .claude/agents/, tools 생략 시 모든 도구 상속
+- Commands(https://code.claude.com/docs/en/commands), 확인 2026-10-20: /hooks는 훅 설정 보기, /permissions는 승인 규칙 설정
+- 예제 파일 대조: check.py는 폴더별 실행 건수 > 0이고 실패 0이면 종료 0(건수 0은 실패, 건수 감소는 감지하지 않음. 그래서 본문은 "다른 시험이 통과하는 상태에서 한 건을 지우면"). tasks.example.json 확인 방법은 작업 1 결정 기록 D-012, 작업 2~4 check.py, 작업 5 사람 승인
+- 미확인: /hooks 목록의 matcher 표시, /context의 하위 에이전트 항목(실습 4 실행 때 RUNLOG.md에 기록)
