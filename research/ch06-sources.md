@@ -44,3 +44,24 @@
 
 ## 확인하지 못한 것
 - sub-agents 문서 끝부분 약 9.5천 자, How Claude Code works 재확인
+
+## 2026-10-20 fact-checker 재확인(PR #30)
+### S-C6-6. Anthropic, Create custom subagents, 포크 절(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/sub-agents, 확인 2026-10-20(C6-2의 미확인 끝부분 약 9.5천 자 포함해 전부 읽음)
+- "A fork is a subagent that inherits the entire conversation so far instead of starting fresh." 비포크 하위 에이전트는 "Fresh context with the prompt you pass". 포크도 자신의 도구 호출은 주 대화에 남기지 않고 최종 결과만 돌려줌. 포크 모드는 v2.1.302부터 기본 켜짐, 대화형 터미널은 v2.1.232부터. Claude가 스스로 포크를 시작할 수 있음. "Non-fork subagent"는 별도 프롬프트 캐시
+- 사용: 본문 "일반 하위 에이전트" 한정 근거, 그림 6-2와 표 6-3의 "주 대화를 보지 않음" 한정 필요 여부
+- 확신: 높음(문서 내용), 책에 반영할 범위는 작성 쪽 결정
+
+### S-C6-7. Anthropic, How the agent loop works, 예산 여유(Agent SDK)
+- URL: https://code.claude.com/docs/en/agent-sdk/agent-loop, "Budget headroom", 확인 2026-10-20
+- 상한은 모델 응답 도착 뒤 비교하므로 상한에 이른 응답까지 완료되고, 실행 중이던 하위 에이전트의 지출만큼 더 넘을 수 있음. 상한 도달 시 실행 중인 백그라운드 하위 에이전트도 중단(v2.1.217 이상)
+- 사용: 버전 주석 보강 여부 판단(선택)
+
+### S-C6-8. Young(2025) 인용 주체 확인
+- URL: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents, 확인 2026-10-20
+- 저자 Justin Young, 2025-11-26. 실험 대상은 Claude Agent SDK 위의 Claude. "Claude Code"는 감사의 말("code RL & Claude Code teams")에만 나옴. 본문 "Claude Code는 … 보고했습니다"의 근거 문장은 글에 없음 → AUTHOR_QUEUE Q-039와 같은 유형(D-108 적용 결과 유지, 작가 결정 대기)
+- 원문 일치 확인: 두 실패, over 200 features와 초기 "failing", 한 번에 한 기능, incremental approach critical, JSON이 Markdown보다 덮어쓰기 적음, passes 필드만 수정
+
+### S-C6-9. 예제 파일 대조(내부 기록)
+- examples/expense-app/reference/tasks.example.json = 표 6-4와 본문 JSON(작업 2, 3)과 글자 일치, 확인 2026-10-20
+- examples/expense-app/RUNLOG.md(2026-10-16): tests 3건 실패 0건, acceptance 5건 실패 3건(test_1, 2, 3). 넷째·다섯째 통과는 이 목록에서 도출. 실행은 이번에 하지 못함
