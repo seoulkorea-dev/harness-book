@@ -21,7 +21,7 @@ exit=1   (실패: test_1, test_2, test_3. CR 구현 전이므로 정상)
 | 실습 2 | CLAUDE.md 작성, 수정 범위 질문 | 실행 전 | 질문과 응답 원문 |
 | 실습 3 | settings.json 권한 설정, 금지 동작 요청 | 실행 전 | /permissions 화면 내용, 거부 메시지 원문 |
 | 실습 4 | 훅과 검토 하위 에이전트 | 실행 전 | 훅 출력, reviewer 보고 원문 |
-| 실습 5 | tasks.json, 세션 1(작업 2, 작업 4) | 실행 전 | check.py 출력, tasks.json 변경, commit 확인 요청, /usage |
-| 실습 6 | HANDOFF.md, 세션 2(작업 3) | 실행 전 | HANDOFF.md, check.py 출력, /usage |
+| 실습 5 | tasks.json, 세션 1(작업 2, 작업 3) | 실행 전 | check.py 출력, tasks.json 변경, commit 확인 요청, /usage |
+| 실습 6 | HANDOFF.md, 세션 2(작업 4) | 실행 전 | HANDOFF.md, check.py 출력, /usage |
 
 실행할 때마다 날짜, 모델과 제품 버전, 요청 원문, 출력 원문, 재실행 시 차이를 함께 적는다.
