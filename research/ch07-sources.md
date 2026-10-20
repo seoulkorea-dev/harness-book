@@ -100,3 +100,12 @@
 - "사람은 우선순위와 결과 검증"(Lopopolo)의 1차 근거
 - "독립 검수는 결과를 만들지 않은 쪽이 해야 한다"는 Anthropic 근거는 Best practices의 adversarial review와 "the agent doing the work isn't the one grading it"이 있어 보강 가능(표 7-1 독립 검수 행에 사용 가능)
 - 수용 시험을 에이전트가 고칠 수 없게 하는 것의 근거는 permissions 문서(S-C7-4)로 충분하나, 한계(간접 쓰기)를 함께 기록해야 정확함
+
+## 2026-10-20 fact-checker 재확인(PR #40)
+- S-C7-1 재확인(https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents, Nov 26, 2025, Justin Young, 확인 2026-10-20). 해소: "identify and fix bugs that weren't obvious from the code alone"(브라우저 테스트 도구 사용 시). 실패 문장, curl, end-to-end, 브라우저 자동화 문장 원문 확인. 실험은 "Opus 4.5 running on the Claude Agent SDK"이고 Claude Code 표기 없음. 본문 7행의 주체 "Claude Code"는 불일치(필수).
+- S-C7-2 재확인(https://platform.claude.com/docs/en/test-and-evaluate/develop-tests, Anthropic, 게시일 표기 없음, 확인 2026-10-20). "Grade your evaluations" 절 전체 원문 확인(문서 100000자 이후 구간). 세 방법 문구, Acme Inc. 예, "Empirical or specific"이 본문과 일치. 표 7-4의 "입력" 열과 코드 기반 "일치, 불일치"는 문서에 없는 이 책의 정리. "다른 모델" 문구는 LLM 예제 코드의 주석.
+- S-C7-4 재확인(https://code.claude.com/docs/en/permissions, Anthropic, 확인 2026-10-20). "Read and Edit" 절. "Edit rules apply to all built-in tools that edit files". 경고문은 인식되는 Bash 파일 명령(cat, head, tail, sed, tee)과 리다이렉션 대상에 적용, 파일을 스스로 여는 스크립트나 파일명을 쓰지 않는 명령에는 미적용, 전면 차단은 샌드박스. Read deny는 Edit, Write도 막고 NotebookEdit은 제외라서 Edit deny를 따로 둠(Write 검사는 v2.1.228 이상).
+- S-C7-5 재확인(https://code.claude.com/docs/en/hooks, Anthropic, 확인 2026-10-20, 앞 100000자 열람). 종료 코드 2 표: PostToolUse는 차단 불가(stderr을 Claude에 표시), Stop은 중단 방지. exit 1은 비차단 오류이고, "If your hook is meant to enforce a policy, use exit 2". 새로 확인: `"onFailure": "block"`(v2.1.295 이상)으로 훅 실패를 차단으로 바꿀 수 있음.
+- S-C7-6 재확인(https://code.claude.com/docs/en/best-practices, Anthropic, 확인 2026-10-20). "Give Claude a way to verify its work"의 검사 제공 문장, "looks done"이 유일한 신호, Stop 훅 "deterministic gate", "the agent doing the work isn't the one grading it", 증거 제시 문장 일치. "trust-then-verify gap" 실패 패턴과 "hooks are deterministic" 문장도 일치. Stop 훅 연속 차단 상한은 Stop input 절(hooks 문서 후반)에 있고 이번에 미열람.
+- S-C7-3(Lopopolo, OpenAI, 2026-02-11) 미확인 유지. openai.com ENOTFOUND(2026-10-20 재시도). 2차 요약은 판정에 쓰지 않음. 7장 38행은 research/ch01-sources.md S2에만 의존.
+- 예제 파일 일치 확인(2026-10-20): docs/CR.md, acceptance/test_cr07.py, check.py, RUNLOG.md(2026-10-16 기준 상태), reference/reviewer.example.md, settings.example.json, tasks.example.json 작업 5, app.py(포트 8000, /new)가 7장 본문, 표 7-6, 7-8과 일치.
