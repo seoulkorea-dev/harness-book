@@ -1,4 +1,5 @@
 <h1><span class="h-num">Chapter 5</span> <span class="h-title">컨텍스트 엔지니어링: 에이전트가 읽는 정보 설계</span></h1>
+<p class="claim">결과를 정하는 것은 요청 문장의 완성도가 아니라, 에이전트가 판단하는 시점에 무엇을 읽고 있는지입니다.</p>
 <p class="lead">에이전트(Agent)는 작업을 시작할 때 규칙 문서와 요청, 작업 중에 읽은 파일과 도구 결과를 근거로 판단합니다. 결과를 정하는 것은 요청 문장의 완성도가 아니라, 에이전트가 판단하는 시점에 무엇을 읽고 있는지입니다. 그래서 필요한 자료가 없거나 오래된 자료가 남아 있으면, 같은 요청에도 근거가 다른 결과가 나옵니다. 따라서 에이전트가 읽을 자료를 선별하고 최신 상태로 유지해야 합니다. 이 장에서는 에이전트가 읽는 정보의 종류와 규칙 문서 작성 방법을 익힙니다.</p>
 <ul class="summary"><li>컨텍스트는 한정된 자원이므로 필요한 자료를 선별해서 제공합니다.</li><li>에이전트가 읽는 정보는 상시 규칙, 필요할 때 읽는 문서, 작업 입력, 작업 중 생성 정보로 나뉩니다.</li><li>규칙 문서는 짧게 유지하고, 같은 실수가 반복될 때 항목을 추가합니다.</li></ul>
 <h2 id="resource">컨텍스트는 한정된 자원</h2>
@@ -29,6 +30,7 @@
 <h2 id="rule-doc">규칙 문서 작성</h2>
 <p>규칙 문서는 에이전트가 세션마다 읽는 프로젝트 지침입니다. Claude Code는 CLAUDE.md를, Codex는 AGENTS.md를 읽습니다. Claude Code 문서는 CLAUDE.md 작성 기준을 다음과 같이 안내합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>).</p>
 <ul><li>확인할 수 있을 만큼 구체적으로: "코드를 정리해 줘" 대신 "API 처리 파일은 src/api/handlers/에 둔다"처럼 작성합니다.</li><li>짧게: 파일 하나를 200줄 이내로 유지합니다. 문서가 길수록 컨텍스트를 더 차지하고 지침 준수율이 낮아집니다.</li><li>일관되게: 두 지침이 서로 모순되면 에이전트가 둘 중 하나를 임의로 따를 수 있습니다.</li><li>분리: 여러 단계로 이루어진 절차나 일부 파일에만 해당하는 지침은 Skill이나 경로별 규칙으로 분리합니다. Skill은 필요할 때만 읽히는 지침과 자료의 묶음입니다.</li></ul>
+<aside class="footnote"><b>버전 주석 (2026년 10월)</b> Claude Code 문서는 v2.1.277 이상에서 저장소에 CLAUDE.md가 없고 AGENTS.md만 있으면 AGENTS.md를 읽는다고 안내합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>). 두 제품의 규칙 문서 비교는 <a href="ch10.html#rule-docs">Chapter 10의 규칙 문서 비교</a>에 있습니다.</aside>
 <p>다음은 Chapter 3과 Chapter 4에서 다룬 가상 프로젝트, 경비 정산 시스템 개편의 규칙 문서 예입니다. 모든 작업에 해당하는 규칙만 담고, 세부 문서는 위치만 안내합니다.</p>
 <pre># 경비 정산 시스템 개편 프로젝트
 
@@ -56,5 +58,25 @@
 <ul><li>에이전트가 같은 실수를 두 번째로 반복했을 때</li><li>코드 리뷰에서 에이전트가 알았어야 할 내용이 지적되었을 때</li><li>지난 세션에 입력한 정정 내용을 다시 입력하고 있을 때</li><li>새로 합류한 팀원에게도 같은 설명이 필요할 때</li></ul>
 <p>규칙 문서는 지시일 뿐 강제가 아닙니다. Claude Code 문서는 CLAUDE.md를 강제 설정이 아닌 컨텍스트로 다룬다고 설명합니다. 반드시 막아야 하는 동작은 훅(Hook)으로 처리하라고 안내합니다(<a href="#ref-anthropic-2026">Anthropic, 2026</a>). 훅은 정해진 시점에 자동으로 실행되는 셸 명령입니다. 지시로 충분한 규칙과 강제가 필요한 규칙의 구분은 <a href="ch02.html#instruct-enforce">Chapter 2의 지시와 강제</a>에서 다룹니다.</p>
 <p>에이전트가 읽는 정보의 설계는 상시 규칙을 짧게 유지하고, 나머지를 필요할 때 읽도록 분리하는 일에서 시작합니다.</p>
+<h2 id="fail">실패와 막는 장치</h2>
+<p>에이전트가 읽는 정보를 설계하지 않으면, 같은 요청에도 근거가 다른 결과가 나옵니다. 표 5-3은 <a href="ch03.html#example">Chapter 3</a>의 경비 정산 시스템 개편 변경 요청(Change Request) CR을 구현하는 에이전트에서, 정보의 종류별로 생길 수 있는 실패와 막는 장치입니다.</p>
+<figure class="fig" id="tbl-5-3"><div class="table-wrap"><table><thead><tr><th>실패</th><th>원인</th><th>막는 장치</th></tr></thead><tbody>
+<tr><td>규칙 문서가 특정 작업의 절차까지 담아 길어지고, 수정 범위 같은 핵심 규칙을 따르지 않음</td><td>상시 규칙: 모든 작업에 해당하지 않는 내용까지 포함</td><td>규칙 문서를 200줄 이내로 유지하고, 세부 절차는 위치만 안내</td></tr>
+<tr><td>수용 기준 문서를 읽지 않고 구현을 시작함</td><td>필요할 때 읽는 문서: 읽을 문서의 위치와 순서를 안내하지 않음</td><td>규칙 문서의 읽는 순서 첫 번째에 수용 기준 문서(docs/CR.md)를 지정</td></tr>
+<tr><td>이미 대체된 결정을 근거로 구현함</td><td>필요할 때 읽는 문서: 결정 기록에 대체 관계가 없음</td><td>결정 기록에 대체한 결정의 번호를 남기고, 읽는 순서에 결정 기록을 포함</td></tr>
+<tr><td>긴 테스트 출력이 컨텍스트를 차지해 앞에서 받은 지시를 놓침</td><td>작업 중 생성 정보: 출력이 많은 작업을 주 대화에서 처리</td><td>테스트 실행을 하위 에이전트에 맡기고, 계속 지킬 지시는 규칙 문서에 둠</td></tr>
+</tbody></table></div><figcaption><b>표 5-3. CR에서 생길 수 있는 실패와 막는 장치</b><ul class="capnote"><li>정보의 종류별 실패와 막는 장치</li></ul></figcaption></figure>
+<h2 id="check">확인 방법</h2>
+<p>에이전트가 무엇을 읽고 있는지는 제품의 화면과 대화 기록으로 확인합니다. 표 5-4는 CR을 구현하는 에이전트에서 확인할 것과 확인 위치입니다.</p>
+<figure class="fig" id="tbl-5-4"><div class="table-wrap"><table><thead><tr><th>확인할 것</th><th>명령이나 화면</th><th>확인 기준</th></tr></thead><tbody>
+<tr><td>컨텍스트를 차지하는 항목</td><td>Claude Code의 /context</td><td>메모리 파일 항목에 규칙 문서가 보이고, 항목별 사용량을 비교할 수 있음</td></tr>
+<tr><td>규칙 문서의 길이</td><td>편집기의 줄 번호</td><td>200줄 이내</td></tr>
+<tr><td>읽는 순서</td><td>작업을 시작한 직후의 대화 화면</td><td>에이전트가 파일을 읽는 도구 호출에서 수용 기준 문서를 먼저 읽음</td></tr>
+<tr><td>규칙을 따르는지</td><td>수정 범위를 묻는 요청(<a href="../appendix/practice.html#lab-2">부록 실습의 실습 2</a>)</td><td>응답이 규칙 문서의 수정 범위를 그대로 따름</td></tr>
+</tbody></table></div><figcaption><b>표 5-4. 에이전트가 읽는 정보의 확인 방법</b><ul class="capnote"><li>확인할 것, 명령이나 화면, 확인 기준</li></ul></figcaption></figure>
+<h2 id="principle">원칙과 점검 질문</h2>
+<p class="principle">상시 규칙 문서에는 모든 작업에 필요한 내용만 짧게 두고, 나머지는 필요할 때 읽도록 위치만 안내합니다.</p>
+<p>자기 업무에 적용할 때는 다음 세 질문으로 점검합니다.</p>
+<ol><li>지금 규칙 문서에 특정 작업에만 필요한 지침이 섞여 있지 않습니까?</li><li>지난 세션에 입력한 정정 내용을 이번 세션에 다시 입력하고 있지 않습니까?</li><li>에이전트가 대체된 결정이나 오래된 자료를 근거로 읽을 수 있는 경로가 있습니까?</li></ol>
 <h2 id="refs">참고 자료</h2>
 <ul><li id="ref-anthropic-2026">Anthropic. How Claude remembers your project(확인 2026년 10월 4일), Manage costs effectively(확인 2026년 10월 15일). Claude Code Docs</li><li id="ref-lopopolo-2026">Lopopolo, R. (2026년 2월 11일). Harness engineering: leveraging Codex in an agent-first world. OpenAI</li><li id="ref-rajasekaran-2025">Rajasekaran, P. 외. (2025년 9월 29일). Effective context engineering for AI agents. Anthropic</li></ul>

@@ -105,3 +105,15 @@
   - /agents: 현재 버전에서는 하위 에이전트 생성과 관리를 Claude에게 요청하거나 .claude/agents/를 직접 편집하라는 안내만 출력. 목록과 도구를 보여 주는 대화형 화면은 v2.1.197 이전 동작. 그래서 표 3-6은 reviewer.md의 tools 줄과 /context의 하위 에이전트 항목으로 확인하게 함
   - 하위 에이전트 tools 필드는 허용 목록. 생략하면 모든 도구 상속
   - 미확인: /context가 개별 하위 에이전트의 도구 제한까지 보여 주는지(그래서 도구는 파일로 확인)
+
+# 2026-10-20 ch05 v1.0 보강 확인(fact-checker)
+
+## S-0520a. Anthropic, How Claude remembers your project(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/memory
+- 확인일: 2026-10-20, 작성: Anthropic
+- 사용한 내용: CLAUDE.md는 파일당 200줄 미만 목표(길면 컨텍스트를 더 차지하고 준수율이 낮아짐). CLAUDE.md는 강제 설정이 아닌 컨텍스트이며 막으려면 PreToolUse 훅. CLAUDE.md가 없고 AGENTS.md만 있으면 AGENTS.md를 읽음(v2.1.277 이상, 5장 버전 주석의 근거). 자동 메모리 MEMORY.md의 첫 200줄 또는 25KB 제한은 규칙 문서 기준과 별개
+
+## S-0520b. Anthropic, Manage costs effectively, Subagents, Explore the context window(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/costs , https://code.claude.com/docs/en/sub-agents , https://code.claude.com/docs/en/context-window
+- 확인일: 2026-10-20, 작성: Anthropic
+- 사용한 내용: 테스트처럼 출력이 많은 작업을 하위 에이전트에 맡기면 출력은 하위 에이전트 컨텍스트에 남고 요약만 주 대화로 돌아옴(하위 에이전트 요청도 사용량에 포함). Read 도구 호출은 대화에 한 줄로 표시됨(context-window 시뮬레이션)
