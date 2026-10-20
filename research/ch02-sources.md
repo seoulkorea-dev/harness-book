@@ -151,3 +151,20 @@ Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 
 - 다섯 구성 요소 분류는 이 책의 정리(1차 출처에 같은 분류 없음)
 - 예제 훅 `|| exit 2`가 Windows PowerShell에서 그대로 동작하는지 미시험
 - reviewer 호출은 CLAUDE.md 지시뿐이며 강제 장치 없음
+
+# 2026-10-20 그림 2-2, 표 2-2 fact-checker 확인(그림 체계 통일)
+
+## S37. Anthropic, How the agent loop works(Agent SDK, Claude Code Docs). S5 보강
+- URL: https://code.claude.com/docs/en/agent-sdk/agent-loop, 확인일: 2026-10-20
+- 루프: Receive prompt(시스템 프롬프트, 도구 정의, 대화 이력) → Evaluate and respond(텍스트 응답 또는 도구 호출 요청) → Execute tools(SDK가 실행) → Repeat → Return result. 권한 확인은 별도 단계가 아님(그림 1-2의 단계 번호는 이 책의 정리)
+- 도구 거부: "When a tool is denied, Claude receives a rejection message as the tool result"
+- 병렬 실행: Read, Glob, Grep 같은 읽기 전용 도구는 동시 실행 가능, Edit, Write, Bash는 순차 실행
+- 컨텍스트: 핵심 내장 도구(Bash, Read, Edit 등)의 정의는 매 요청에 들어가고, MCP 도구와 그 밖의 내장 도구는 도구 검색이 기본 지연 로드. "Every tool definition takes context space"
+
+## S25 재확인(permissions 문서, 2026-10-20)
+- "Rules are evaluated in order: deny, then ask, then allow." 이름만 쓴 deny는 도구를 컨텍스트에서 제거. "Ask rules prompt for confirmation"
+- 미확인: dontAsk, auto 모드에서 ask 규칙이 사람 승인으로 이어지는지
+
+## S38. Anthropic, How Claude Code works
+- URL: https://code.claude.com/docs/en/how-claude-code-works, 확인일: 2026-10-20
+- 루프는 gather context, take action, verify results. MCP 도구 정의는 기본 지연 로드, 이름과 서버 지시만 컨텍스트에 둠
