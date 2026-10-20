@@ -14,15 +14,25 @@
       "Bash(git commit:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr checks:*)",
-      "Bash(gh pr list:*)"
-    ],
-    "ask": [
-      "Bash(git push:*)",
+      "Bash(gh pr list:*)",
+      "Bash(git push -u origin:*)",
+      "Bash(git push origin:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
       "Bash(gh pr create:*)",
       "Bash(gh pr merge:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue close:*)",
+      "Bash(gh label create:*)",
       "Edit(DECISIONS.md)",
-      "Write(DECISIONS.md)"
+      "Edit(HANDOFF.md)",
+      "Edit(docs/AUTHOR_QUEUE.md)"
     ],
+    "ask": [],
     "deny": [
       "Bash(git push origin main:*)",
       "Bash(git push --force:*)",
