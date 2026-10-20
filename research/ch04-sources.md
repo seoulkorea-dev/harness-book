@@ -28,3 +28,14 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
 ## 확인하지 못한 것
 - 두 페이지의 게시일, 개정일
 - "trained for precise instruction following"과 같은 취지의 문장이 모델별 안내 절에도 있는지
+
+## C4-3. Anthropic, Define success criteria and build evaluations
+- URL: https://platform.claude.com/docs/en/test-and-evaluate/develop-tests, 확인 2026-10-20(앞 100,000자만 읽음)
+- 게시일: 표기 없음, 작성: Anthropic(Claude Platform Docs)
+- 사용한 내용: 성공 기준을 먼저 정의하고 평가를 설계하는 것을 시작 단계로 설명. overview의 "Before prompt engineering" 절이 이 문서를 연결함
+
+## C4-1, C4-2 재확인(2026-10-20 fact-checker, 흐름 재점검 PR #38)
+- C4-1(overview): "Before prompt engineering"의 세 전제와 "When to prompt engineer"의 "Not every success criteria or failing eval is best solved by prompt engineering" 원문이 기록과 같음. 4장의 "완료 기준을 먼저 정하는 방식"은 이 개요 문서의 내용(본문에 문서명을 밝힘)
+- C4-2(best practices): 여섯 방법의 근거 문장이 기록과 같음. "If you want 'above and beyond' behavior, explicitly request it rather than relying on the model to infer this from vague prompts"(Be clear and direct). "trained for precise instruction following"은 도구 사용 절의 문장(본문에 "도구 사용을 안내하는 절에서"로 맥락을 밝힘)
+- 예제 D-012(examples/expense-app/DECISIONS.md): CR 조건부 수용, 인사 시스템 일 1회 갱신 자료 사용, 근거는 운영 위원회 결정과 실시간 연동 규격 없음(본문의 결정 주체를 운영 위원회로 맞춤)
+- 미확인 유지: 두 페이지의 게시일과 개정일
