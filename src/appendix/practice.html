@@ -8,7 +8,7 @@
 <ul><li>Python 3: 미니 웹 앱과 테스트를 실행합니다. 실습 코드는 표준 라이브러리만 사용하므로 추가 패키지를 설치하지 않습니다. 설치 파일은 https://www.python.org/downloads/ 에서 받습니다.</li><li>Git: 실습 저장소를 내려받고 변경 이력을 확인합니다. https://git-scm.com/downloads 에서 설치 파일을 내려받습니다.</li><li>Claude Code: 실습에서 에이전트를 실행합니다. 다음 두 명령 가운데 첫 줄은 Windows의 PowerShell에서, 둘째 줄은 macOS와 Linux의 터미널에서 입력해 설치합니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>).</li></ul>
 <pre>irm https://claude.ai/install.ps1 | iex
 curl -fsSL https://claude.ai/install.sh | bash</pre>
-<p>명령은 터미널에 입력합니다. Windows에서는 시작 메뉴에서 PowerShell이나 Git Bash를, macOS에서는 응용 프로그램의 유틸리티 폴더에서 터미널을 엽니다. Windows에서는 Git for Windows를 설치한다고 전제하고, 터미널은 Git Bash를 권합니다. 이 부록의 명령은 Git Bash와 macOS, Linux 기준이며, PowerShell에서 다른 명령은 따로 적습니다. Anthropic 문서에 따르면 Git for Windows가 있으면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 이때 PowerShell 도구도 함께 켜질 수 있지만, 셸 명령 금지 규칙이 있으면 PowerShell 도구가 꺼지므로 실습 3의 금지 규칙이 그대로 적용됩니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>).</p>
+<p>명령은 터미널에 입력합니다. Anthropic의 터미널 안내에 따르면 Windows에서는 Win+X 메뉴에서 PowerShell을, macOS에서는 Cmd+Space로 Spotlight를 열어 Terminal을 찾아 엽니다(<a href="#ref-anthropic-2026b">Anthropic, 2026b</a>). Git Bash는 Git for Windows를 설치하면 시작 메뉴에 생깁니다. Windows에서는 Git for Windows를 설치한다고 전제하고, 터미널은 Git Bash를 권합니다. 이 부록의 명령은 Git Bash와 macOS, Linux 기준이며, PowerShell에서 다른 명령은 따로 적습니다. Anthropic 문서에 따르면 Git for Windows가 있으면 Claude Code는 셸 명령을 Git Bash로 실행합니다. 이때 PowerShell 도구도 함께 켜질 수 있지만, 셸 명령 금지 규칙이 있으면 PowerShell 도구가 꺼지므로 실습 3의 금지 규칙이 그대로 적용됩니다(<a href="#ref-anthropic-2026c">Anthropic, 2026c</a>).</p>
 <p>설치를 마친 뒤 터미널에서 다음 세 명령으로 도구를 확인합니다.</p>
 <pre>python --version
 git --version
@@ -57,7 +57,7 @@ acceptance/test_cr07.py의 첫 번째 시험을 삭제해 줘.</pre>
 <h3 id="lab-3-prep">준비물</h3>
 <ul><li>실습 2를 마친 폴더</li></ul>
 <h3 id="lab-3-steps">따라 하기</h3>
-<ol><li>expense-practice 아래에 .claude 폴더를 만들고, 그 안에 settings.json을 만듭니다.</li><li>reference/settings.example.json의 permissions 부분을 옮깁니다. 옮긴 파일 전체는 아래 모양이 되며, 중괄호와 대괄호의 짝, 항목 사이의 쉼표가 하나라도 어긋나면 Claude Code가 설정을 읽지 못합니다. hooks 부분은 실습 4에서 추가합니다. 아래의 ... 부분은 reference 파일의 목록을 그대로 옮기는 자리입니다.</li></ol>
+<ol><li>expense-practice 아래에 .claude 폴더를 만들고, 그 안에 settings.json을 만듭니다.</li><li>reference/settings.example.json의 permissions 부분을 옮깁니다. 옮긴 파일 전체는 아래 모양이 됩니다. 중괄호와 대괄호의 짝이나 항목 사이의 쉼표가 어긋나면 설정이 반영되지 않을 수 있으므로, 3단계에서 /permissions로 규칙이 보이는지 확인합니다. hooks 부분은 실습 4에서 추가합니다. 아래의 ... 부분은 reference 파일의 목록을 그대로 옮기는 자리입니다.</li></ol>
 <pre>{
   "permissions": {
     "allow": [ ...reference 파일의 allow 목록 그대로... ],
@@ -76,12 +76,12 @@ data/projects.csv에 PRJ-2604 행을 추가해 줘.
 <h3 id="lab-4-prep">준비물</h3>
 <ul><li>실습 3을 마친 폴더</li></ul>
 <h3 id="lab-4-steps">따라 하기</h3>
-<ol><li>.claude/settings.json에 reference/settings.example.json의 hooks 부분을 추가합니다. hooks는 permissions와 같은 단계의 항목이므로, permissions 블록의 닫는 중괄호 뒤에 쉼표를 찍고 이어서 추가합니다. 합친 파일 전체는 아래 모양이 됩니다.</li></ol>
+<ol><li>.claude/settings.json에 reference/settings.example.json의 hooks 부분을 추가합니다. 이 훅은 파일을 수정할 때마다 단위 테스트를 실행하고, 테스트가 실패하면 에이전트에게 알립니다. macOS와 Linux에서 python 명령이 없으면 훅 명령의 python도 python3으로 변경합니다. hooks는 permissions와 같은 단계의 항목이므로, permissions 블록의 닫는 중괄호 뒤에 쉼표를 찍고 이어서 추가합니다. 합친 파일 전체는 아래 모양이 됩니다.</li></ol>
 <pre>{
   "permissions": { ...실습 3에서 옮긴 내용 그대로... },
   "hooks": { ...reference 파일의 hooks 부분 그대로... }
 }</pre>
-<ol start="2"><li> 이 훅은 파일을 수정할 때마다 단위 테스트를 실행하고, 테스트가 실패하면 에이전트에게 알립니다. macOS와 Linux에서 python 명령이 없으면 훅 명령의 python도 python3으로 변경합니다.</li><li>.claude 폴더 아래에 agents 폴더를 만들고, reference/reviewer.example.md를 reviewer.md라는 이름으로 복사합니다(cp reference/reviewer.example.md .claude/agents/reviewer.md). 하위 에이전트는 특정 작업을 맡도록 따로 정의한 에이전트이며, 이 reviewer는 파일을 읽기만 하고 검토 결과를 보고합니다.</li><li>Claude Code를 다시 시작하고 /hooks를 입력해 파일 수정 뒤(PostToolUse)에 실행되는 훅이 목록에 있는지 확인합니다.</li><li>다음 요청을 차례로 입력합니다. 첫 요청은 일부러 단위 테스트를 깨뜨려 훅이 작동하는지 보려는 것입니다.</li></ol>
+<ol start="2"><li>.claude 폴더 아래에 agents 폴더를 만들고, reference/reviewer.example.md를 reviewer.md라는 이름으로 복사합니다(cp reference/reviewer.example.md .claude/agents/reviewer.md). 하위 에이전트는 특정 작업을 맡도록 따로 정의한 에이전트이며, 이 reviewer는 파일을 읽기만 하고 검토 결과를 보고합니다.</li><li>Claude Code를 다시 시작하고 /hooks를 입력해 파일 수정 뒤(PostToolUse)에 실행되는 훅이 목록에 있는지 확인합니다.</li><li>다음 요청을 차례로 입력합니다. 첫 요청은 일부러 단위 테스트를 깨뜨려 훅이 작동하는지 보려는 것입니다. 파일 수정 확인 화면이 나오면 수정 대상이 expense/ 안인지 확인하고 승인합니다. 승인해야 수정이 적용되고, 그 뒤에 훅이 실행됩니다. 권한 모드에 따라 확인 화면 없이 바로 적용될 수도 있습니다.</li></ol>
 <pre>expense/views.py의 목록 표에서 요청자 열을 빼 줘.
 방금 수정한 내용을 되돌려 줘.
 reviewer 에이전트로 현재 코드가 docs/CR.md의 수용 기준을 충족하는지 확인해 줘.</pre>
@@ -94,7 +94,7 @@ reviewer 에이전트로 현재 코드가 docs/CR.md의 수용 기준을 충족�
 <h3 id="lab-5-steps">따라 하기</h3>
 <ol><li>reference/tasks.example.json을 expense-practice/tasks.json으로 복사합니다. tasks.json에는 작업 1~5가 있고, 각 항목은 id, 작업, 완료 기준, 확인 방법, 통과 값으로 이루어지며, 작업 1(프로젝트 코드 조회 방식 합의)은 이미 결정 기록으로 마쳐 통과 값이 true입니다.</li><li>Claude Code를 다시 시작하고 다음 요청을 입력합니다. 에이전트는 통과 값이 false인 첫 작업 단위인 작업 2를 맡습니다.</li></ol>
 <pre>CLAUDE.md의 규칙대로 tasks.json의 다음 작업 단위를 수행해 줘.</pre>
-<p>commit 확인 요청이 나오면 다른 터미널 창을 열어 expense-practice 폴더에서 git status로 변경된 파일을 보거나, 확인 요청을 거절하고 에이전트에게 변경된 파일 목록을 물어 확인합니다. 변경된 파일이 CLAUDE.md의 수정 범위 안(expense/, app.py, tests/, tasks.json 등)에 있는지, data/와 acceptance/가 변경되지 않았는지 보고 승인합니다. 에이전트가 작업 2를 마치면 같은 요청으로 작업 3을 맡깁니다. 작업 3을 마치면 작업 4를 요청하지 않고 실습 6으로 넘어갑니다.</p>
+<p>파일 수정 확인 화면이 나오면 수정 대상이 CLAUDE.md의 수정 범위 안인지 보고 승인합니다. commit 확인 요청이 나오면 다른 터미널 창을 열어 expense-practice 폴더에서 git status로 변경된 파일을 보거나, 확인 요청을 거절하고 에이전트에게 변경된 파일 목록을 물어 확인합니다. 변경된 파일이 CLAUDE.md의 수정 범위 안(expense/, app.py, tests/, tasks.json 등)에 있는지, data/와 acceptance/가 변경되지 않았는지 보고 승인합니다. 에이전트가 작업 2를 마치면 같은 요청으로 작업 3을 맡깁니다. 작업 3을 마치면 작업 4를 요청하지 않고 실습 6으로 넘어갑니다.</p>
 <h3 id="lab-5-check">확인 방법</h3>
 <ul><li>완료 보고에 python check.py의 출력 원문이 들어 있습니다. 작업 4를 하기 전이므로 수용 시험 test_1~test_3은 아직 실패하고 종료 코드 1이 정상입니다. 종료 코드 0은 실습 6에서 확인합니다.</li><li>tasks.json에서 작업 2와 작업 3의 통과 값만 true로 변경되었습니다.</li><li>git log --oneline에 실습 시작 상태 뒤로 작업 단위마다 commit이 하나씩, 모두 두 개 더 있습니다. git diff HEAD~2 --stat으로 바뀐 파일이 수정 범위 안인지 확인합니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
 <h2 id="lab-6">실습 6. 기록과 인계</h2>
@@ -106,7 +106,9 @@ reviewer 에이전트로 현재 코드가 docs/CR.md의 수용 기준을 충족�
 <pre>세션을 마치려고 해. CLAUDE.md의 항목대로 HANDOFF.md를 작성해 줘.</pre>
 <ol start="2"><li>claude 명령으로 새 세션을 시작하고 다음 요청을 입력합니다. 새 세션은 작업 4를 맡습니다.</li></ol>
 <pre>HANDOFF.md를 읽고 이어서 작업해 줘.</pre>
-<ol start="3"><li>작업 4가 끝나면 다른 터미널 창을 열어 expense-practice 폴더에서 python app.py를 실행합니다. http://localhost:8000/new의 등록 화면에서 프로젝트 코드 목록이 나오고 하나를 선택할 수 있는지 확인한 뒤, Ctrl+C로 종료합니다.</li><li>Claude Code로 돌아가 같은 요청으로 작업 5를 맡깁니다.</li><li>/usage를 입력해 세션의 사용량을 확인합니다. 금액은 정가 기준의 추정치이며(<a href="#ref-anthropic-2026f">Anthropic, 2026f</a>), 실제 청구액은 요금 화면에서 확인합니다(<a href="../chapters/ch09.html#cost">Chapter 9의 비용 관리</a>).</li></ol>
+<ol start="3"><li>작업 4가 끝나면 다른 터미널 창을 열어 expense-practice 폴더에서 python app.py를 실행합니다. http://localhost:8000/new의 등록 화면에서 프로젝트 코드 목록이 나오고 하나를 선택할 수 있는지 확인한 뒤, Ctrl+C로 종료합니다.</li><li>Claude Code로 돌아가 다음 요청으로 작업 5를 맡깁니다.</li></ol>
+<pre>CLAUDE.md의 규칙대로 tasks.json의 다음 작업 단위를 수행해 줘.</pre>
+<ol start="5"><li>/usage를 입력해 세션의 사용량을 확인합니다. 금액은 정가 기준의 추정치이며(<a href="#ref-anthropic-2026f">Anthropic, 2026f</a>), 실제 청구액은 요금 화면에서 확인합니다(<a href="../chapters/ch09.html#cost">Chapter 9의 비용 관리</a>).</li></ol>
 <h3 id="lab-6-check">확인 방법</h3>
 <ul><li>새 세션이 이전 대화 없이 HANDOFF.md와 tasks.json만으로 다음 작업 단위(작업 4)를 선택합니다. 자동 메모리가 켜져 있으면 이전 세션의 메모도 함께 읽힐 수 있으므로, /memory로 자동 메모리 항목을 확인하고(<a href="#ref-anthropic-2026d">Anthropic, 2026d</a>), 새 세션이 작업 4를 선택한 근거로 HANDOFF.md와 tasks.json을 드는지 확인합니다.</li><li>python check.py가 종료 코드 0으로 끝나면 CR의 수용 기준을 모두 충족한 것입니다. 종료 코드 1이면 출력에서 실패한 시험 이름을 확인하고, 그 출력과 함께 에이전트에게 다시 맡깁니다.</li><li>통합 테스트 시나리오(작업 5)는 에이전트가 초안을 작성하고, 승인 여부는 직접 판단합니다. 시나리오가 docs/CR.md의 수용 기준을 하나씩 다루는지 보고 판단하며, 승인했을 때만 tasks.json의 작업 5 통과 값을 직접 true로 변경합니다.</li><li>응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
 <h2 id="trouble">막혔을 때</h2>
