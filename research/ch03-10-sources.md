@@ -120,3 +120,8 @@
 
 # 2026-10-20 ch06 v1.0 보강 확인(fact-checker)
 - S3(Young, 2025) 재확인: 에이전트에게 passes 필드의 상태만 바꾸도록 지시했다는 문장을 원문에서 다시 확인(6장 작업 단위 분할, 예제 절). 원문은 커밋을 "기능마다 하나"로 쓰지 않고, 설명 있는 커밋과 세션 종료 때의 커밋으로 적음(6장 표 6-6의 "작업 단위마다 commit 하나"는 이 책 실습의 확인 방법이며 Young의 사실이 아님)
+
+# 2026-10-20 ch07 v1.0 보강 확인(fact-checker)
+- Anthropic, Define success criteria and build evaluations(Claude Platform Docs), https://platform.claude.com/docs/en/test-and-evaluate/develop-tests, 확인일 2026-10-20: LLM 기반 채점의 1~5 척도 예, 예시 답안 비교, 생성 모델과 다른 모델로 평가하는 편이 좋다는 주석(표 7-3 4행 근거)
+- Python 문서 unittest, https://docs.python.org/3/library/unittest.html, 확인일 2026-10-20: Test Discovery 절에 시작 폴더가 없을 때의 동작이 적혀 있지 않음. 그래서 표 7-4 3행 원인을 "시험 파일을 찾지 못해"로 씀
+- 예제 앱 app.py: 등록 화면은 /new, 루트는 목록(표 7-5 4행 근거). acceptance/test_cr07.py test_1은 render_form의 HTML 출력을 확인(표 7-4 1행 근거)
