@@ -1,12 +1,10 @@
 # 인계(HANDOFF)
 
-- 갱신: 2026-10-20(3장 개정, ch03-write)
+- 갱신: 2026-10-20(.claude/ 반영, claude-flow-apply)
 - 브랜치: ch01-figures-rules(그림 1-1, 1-2 확정과 그림 규칙 승격, 명세 먼저 D-106, D-107). v1.0(PR #4)은 main에 병합됨
 
 ## 지금 상태
-- 멈춤(네 번째, 2026-10-20 /next): PR #33을 다시 이어받았으나 .claude/settings.json은 그대로이고 cp가 또 "you haven't granted it yet"로 거부됨(F-19 네 번째). 작가 조치(Q-036) 전에는 /next와 /autopilot을 다시 돌려도 같은 곳에서 멈춤. 작가 조치: .claude/settings.json의 allow에 "Write(.claude/agents/**)", "Write(.claude/commands/**)"를 추가하거나, 대화형 세션에서 docs/specs/flow-criteria-claude/README.md의 cp 다섯 줄을 직접 실행
-- 멈춤(세 번째, 2026-10-20 /next): .claude/ 반영 PR #33을 다시 이어받았으나 cp가 또 "permission not granted"로 거부됨. /next는 작가가 .claude/ 쓰기를 허용하기 전까지 같은 이유로 멈춤(F-19). 작가 조치: .claude/settings.json에 .claude/agents, .claude/commands 쓰기 허용을 추가하거나, 대화형 세션에서 README의 cp 다섯 줄을 직접 실행(Q-036)
-- 멈춤: .claude/ 반영(이슈 #31, D-117, 브랜치 claude-flow-apply, 초안 PR #33). 2026-10-20 /next 세션에서도 .claude/ 쓰기 권한이 허용되지 않음(cp와 Write 도구 모두 "permission not granted"). 작가가 .claude/ 쓰기를 허용한 세션에서 PR #33을 이어받아 docs/specs/flow-criteria-claude/README.md의 cp 명령 다섯 줄을 실행하고 그 폴더를 지운 뒤 editor 검수로 진행. 반영 전에는 장 PR(#30, 1~5장 재점검)을 병합하지 않음(Q-036)
+- 2026-10-20: .claude/ 반영 완료(이슈 #31, D-117, PR #33, Q-036 처리, F-19 해소). 작가가 .claude/ 쓰기를 허용한 대화형 세션에서 docs/specs/flow-criteria-claude/의 새 판 다섯 개(editor, flow-reviewer, reader-novice, review-chapter, next)를 .claude/에 덮어쓰고 그 폴더를 지움. 이제 장 PR은 장 전체 통독과 논지 사슬 표(reviews/flow/<장>-flow.md)로 검수함. 다음은 1장 흐름 재점검(장마다 PR), 이슈 #34(PC용 autorun 개선)는 이 세션에서 건너뜀
 - 2026-10-20: 흐름과 이해도 검수 기준 완료(이슈 #31 할 일 1~3, PR #32, D-117, F-18). AUTHOR_PREFS 맨 위 기준 셋과 검수 방법, 논지 사슬 표 형식(reviews/flow/README.md). .claude/ 쓰기가 허용되지 않아 editor, flow-reviewer, reader-novice, review-chapter, next의 새 판은 docs/specs/flow-criteria-claude/에 둠(Q-036). 다음은 작업 목록 첫 항목 .claude/ 반영(쓰기 허용 세션), 그다음 1~5장 흐름 재점검(장마다 PR). 반영 전에는 장 PR(#30 포함)을 병합하지 않음. 이슈 #31은 1~5장이 끝날 때 닫음
 - 2026-10-20: 그림은 모두 일반 내용으로 완료(이슈 #28, PR #29, D-116: D-115 예외 삭제, D-114 폐지). 그림 3-1을 Neo 보충 이름 기준으로 일반 이름으로(파일 이름, 부제와 캡션의 예제 삭제, 작업 단위 상태(통과 값), 하네스 설정, 검사 스크립트 실행, 세 번 연속 실패는 유지 Q-033), 표 3-3, 3-4와 그림 소개 문장, 규칙 문서(AUTHOR_PREFS, FIGURE_STYLE, 명세 틀, editor, figure-checker), HANDOFF 6장, 8장 항목. 1~5장 그림 9개 예제 흔적 0. 다음은 6장 개정(그림 6-1 일반 내용, 작업 순서 불일치 Q-034 예정).
 - 2026-10-20: 5장 개정 완료(브랜치 ch05-write, PR #27). 장 틀 보강, 그림 5-1(시안 B), 5-2(시안 A)를 기준 시각 체계와 일반 내용으로, 해설표 5-2, 5-3 신설, 일반 규칙 문서 예를 지우고 예제 절 "예제: CR 에이전트가 읽는 정보"(CR 규칙 문서 발췌, 표 5-5) 신설(Q-029), 표 번호 이동(5-2~5-4 → 5-4, 5-6, 5-7), 200줄 미만 목표 등 사실 보강(research/ch05-sources.md), 그림 5-1, 5-2 체계와 글자 크기 경고 해소. Q-029~Q-031. 다음은 이슈 #28(그림은 모두 일반 내용, 그림 3-1), 그다음 6장 개정.
@@ -51,7 +49,7 @@
 - [x] 2장 정확성 보강(이슈 #10, Q-016)
 - [x] 4장 개정(그림 4-2 글자 크기 포함, Q-018~Q-021)
 - [x] 5장 개정(그림 5-2 글자 크기 포함, Q-029~Q-031)
-- [ ] .claude/ 반영(이슈 #31, D-117): docs/specs/flow-criteria-claude/의 editor, flow-reviewer, reader-novice, review-chapter, next 새 판을 .claude/에 덮어쓰고 그 폴더를 지움(쓰기 권한을 허용한 세션에서)
+- [x] .claude/ 반영(이슈 #31, D-117, PR #33): docs/specs/flow-criteria-claude/의 editor, flow-reviewer, reader-novice, review-chapter, next 새 판을 .claude/에 덮어쓰고 그 폴더를 지움(쓰기 권한을 허용한 세션에서)
 - [ ] 1장 흐름 재점검(이슈 #31 할 일 4): 장 전체 통독, reviews/flow/ch01-flow.md, 끊긴 곳 수정, 장마다 PR
 - [ ] 2장 흐름 재점검(같음, ch02-flow.md)
 - [ ] 3장 흐름 재점검(같음, ch03-flow.md)
@@ -86,6 +84,7 @@
 | 2026-10-20 | 5장 개정 | #27 | 병합 가능(필수 0, reviews/2026-10-20-ch05-editor.md) | 통과(그림 5-1, 5-2 경고 0) | Q-029~Q-031 |
 | 2026-10-20 | 그림은 모두 일반 내용으로(이슈 #28) | #29 | 병합 가능(필수 0, reviews/2026-10-20-all-figures-general-editor.md) | 통과(1~5장 그림 경고 0) | Q-032, Q-033 |
 | 2026-10-20 | 흐름과 이해도 검수 기준(이슈 #31 할 일 1~3) | #32 | 병합 가능(2차, 필수 0, reviews/2026-10-20-flow-criteria-editor-2.md) | 통과 | Q-036 |
+| 2026-10-20 | .claude/ 반영(이슈 #31) | #33 | (editor 검수 후 기입) | 통과 | 없음 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
