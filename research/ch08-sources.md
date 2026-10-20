@@ -158,3 +158,29 @@
 - "인계 메모"라는 형식 자체의 1차 출처는 없다. Young의 진행 파일과 git 이력이 가장 가까운 근거이고, 인계 메모의 다섯 항목은 이 책의 설계이다.
 
 참고한 이전 기록: /home/user/harness-book/research/ch03-10-sources.md, /home/user/harness-book/research/ch01-sources.md, /home/user/harness-book/research/ch07-sources.md
+
+---
+## 2026-10-20 fact-checker 재확인(8장 개정, PR #41)
+
+### S-C8-10. 재확인: Claude Code 문서 6건
+- URL: https://code.claude.com/docs/en/how-claude-code-works, /claude-directory, /memory, /agent-sdk/agent-loop, /costs, /monitoring-usage
+- 게시일: 표기 없음, 확인일: 2026-10-20
+- 작성: Anthropic
+- 사용한 내용 요약
+  - how-claude-code-works Work with sessions: "Sessions are independent." JSONL은 ~/.claude/projects/. --continue와 --resume은 같은 세션 ID로 다시 열고 --fork-session과 /branch는 새 ID로 복사
+  - claude-directory Cleaned up automatically: cleanupPeriodDays 기본 30, 최솟값 1, 0은 검증 오류. 자동 메모리 디렉터리는 삭제하지 않음(v2.1.228 이전에는 삭제될 수 있었음). Desktop과 Cowork 기록 예외(v2.1.248 이상, 관리형 설정이 정하면 예외 없음)
+  - memory: 자동 메모리는 machine-local, 위치 ~/.claude/projects/<project>/memory/. 첫 문장 "fresh context window"
+  - agent-loop Handle the result: 하위 종류 5개, 모든 하위 종류가 total_cost_usd, usage, num_turns, session_id를 가짐, 충돌 시 error_during_execution과 비용 0 가능, stop_reason null. Hooks 표: PostToolUse, SubagentStart/SubagentStop, PreCompact
+  - costs: /usage 금액은 목록 가격 기준 로컬 계산 추정치(managed modelPricing이 있으면 계약 요율 기준, 그래도 추정치). OpenTelemetry는 every setup, only option(near real time). /insights 보고서도 시작 때 cleanupPeriodDays로 삭제
+  - monitoring-usage: CLAUDE_CODE_ENABLE_TELEMETRY=1과 내보내기 변수 필요(기본 꺼짐). 뒤 56,414자는 미열람
+- 확신: 높음
+
+### S-C8-11. 재확인: Young(2025)
+- URL: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+- 게시일: 2025-11-26, 확인일: 2026-10-20
+- 작성: Justin Young
+- 사용한 내용 요약: discrete sessions와 기억 없음, 세션 시작 때 git 로그와 진행 파일 읽기, 설명 있는 커밋과 되돌리기, 기능 목록은 JSON. 실험 하네스는 Claude Agent SDK, 모델은 Opus 4.5이며 Claude Code를 하네스로 지칭하지 않음. 효과를 측정한 비교 실험은 아님
+- 확신: 높음
+
+### S-C8-8 갱신
+- 2026-10-20 재시도에서도 openai.com 접속 실패. 검색은 게시일, 작성자, Codex 실험 개요까지만 확인. 인용 문장은 계속 미확인
