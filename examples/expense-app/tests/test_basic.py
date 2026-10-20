@@ -1,4 +1,4 @@
-"""기준 상태의 단위 테스트(에이전트가 CR-07에 맞춰 갱신할 수 있음)."""
+"""기준 상태의 단위 테스트(에이전트가 CR에 맞춰 갱신할 수 있음)."""
 import shutil
 import tempfile
 import unittest
