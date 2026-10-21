@@ -39,3 +39,15 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
 - C4-2(best practices): 여섯 방법의 근거 문장이 기록과 같음. "If you want 'above and beyond' behavior, explicitly request it rather than relying on the model to infer this from vague prompts"(Be clear and direct). "trained for precise instruction following"은 도구 사용 절의 문장(본문에 "도구 사용을 안내하는 절에서"로 맥락을 밝힘)
 - 예제 D-012(examples/expense-app/DECISIONS.md): CR 조건부 수용, 인사 시스템 일 1회 갱신 자료 사용, 근거는 운영 위원회 결정과 실시간 연동 규격 없음(본문의 결정 주체를 운영 위원회로 맞춤)
 - 미확인 유지: 두 페이지의 게시일과 개정일
+
+## C4-2 재확인(2026-10-21 fact-checker, 예시 제공과 행동 동사)
+- S: C4-2 Anthropic, Prompting best practices
+- URL: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices, 확인 2026-10-21
+- 구 주소 https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/multishot-prompting 은 302로 위 페이지에 넘어감(multishot 전용 페이지는 현재 별도로 열리지 않음)
+- 게시일: 표기 없음, 작성: Anthropic(Claude Platform Docs)
+- 사용한 내용:
+  - "Use examples effectively" 절: "Examples are one of the most reliable ways to steer Claude's output format, tone, and structure." Relevant/Diverse/Structured 세 조건. Tip 블록 "Include 3–5 examples for best results."(예시를 쓸 때의 팁이며 모든 요청의 필수가 아님)
+  - "Control the format of responses" 절: "Tell Claude what to do instead of what not to do"
+  - "Tool use > Tool usage" 절: "Claude's latest models are trained for precise instruction following… If you say 'can you suggest some changes,' Claude will sometimes provide suggestions rather than implementing them, even if making changes might be what you intended."
+- 판정: 4장 30, 32, 33행 일치. 30행은 3~5개가 예시를 쓸 때의 팁임을 밝히는 범위 보강을 권장(이슈 #48 항목 6)
+- 미확인 유지: 게시일과 개정일. 대상 모델 목록은 페이지 도입부에서 바뀔 수 있음
