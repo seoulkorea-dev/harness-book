@@ -98,7 +98,7 @@
 <tr><td>commit 전에 사람이 확인함</td><td>(규칙 문서에 없음)</td><td>확인 규칙 Bash(git commit *)</td><td>작업 단위의 반영 시점을 사람이 정함</td></tr>
 <tr><td>파일을 수정할 때마다 단위 테스트를 실행함</td><td>명령 절의 단위 테스트 명령</td><td>편집 뒤 훅(PostToolUse, Edit|Write)</td><td>모델이 잊어도 실행됨</td></tr>
 <tr><td>같은 시험이 세 번 연속 실패하면 중단함</td><td>중단 규칙</td><td>(강제 없음, 지시만)</td><td>되돌릴 수 있는 일이라 지시로 충분함</td></tr>
-<tr><td>작업 단위를 마치기 전에 검토를 요청함</td><td>작업 순서</td><td>(강제 없음, 지시만)</td><td>검토를 하지 않아도 검사 스크립트가 다시 확인함</td></tr>
+<tr><td>검사 스크립트 통과 뒤 commit 전에 검토를 요청함</td><td>작업 순서</td><td>(강제 없음, 지시만)</td><td>검토를 하지 않아도 검사 스크립트가 다시 확인함</td></tr>
 </tbody></table></div><figcaption><b>표 2-4. CR의 규칙과 처리 수단</b><ul class="capnote"><li>CR의 규칙별 지시와 강제, 강제가 필요한 이유</li></ul></figcaption></figure>
 <p>표 2-4의 첫 두 줄은 실습으로 확인할 수 있습니다. 규칙 문서만 있는 상태에서는 수용 시험을 수정하려는 시도를 막지 못하고, 금지 규칙을 더하면 같은 시도가 거부됩니다(<a href="../appendix/practice.html">부록 실습</a> 2, 3).</p>
 <p>훅은 시점에 따라 하는 일이 다릅니다. 도구 실행 전에 실행되는 PreToolUse 훅은 호출을 막을 수 있고, 실행 뒤에 실행되는 PostToolUse 훅은 이미 실행된 편집을 막지 못하고 오류를 모델에 알립니다(<a href="#ref-anthropic-2026d">Anthropic, 2026d</a>).</p>
