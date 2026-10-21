@@ -73,3 +73,11 @@
 - Commands(https://code.claude.com/docs/en/commands), 확인 2026-10-20: /hooks는 훅 설정 보기, /permissions는 승인 규칙 설정
 - 예제 파일 대조: check.py는 폴더별 실행 건수 > 0이고 실패 0이면 종료 0(건수 0은 실패, 건수 감소는 감지하지 않음. 그래서 본문은 "다른 시험이 통과하는 상태에서 한 건을 지우면"). tasks.example.json 확인 방법은 작업 1 결정 기록 D-012, 작업 2~4 check.py, 작업 5 사람 승인
 - 미확인: /hooks 목록의 matcher 표시, /context의 하위 에이전트 항목(실습 4 실행 때 RUNLOG.md에 기록)
+
+## C3-10. fact-checker 3차 확인(2026-10-21, 외부 검토 반영 PR, 브랜치 ch03-external-review)
+- Hooks reference(https://code.claude.com/docs/en/hooks), 확인 2026-10-21, 작성 Anthropic(게시일 표기 없음): 종료 코드 2 표에서 PostToolUse는 "Can block? No", "Shows stderr to Claude; the tool already ran". 막으려면 PreToolUse. 본문 95행 마지막 문장과 일치
+- How the agent loop works(https://code.claude.com/docs/en/agent-sdk/agent-loop), 확인 2026-10-21, 작성 Anthropic(게시일 표기 없음): 상한이 없으면 범위가 분명한 작업에는 괜찮지만 열린 요청에서는 오래 실행될 수 있음. "Setting a budget is a good default for production agents." max_turns와 max_budget_usd의 기본값은 No limit. 상한 도달 시 subtype error_max_turns, error_max_budget_usd. ch01 91행, ch03 48행과 일치
+- CLI reference(https://code.claude.com/docs/en/cli-reference), 확인 2026-10-21, 작성 Anthropic(게시일 표기 없음): --max-turns와 --max-budget-usd는 print mode(-p) 전용이고 기본값은 제한 없음. 대화형 세션 설정으로는 확인하지 못함. C3 "확인하지 못한 것"의 첫째 항목(대화형 CLI 대응 설정)은 이 확인으로 해소
+- 예제 파일 대조: CLAUDE.example.md 작업 순서 15행이 본문 105행 인용과 같음(32줄 유지). settings.example.json에 상한 키 없음(allow 6, ask 1, deny 9, PostToolUse Edit|Write). examples/ 전체에서 max_turns, max_budget, 상한, 예산 검색 0건
+- 내부 링크: ch07.html#criteria, ch01.html#loop, ch09.html#cost, ch02.html#tbl-2-4, practice.html#lab-1, lab-3, lab-4, lab-6 모두 존재
+- 미확인: RUNLOG.md에 python check.py 종료 코드 0 실행 기록 없음(실습 6 실행 때 기록할 것). /hooks 목록의 matcher 표시, /context의 하위 에이전트 항목은 계속 미확인
