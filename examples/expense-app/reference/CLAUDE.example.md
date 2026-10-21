@@ -12,9 +12,9 @@
 ## 작업 순서
 - tasks.json에서 "통과"가 false인 첫 작업 단위만 수행한다. 작업 5의 "통과" 값은 변경하지 않는다.
 - 작업 단위를 마치면 python check.py를 실행하고, 통과하면 그 단위의 "통과" 값만 true로 변경한다.
-- 완료 보고에는 python check.py의 출력 원문을 포함한다.
-- 작업 단위를 마치면 그 단위의 변경을 commit한다(commit은 사람 확인 후).
-- 작업 단위를 마치기 전에 reviewer 하위 에이전트에게 수용 기준 대조를 요청한다.
+- check.py가 통과하면 commit 전에 reviewer 하위 에이전트에게 수용 기준 대조를 요청한다.
+- 완료 보고에는 python check.py의 출력 원문과 reviewer의 대조 보고를 포함한다.
+- 대조 보고 뒤 그 단위의 변경을 commit한다(commit은 사람 확인 후).
 
 ## 수정 범위
 - 수정할 수 있음: expense/, app.py, tests/, tasks.json의 "통과" 값, HANDOFF.md
