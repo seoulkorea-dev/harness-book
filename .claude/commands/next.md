@@ -19,7 +19,7 @@ description: 다음 한 단위를 진행한다(작가 요청 → 열린 PR 마�
   - [ ] 그림 시안 두 개와 선택
   - [ ] 원고 작성
   - [ ] check_all
-  - [ ] 점검 에이전트(필수 반영, 논지 사슬 표)
+  - [ ] 점검 에이전트(필수 반영, 내용 정리표, 여섯 확인 표)
   - [ ] editor 검수(결론)
   - [ ] CI
   - [ ] 병합
@@ -30,12 +30,12 @@ description: 다음 한 단위를 진행한다(작가 요청 → 열린 PR 마�
 
 3-1. 단계(작가 요청 작업도 같은 단계를 따른다. 해당하지 않는 단계는 체크 목록에 "해당 없음")
    a. 장 작업이면 /plan-chapter와 같은 순서로 장 명세와 그림 명세를 만든다. 작가 확인 대신 editor에게 명세 검토를 맡기고, 작가만 정할 일은 AUTHOR_QUEUE.md에 적는다. → 체크: 명세
-   b. 원고와 그림을 쓴다. 그림은 시안 두 개를 만들어 reviews/agents/YYYY-MM-DD-<작업>-figures.html에 남기고, editor와 alt-reviewer의 의견으로 하나를 고른다. → 체크: 그림 시안 두 개와 선택, 원고 작성
-   c. python tools/check_all.py 통과 → 체크: check_all. /review-chapter(점검 에이전트. 장 작업이면 flow-reviewer와 reader-novice가 장 전체를 통독하고 논지 사슬 표를 reviews/flow/<장>-flow.md에 저장, D-117) → 필수(논지 사슬 끊김 포함) 반영 → check_all 다시 통과 → 체크: 점검 에이전트 장별 정비와 장 개정에서는 reader-expert와 fact-checker도 필수이고(이슈 #66), PR 설명에 에이전트 실행 기록 표(에이전트, 실행 여부, 필수 건수, 반영 여부)를 넣는다. 장별 정비 PR이면 그 장을 lint/rules_applied.txt에 더하고 python lint/check_rules.py가 그 장에서 실패 0인지 확인한다(REVIEW_RULES.md, D-127).
-   d. editor에게 정식 검수를 맡긴다(장 작업이면 장 전체 통독과 논지 사슬 표 경로를 넘김). 결과를 reviews/YYYY-MM-DD-<작업>-editor.md로 저장한다. → 체크: editor 검수(결론)
+   b. 원고와 그림을 쓴다. 그림은 시안 두 개를 만들어 reviews/agents/YYYY-MM-DD-<작업>-figures.html에 남기고, editor와 production-checker의 의견으로 하나를 고른다. → 체크: 그림 시안 두 개와 선택, 원고 작성
+   c. python tools/check_all.py 통과 → 체크: check_all. /review-chapter(점검 에이전트. 장 PR이면 여섯 확인을 맡는 flow-reviewer, reader-novice, fact-checker, reader-expert, practice-checker, production-checker가 모두 필수이고, flow-reviewer는 장 전체를 통독해 내용 정리표를 reviews/flow/<장>-flow.md에 저장, D-117, D-129) → 필수(내용 정리표의 끊김 포함) 반영 → check_all 다시 통과 → 체크: 점검 에이전트. PR 설명에 에이전트 실행 기록 표(에이전트, 실행 여부, 필수 건수, 반영 여부)와 여섯 확인 표(저자, 편집, 기술, 실습, 교정, 제작: 맡는 쪽, 결과, 보고서)를 넣는다(REVIEW_RULES.md "여섯 확인"). 장별 정비 PR이면 그 장을 lint/rules_applied.txt에 더하고 python lint/check_rules.py가 그 장에서 실패 0인지 확인한다(REVIEW_RULES.md, D-127).
+   d. editor에게 편집 검토를 맡긴다(장 작업이면 장 전체 통독, 내용 정리표 경로, 여섯 확인 표를 넘김. 총평, 점검 질문 10개 답 표, 필수 수정의 수정 전과 수정 후 문장을 받음). 결과를 reviews/YYYY-MM-DD-<작업>-editor.md로 저장한다. → 체크: editor 검수(결론)
    e. "병합 불가"면 필수를 반영하고 d로 돌아간다(최대 3회. 넘으면 멈추고 PR 설명 맨 위와 HANDOFF.md에 이유를 적는다).
    f. HANDOFF.md를 갱신한다: "## 진행 기록" 표에 한 행(날짜, 작업, PR, editor 결론, check_all, 작가 확인 추가 여부), 작업 목록 체크, 다음 할 일, "작업 시작" 줄을 결과로 바꿈.
-   g. 커밋, push. PR 설명에 체크 목록과 함께 editor 결론, 바뀐 파일, check_all 출력 원문 요약, 작가 확인 항목을 넣고, 장 작업이면 논지 사슬 표(reviews/flow/<장>-flow.md) 링크와 고친 곳(이전, 이후)을 넣는다. editor 검수 문서를 PR 댓글로 올린다(gh pr comment).
+   g. 커밋, push. PR 설명에 체크 목록과 함께 editor 결론, 바뀐 파일, check_all 출력 원문 요약, 작가 확인 항목을 넣고, 장 작업이면 내용 정리표(reviews/flow/<장>-flow.md) 링크, 여섯 확인 표, 고친 곳(이전, 이후)을 넣는다. editor 검수 문서를 PR 댓글로 올린다(gh pr comment).
    h. gh pr checks --watch 로 CI를 기다린다 → 체크: CI. editor "병합 가능", check_all 통과, CI 통과일 때만 초안을 해제하고(gh pr ready) gh pr merge --merge --delete-branch → 체크: 병합.
    i. 작가 요청 작업이었다면 이슈에 결과 댓글을 남기고 닫는다. 형식은 templates/issue-report.md: PR 주소와 결과, 진행 완료 chapter 표(전체 chapter의 상태와 이번에 바꾼 chapter), chapter별 작업 내용과 수정 내용(절, 표, 그림 단위), 장 밖의 변경. 멈춘 경우에도 "멈춤: 이유"와 같은 형식의 진행 표를 이슈에 댓글로 남긴다.
 4. 끝에 한 줄로 보고한다: 작업 이름, PR 주소, 병합 여부, 작가 확인 추가 항목 수.
