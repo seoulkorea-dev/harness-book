@@ -89,3 +89,4 @@
 - unittest 결과 출력: Python 표준 라이브러리 unittest의 TextTestRunner 기본 스트림은 sys.stderr(실행 확인: examples/expense-app에서 python -m unittest discover tests -q 2>/dev/null 출력 없음, 2026-10-22 작성 에이전트). fact-checker 재확인 대상
 - CLI reference(C3-10): --max-turns, --max-budget-usd는 -p 전용. 본문은 "명령 줄 상한 옵션은 -p 실행 전용"까지만 쓰고, 대화형 세션의 상한 설정 유무는 쓰지 않음
 - Permission modes(permission-modes): 기본 모드(default)는 허용 목록에 없는 도구 사용 전에 확인을 요청함. 본문은 "권한 모드가 사람에게 묻는 기본 모드라면"으로 조건을 밝힘(Q-116과 같은 처리)
+- Permission modes(permission-modes), 확인 2026-10-22(실무자 역할 검토자 3차 WebFetch): v2.1.283 이상 대화형 세션은 auto로 시작, Manual 모드의 설정 값은 default(별칭 manual), 시작 옵션 claude --permission-mode default. 금지 규칙은 모든 모드에서 막음. 명령 내용에 일치하는 ask 규칙은 auto에서도 확인 요청. auto 분류기의 기본 허용 목록에 "Pushing to any branch of the repository you're working in, including the default branch". 본문 files 절 권한 모드 문단과 표 3-6 넷째 행
