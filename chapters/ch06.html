@@ -94,7 +94,7 @@
 <figure class="fig" id="tbl-6-4"><div class="table-wrap"><table><thead><tr><th>번호</th><th>작업 단위</th><th>담당</th><th>완료 기준</th><th>확인 방법</th></tr></thead><tbody>
 <tr><td>작업 1</td><td>프로젝트 코드 조회 방식 합의</td><td>승인자</td><td>인사팀과 조회 방식과 갱신 주기 합의</td><td>결정 기록 D-012</td></tr>
 <tr><td>작업 2</td><td>데이터 모델에 프로젝트 코드 항목 추가</td><td>에이전트</td><td>정산 요청 데이터에 항목 추가, 기존 데이터 유지</td><td>python check.py의 수용 시험 4, 5 통과</td></tr>
-<tr><td>작업 3</td><td>기존 단위 테스트 갱신</td><td>에이전트</td><td>변경된 데이터 모델의 테스트 반영</td><td>python check.py의 tests 실패 0건</td></tr>
+<tr><td>작업 3</td><td>기존 단위 테스트 갱신</td><td>에이전트</td><td>변경된 데이터 모델의 테스트 반영(project_code 시험 추가, 기존 시험 통과)</td><td>python check.py의 tests 실패 0건, project_code 시험 1건 이상</td></tr>
 <tr><td>작업 4</td><td>정산 요청 화면에 선택 항목 추가</td><td>에이전트</td><td>화면에서 프로젝트 코드 선택 가능, 목록에 없는 코드 거부</td><td>python check.py의 수용 시험 1, 2, 3 통과</td></tr>
 <tr><td>작업 5</td><td>통합 테스트 시나리오 추가</td><td>에이전트 작성, 승인자 승인</td><td>프로젝트별 집계 시나리오 초안</td><td>사람 승인(통과 값은 사람이 변경)</td></tr>
 </tbody></table></div><figcaption><b>표 6-4. CR의 작업 단위</b><ul class="capnote"><li>번호, 작업 단위, 담당, 완료 기준, 확인 방법</li></ul></figcaption></figure>
@@ -112,7 +112,7 @@
     "id": "작업 3",
     "작업": "기존 단위 테스트 갱신",
     "완료 기준": "변경된 데이터 모델의 테스트 반영",
-    "확인 방법": "python check.py의 tests 실패 0건",
+    "확인 방법": "python check.py의 tests 실패 0건, project_code 시험 1건 이상",
     "통과": false
   }
 ]</pre>
