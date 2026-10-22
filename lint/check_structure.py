@@ -88,7 +88,8 @@ for _f in glob_(f'{ROOT}/chapters/ch*.html'):
     _ids = re.findall(r'id="(ref-[^"]+)"', _t)
     _local = re.findall(r'href="#(ref-[^"]+)"', _t)
     _remote = re.findall(r'href="[^"]*references\.html#(ref-[^"]+)"', _t)
-    if not _ids and not _remote:
+    _fn = 'class="fnref"' in _t and '<h2 id="refs">' in _t  # 각주로 정비한 장(D-123)은 참고 자료에 id와 본문 링크가 없음
+    if not _ids and not _remote and not _fn:
         errors.append(f'{_n}: 참고 자료 항목 없음')
     for _i in _ids:
         if not re.fullmatch(r'ref-[a-z]+-[0-9]{4}[a-z]?', _i):
