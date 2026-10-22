@@ -11,3 +11,6 @@
 | 4 | 권장 | .claude/commands/next.md, review-chapter.md, .claude/agents/editor.md | 병합과 --apply-only 사이에 옛 판이 지운 에이전트를 가리킴 | D-119 | 병합 직후 --apply-only, 그 전에는 /next 쓰지 않음을 HANDOFF에 | 중간 | 반영 |
 
 확인한 항목: 이슈 0단계 표(editor 총평, 가장 큰 문제 셋, 점검 질문, 등급, 수정 전과 수정 후. flow-reviewer 내용 정리표 열과 문맥 점검. fact-checker, reader-expert 조건과 근거. practice-checker 실제 실행과 판정만. reader-novice 교정. production-checker 화면, 각주, 링크, 코드, 빌드 HTML) 반영. 여섯 확인 표 일치. src/ 변경 없음, BOOK_STANDARD.md는 참조만. autorun 반영 형식(새 에이전트 tools 줄, 기존 판 tools와 model 같음, 명령에 권한 키 변경 없음), 에이전트 수 8. check_all 종료 코드 0.
+
+## 2차(2026-10-22, 커밋 1da32d3)
+결론: **병합 가능** (필수 0, 새 발견 없음). 필수 1(flow-reviewer 옛 참조), 권장 2(해설표 조건부), 권장 4(HANDOFF 반영 순서) 반영 확인. 범위 밖 변경 없음. check_all 종료 코드 0.

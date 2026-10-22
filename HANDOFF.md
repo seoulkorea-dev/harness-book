@@ -145,7 +145,7 @@
 | 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(3차, 필수 0, 1차 .pyc, 2차 작가 확인 대기 지점 → 반영, reviews/2026-10-22-review-rules-editor-1.md, -2.md, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
 | 2026-10-22 | R13~R17, 판정 등급, 점검 질문(이슈 #66 보충) | #70 | 병합 가능(필수 0, reviews/2026-10-22-review-rules-2-editor.md) | 통과 | 없음 |
 | 2026-10-22 | 1장 정비(이슈 #66 ②) | #69 | 병합 가능(2차, 1차 필수 2: PR 설명과 HANDOFF, reader-novice 모델 → 반영, reviews/2026-10-22-ch01-rules-editor.md) | 통과 | Q-086~Q-092 |
-| 2026-10-22 | 작업 체계 마지막 변경과 동결(이슈 #66 0단계) | #72 | (editor 결론 기록 예정) | 통과 | Q-093 |
+| 2026-10-22 | 작업 체계 마지막 변경과 동결(이슈 #66 0단계) | #72 | 병합 가능(2차, 1차 필수 1: flow-reviewer 옛 참조 → 반영, reviews/2026-10-22-freeze-workflow-editor.md) | 통과 | Q-093 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
