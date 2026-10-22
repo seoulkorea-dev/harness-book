@@ -3,8 +3,8 @@ description: PR 전 점검: 하위 에이전트 점검을 한 번에 실행한�
 ---
 Chapter $ARGUMENTS에 대해 하위 에이전트 점검을 한다. 원고는 고치지 않는다.
 1. 이번 작업에서 새로 쓰거나 바꾼 문장 목록을 git diff로 만든다.
-2. 장 PR(장 정비, 장 개정, 장 작성)이면 여섯 확인을 맡는 에이전트를 모두 동시에 부른다(이슈 #66 0단계, D-129): flow-reviewer(편집, 장 전체, 내용 정리표), reader-novice(교정, 장 전체, sonnet), fact-checker(기술, 명령과 예제를 실제 실행), reader-expert(기술, 장 전체), practice-checker(실습, 본문과 실습 파일과 검사를 실제 실행), production-checker(제작, 그림과 빌드된 HTML). 장이 아닌 작은 변경이면 바뀐 내용에 맞는 점검만 부른다(비용 규칙). 각 에이전트에 다음을 넘긴다.
-   - 범위: src/chapters/ch$ARGUMENTS.html(바꾼 절 이름). flow-reviewer, reader-novice, reader-expert는 장 전체. 모두 REVIEW_RULES.md와 BOOK_STANDARD.md(있으면)를 함께 넘긴다
+2. 장 PR(장 정비, 장 개정, 장 작성)이면 여섯 확인을 맡는 에이전트를 모두 동시에 부른다(이슈 #66 0단계, D-129): flow-reviewer(편집, 장 전체, 내용 정리표), reader-novice(교정, 장 전체, sonnet), fact-checker(기술, 명령과 예제를 실제 실행과 실무 정확성, 장 전체, reader-expert 통합), practice-checker(실습, 본문과 실습 파일과 검사를 실제 실행), production-checker(제작, 그림과 빌드된 HTML). 장이 아닌 작은 변경이면 바뀐 내용에 맞는 점검만 부른다(비용 규칙). 각 에이전트에 다음을 넘긴다.
+   - 범위: src/chapters/ch$ARGUMENTS.html(바꾼 절 이름). flow-reviewer, reader-novice, fact-checker는 장 전체. 모두 REVIEW_RULES.md와 BOOK_STANDARD.md(있으면)를 함께 넘긴다
    - 바꾼 문장 목록(flow-reviewer), 장의 주장(BOOK_SPEC.md, flow-reviewer), 관련 research/ 파일(fact-checker), 관련 실습 파일과 docs/example-facts.md(practice-checker), 그림 번호와 빌드된 chapters/ch$ARGUMENTS.html, 그림 시안 확인용 HTML(production-checker)
    - 보고 형식: 각 에이전트 파일의 "출력 형식"
    - 대시보드: 각 에이전트를 부르기 직전 python tools/dashboard.py start <에이전트> "ch$ARGUMENTS <범위>", 결과를 받은 직후 python tools/dashboard.py end <에이전트> "<필수 n, 권장 n>"
