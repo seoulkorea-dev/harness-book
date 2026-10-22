@@ -81,8 +81,8 @@ for f in files:
         continue
     body = open(f, encoding="utf-8").read()
     body = re.sub(r'<ul class="summary">.*?</ul>', " ", body, flags=re.S)
-    body = re.sub(r'<p class="claim">.*?</p>', " ", body, flags=re.S)
-    body = re.sub(r'<ol class="fn"[^>]*>.*?</ol>|<h2 id="refs">.*', " ", body, flags=re.S)  # 각주와 참고 자료(D-123)는 서지 형식이 겹침  # 주장 줄(D-104)은 첫 문단 둘째 문장과 같게 둠, 작가 확인 사항
+    body = re.sub(r'<p class="claim">.*?</p>', " ", body, flags=re.S)  # 주장 줄(D-104)은 첫 문단 둘째 문장과 같게 둠, 작가 확인 사항
+    body = re.sub(r'<ol class="fn"[^>]*>.*?</ol>|<h2 id="refs">.*', " ", body, flags=re.S)  # 각주와 참고 자료(D-123)는 서지 형식이 겹침
     body = re.sub(r"<(pre|table|svg|figure)\b.*?</\1>", " ", body, flags=re.S)
     for sec in re.split(r"<h[23]\b", body):
         sents = []
