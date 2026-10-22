@@ -4,6 +4,7 @@
 - 브랜치: final-adjust(이슈 #66 06:12, PR #77)
 
 ## 지금 상태
+- 작업 시작: 이슈 #66 1단계 기준서(BOOK_STANDARD.md), 브랜치 book-standard
 - 2026-10-22: 마지막 체계 조정(이슈 #66 Neo 06:12, PR #77, D-130). reader-expert를 fact-checker에 합침(에이전트 7개, 기술 확인은 fact-checker). 작성 에이전트는 원고 작업만, 한 단위는 장 하나(기준서는 예외), editor 재검수 최대 2회, 진행은 /autopilot만(tools/autorun.py 반복 실행 사용 중지, .claude/ 반영만 --apply-only, Q-096), 대시보드에 PR마다 원고 변경 여부와 비율. 다음은 1단계 기준서
 - 2026-10-22: 작업 대시보드(이슈 #66 작가 요청 15:00, PR #75). 고정 이슈 #74 본문을 tools/dashboard.py가 덮어씀(지금, 에이전트 상태, 장별 진행, 오늘 병합 PR, 멈춤), DASHBOARD.md는 병합 전 refresh --write-file. 작성 에이전트는 단위 시작과 끝, 하위 에이전트 호출 직전과 직후에 start, end(next.md, review-chapter.md 새 판은 병합 뒤 --apply-only), autorun도 단위 시작과 끝. 상태는 logs/dashboard.json. 작가 확인 Q-094(허용 목록), Q-095(CR 수 기준). 다음은 1단계 기준서
 - 2026-10-22: 이슈 #66 0단계 작업 체계 마지막 변경과 동결(PR #72, D-129). 에이전트를 출판 역할에 맞춤: editor 편집자 방식(총평, 가장 큰 문제 셋, 점검 질문 10개, 수정 전과 수정 후), flow-reviewer 내용 정리표(논지 사슬 표 대체), fact-checker 실행 확인, reader-expert 장 PR마다 필수, reader-novice 교정, practice-checker(신규, alt-reviewer 대체), production-checker(신규, figure-checker 대체). 장 PR마다 여섯 확인 표(REVIEW_RULES.md). 새 판은 docs/staged-claude/, 병합 뒤 python tools/autorun.py --apply-only. 작업 체계는 이제 동결. 병합 직후 python tools/autorun.py --apply-only를 실행하고, 그 전에는 /next를 쓰지 않음(.claude/의 옛 next, review-chapter, editor가 지운 alt-reviewer, figure-checker를 가리킴). CLAUDE.md 표는 Q-093. 다음은 1단계 기준서(BOOK_STANDARD.md), 병합 뒤 "기준서 승인" 대기
