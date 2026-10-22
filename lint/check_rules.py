@@ -94,6 +94,8 @@ def check_file(path):
         for k, t in cites:
             if len(text_of(t).strip()) > 25:
                 fails.append(f"R11 링크 낱말이 김(자료를 가리키는 말만): {text_of(t).strip()[:30]}")
+        if len(re.findall(r'<a\b[^>]*class="cite"', s)) != len(cites):
+            fails.append('R11 형식이 다른 인용 링크(<a class="cite" data-ref="키"> 순서로 씀, 빌드가 바꾸지 못함)')
         if '<sup class="cite"' in s:
             fails.append("R11 위첨자 인용 번호 남음(본문 낱말 링크로)")
         if re.search(r'<a class="cite"(?! data-ref=)', s):

@@ -343,3 +343,13 @@
 
 ## 열람 재시도(2026-10-22)
 - OpenAI 두 글 HTTP 403. 검색 발췌: Bolin 2026-01-23 "core agent loop and execution logic that underlies all Codex experiences". Lopopolo 2026-02-11 5개월, 직접 작성 코드 0줄, 약 100만 줄. 1,500 PR, 턴 정의, 수백 번 호출은 미확인(Q-040, Q-090)
+
+# 2026-10-22 ch01 인용 링크 감수(fact-checker, 1장 수정 PR #82)
+확인일: 2026-10-22. 원문을 직접 열어 확인한 내용만 적는다.
+- S28 정정, Glossary(Claude Platform Docs) https://platform.claude.com/docs/en/about-claude/glossary : LLM 항목은 "많은 매개변수를 가진 AI 언어 모델, 방대한 텍스트로 학습, 다양한 작업 수행". 다음 단어 예측은 Pretraining 항목("pretrained to predict the next word, given the previous context"). Context window 항목은 "모델이 되돌아보고 참고할 수 있는 텍스트의 양, 학습 코퍼스와 다른 작업 기억". Tokens 항목은 "언어 모델의 가장 작은 단위(단어, 부분 단어, 문자, 바이트)". → 본문 7행은 LLM, 컨텍스트 윈도 정의를 "이 책에서"로 밝히고(용어표 정의 유지), 용어집에는 토큰과 사전 학습의 다음 단어 예측만 귀속(Q-106)
+- S27 재확인, Handle tool calls https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls : 실행 오류는 content에 오류 메시지와 "is_error": true를 "돌려줄 수 있다"(is_error는 선택). → 10행 가능형
+- S26 재확인, How tool use works https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works : 도구 실행 위치 세 가지(사용자 정의, Anthropic 스키마는 클라이언트 실행, 서버 도구). 대화 상태 일반의 stateless 문장은 없음 → 8행 "이 설명을 바탕으로 이 책은 … 정리"
+- S5 재확인, How the agent loop works https://code.claude.com/docs/en/agent-sdk/agent-loop : 턴 = 도구 호출 왕복 한 번, max_turns와 max_budget_usd 기본 제한 없음, 결과 subtype(success, error_max_turns, error_max_budget_usd, error_during_execution, error_max_structured_output_retries), 거부 뒤 "typically attempts a different approach or reports that it couldn't proceed", 사용자 정의 도구가 기본 도구, MCP와 나란히 있음 → 95행 "대개", 표 1-4 외부 실행 환경 칸
+- S17/S30 재확인, Hooks reference https://code.claude.com/docs/en/hooks (앞 100,000자): Stop은 응답을 마칠 때 실행, 종료 코드 2나 decision "block"은 멈추지 못하게 하고 대화를 계속. 연속 차단 상한은 이번 열람 범위에서 다시 확인하지 못함(S30 유지)
+- S6 재확인, Glossary(Claude Code Docs) https://code.claude.com/docs/en/glossary : Agentic harness "The tools, context management, and execution environment that turn a language model into a capable coding agent. Claude Code is the harness; Claude is the model inside it." Turn 문장 일치. 기본 권한 모드는 버전에 따라 다름 → 40행 "Claude Code 용어집은"
+- 열람 실패: https://openai.com/index/unrolling-the-codex-agent-loop/ HTTP 403(턴 정의, 수백 번 도구 호출 미확인, Q-040, Q-090 유지), https://openai.com/index/harness-engineering/ 이번에 열지 않음(약 1,500 PR 미확인)

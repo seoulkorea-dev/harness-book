@@ -246,7 +246,7 @@ ol.fn li { margin: 0.1rem 0; word-break: keep-all; }
 /* 버전 주석(STYLE 5절): 각주와 구분되는 상자. 장 정비 전 aside.footnote와 같은 모양 */
 aside.version-note { margin: 1rem 0; padding: 0.7rem 0.9rem; border-left: 3px solid #0284c7; background: #F8F8F6; font-size: 0.92em; }
 /* 인용 번호와 참고 문헌(D-131) */
-a.cite { color: inherit; text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+a.cite { color: inherit; text-decoration: underline dotted var(--link); text-decoration-thickness: 1.5px; text-underline-offset: 0.22em; }
 a.cite:hover { color: var(--link-hover); }
 .bib-used { color: var(--muted); font-size: 0.9em; }
 ol.bib { padding-left: 2rem; line-height: 1.6; }
