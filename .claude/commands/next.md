@@ -6,6 +6,8 @@ description: 다음 한 단위를 진행한다(작가 요청 → 열린 PR 마�
 -1. 자동 실행 확인(이슈 #34): 이 명령의 인자가 unit이 아니면(autorun이 띄운 단위 세션은 "/next unit") Read 도구로 logs/autorun.lock을 읽는다. 파일이 있으면 아무 작업도 하지 않고 "자동 실행 중(logs/autorun.lock: pid, 마지막 갱신 시각)"이라고만 답하고 끝낸다. autorun이 실행 중이 아닌데 파일이 남아 있으면(비정상 종료) logs/autorun.lock을 지운 뒤 다시 /next를 실행하라고 덧붙인다. 파일을 직접 지우지는 않는다.
 - .claude/(agents, commands, settings.json)를 바꿔야 하면 .claude/에 직접 쓰지 않고, 새 판을 docs/staged-claude/의 같은 경로(agents/<이름>.md, commands/<이름>.md, settings.json)에 두고 보통 PR처럼 editor 검수를 거쳐 병합한다. 병합되면 autorun(python tools/autorun.py)이 .claude/에 반영한다(D-119). settings.json에서 권한을 넓히는 변경은 autorun이 반영하지 않고 작가에게 알린다.
 
+- 작업 대시보드(이슈 #66 작가 요청, 고정 이슈 "작업 대시보드"): 단위를 시작하면 python tools/dashboard.py now <단계> <작업> [초안 PR]와 python tools/dashboard.py start "작성 에이전트" <작업>, 하위 에이전트를 부르기 직전 start <에이전트> <범위>, 결과를 받은 직후 end <에이전트> "<결과: 필수 n, 권장 n, 병합 가능 여부>", 병합 직전 마지막 커밋 전에 python tools/dashboard.py refresh --write-file(DASHBOARD.md 갱신), 병합 뒤 end "작성 에이전트" "<결과>" "<다음 작업>". 멈추면 stop "<이유>" "<작가가 할 일>"(작가 알림), 다시 시작하면 resume. 장 PR에서 여섯 확인을 마치면 six <장> <PR>.
+
 0. 준비: git switch main, git pull --ff-only origin main. 실패하면 멈추고 이유를 HANDOFF.md 맨 위 "## 지금 상태"에 적는다.
 1. 작가 요청: gh issue list --label request --state open 으로 열린 요청을 확인한다(라벨이 없으면 gh label create request). 있으면 가장 오래된 것 하나를 이번 작업으로 정한다("작업 시작" 댓글은 3-0에서 초안 PR을 연 뒤에 남김).
 2. 열린 PR: gh pr list 로 이 저장소의 열린 PR을 확인한다. 있으면 그 PR을 마무리하는 것이 이번 작업이다(초안 PR이면 체크 목록에서 체크하지 않은 첫 단계부터, 아니면 3-d부터).
