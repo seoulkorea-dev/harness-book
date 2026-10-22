@@ -319,3 +319,27 @@
 ## 열람 실패(2026-10-22)
 - OpenAI, Unrolling the Codex agent loop: HTTP 403. 검색 결과 요약으로만: Michael Bolin, 2026-01-23, 하네스가 Codex 제품(CLI, Cloud, VS Code 확장)에 공통인 루프 제공. 턴 정의, 수백 번의 도구 호출, 컨텍스트 소진은 미확인(Q-040, Q-090)
 - OpenAI, Harness engineering: HTTP 403. 검색 결과 요약으로만: Ryan Lopopolo, 2026-02-11, 약 5개월, 약 100만 줄. 약 1,500개 풀 리퀘스트는 미확인(Q-090)
+
+# 2026-10-22 ch01 기술 감수(fact-checker, 1장 완성본 PR #81)
+확인일: 2026-10-22. 원문을 직접 열어 확인한 내용만 적는다.
+
+## S29. Anthropic, Run Claude Code programmatically / CLI reference(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/headless , https://code.claude.com/docs/en/cli-reference
+- 사용한 내용: claude -p는 "Agent SDK via the CLI". --max-turns(print 모드, 한도 도달 시 오류 종료, 기본 제한 없음), --max-budget-usd(추정 지출, 초과 가능). --output-format json은 result, 세션 ID, total_cost_usd. CLI JSON의 subtype은 미확인(본문은 Agent SDK 결과 메시지로 한정)
+
+## S30. Anthropic, Hooks reference, Stop 절
+- URL: https://code.claude.com/docs/en/hooks , 확인일 2026-10-22(앞 200,000자)
+- 사용한 내용: Stop은 메인 에이전트가 응답을 마칠 때 실행, 사용자 중단에는 실행 안 됨, 종료 코드 2 또는 decision block, 연속 8회 차단 뒤 종료, 0과 2 외 종료 코드는 비차단
+
+## S31. Anthropic, Manage costs effectively 재확인
+- URL: https://code.claude.com/docs/en/costs
+- 사용한 내용: /usage Session 블록은 API 사용자용, 금액은 정가 기준 로컬 추정(청구는 Console), 구독 사용자는 요금제 사용량(표 1-9)
+
+## S32. Anthropic, Commands / Debug your configuration 재확인
+- /context [all](전체 화면에서 all로 펼침), /permissions(allow, ask, deny, 별칭 /allowed-tools), /usage(별칭 /cost, /stats), 하위 폴더 CLAUDE.md는 시작 때 로드되지 않음
+
+## S33. Glossary(Platform Docs, Claude Code Docs) 재확인
+- Platform: Tokens, Context window("amount of text … look back on and reference"), 다음 토큰 예측은 Pretraining 항목. Claude Code: Turn, Session, Agentic harness
+
+## 열람 재시도(2026-10-22)
+- OpenAI 두 글 HTTP 403. 검색 발췌: Bolin 2026-01-23 "core agent loop and execution logic that underlies all Codex experiences". Lopopolo 2026-02-11 5개월, 직접 작성 코드 0줄, 약 100만 줄. 1,500 PR, 턴 정의, 수백 번 호출은 미확인(Q-040, Q-090)

@@ -41,7 +41,7 @@ for path in pages:
     if 'http-equiv="refresh"' in s:
         _main = ''  # 이동 쪽은 새 쪽 맨 위로 안내하는 것이 목적이라 제외
     for m in re.finditer(r'href="[^"]*references\.html(#[^"]*)?"', _main):
-        if not (m.group(1) or '').startswith('#ref-'):
+        if not (m.group(1) or '').startswith(('#ref-', '#bib-')):  # #bib-N은 새 인용 방식의 참고 문헌 항목(D-131)
             errors.append(f'{name}: 참고 자료 링크에 항목 id 없음')
     if not name.endswith(('index.html', 'epilogue.html')):
         body = re.sub(r'<table.*?</table>', ' ', _main, flags=re.S)
@@ -88,7 +88,7 @@ for _f in glob_(f'{ROOT}/chapters/ch*.html'):
     _ids = re.findall(r'id="(ref-[^"]+)"', _t)
     _local = re.findall(r'href="#(ref-[^"]+)"', _t)
     _remote = re.findall(r'href="[^"]*references\.html#(ref-[^"]+)"', _t)
-    _fn = 'class="fnref"' in _t and '<h2 id="refs">' in _t  # 각주로 정비한 장(D-123)은 참고 자료에 id와 본문 링크가 없음
+    _fn = ('class="fnref"' in _t and '<h2 id="refs">' in _t) or 'class="cite"' in _t  # 새 인용 방식(D-131)은 부록 끝 참고 문헌  # 각주로 정비한 장(D-123)은 참고 자료에 id와 본문 링크가 없음
     if not _ids and not _remote and not _fn:
         errors.append(f'{_n}: 참고 자료 항목 없음')
     for _i in _ids:

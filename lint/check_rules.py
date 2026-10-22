@@ -9,10 +9,11 @@ src/chapters/*.html, src/appendix/*.html을 검사한다. 장별 정비를 마�
 각주 형식(D-123): 본문 <sup class="fnref">n</sup>, 그 문단 바로 아래 <ol class="fn" start="n"><li>…</li></ol>
 종료 코드: 실패가 하나라도 있으면 1.
 """
-import glob, html, os, re, sys
+import glob, html, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APPLIED = os.path.join(ROOT, "lint", "rules_applied.txt")
+BIB = {k for k in json.load(open(os.path.join(ROOT, "research", "bibliography.json"), encoding="utf-8")) if not k.startswith("_")}
 FAIL_HEAD = ["실패", "원인", "막는 장치"]
 CHECK_HEAD = ["확인할 것", "확인 방법", "확인 기준"]
 R1_WORDS = re.compile(r"반드시|항상|결국|(?:이|가) 아니라")
@@ -65,7 +66,19 @@ def check_file(path):
             parts = [p.strip() for p in re.split(r",\s*", text_of(li))]
             if len(parts) >= 2 and sum(1 for p in parts if p in heads) >= 2:
                 fails.append(f"R9 {tid} 설명 줄이 열 이름을 나열: {text_of(li).strip()[:40]}")
-    # R11 각주
+    # R11 인용(D-131): 새 방식(sup.cite 자료 키)을 쓰는 장은 옛 표기(문단 아래 각주, 장 끝 참고 자료, #ref- 링크)가 없어야 하고 키가 자료 목록에 있어야 함
+    if 'class="cite"' in s:
+        for k in re.findall(r'<sup class="cite" data-ref="([^"]+)"></sup>', s):
+            if k not in BIB:
+                fails.append(f"R11 bibliography.json에 없는 자료 키 {k}")
+        for pat, label in [('class="fnref"', "문단 아래 각주 번호"), ('<ol class="fn"', "문단 아래 각주"), ('<h2 id="refs">', "장 끝 참고 자료 절"), ('href="#ref-', "#ref- 링크")]:
+            if pat in s:
+                fails.append(f"R11 옛 인용 표기 남음: {label}")
+        if re.search(r'<sup class="cite"(?! data-ref=)', s):
+            fails.append("R11 자료 키 없는 인용 번호(sup.cite에는 data-ref만 씀, 번호는 빌드가 매김)")
+        return name, fails, warns + r1_r4(s)
+    if name in applied():
+        fails.append("R11 규칙 적용 장은 새 인용 방식(sup.cite 자료 키)을 써야 함(D-131)")
     if 'href="#ref-' in s:
         fails.append(f"R11 본문의 참고 자료 링크 {s.count('href=\"#ref-')}곳")
     sups = [int(n) for n in re.findall(r'<sup class="fnref">(\d+)</sup>', s)]
@@ -76,6 +89,10 @@ def check_file(path):
         fails.append(f"R11 위첨자 번호가 1부터 차례대로가 아님 {sups[:10]}")
     if sorted(sups) != sorted(notes):
         fails.append(f"R11 위첨자 {len(sups)}개와 각주 {len(notes)}개가 1:1이 아님")
+    return name, fails, warns + r1_r4(s)
+
+def r1_r4(s):
+    warns = []
     # 경고: R1, R3, R4
     plain = text_of(strip_code(s))  # 주장 줄도 포함(D-126)
     n1 = len(R1_WORDS.findall(plain))
@@ -84,9 +101,9 @@ def check_file(path):
     for m in re.finditer(r"Claude Code는[^.]{0,60}(?:실험|보고했|밝혔)", plain):
         warns.append(f"R3 주어: {m.group(0)[:50]}")
     for p in re.findall(r"<p\b.*?</p>", s, re.S):
-        if re.search(r"v\d+\.\d+\.\d+", text_of(p)) and "fnref" not in p:
+        if re.search(r"v\d+\.\d+\.\d+", text_of(p)) and "fnref" not in p and 'class="cite"' not in p:
             warns.append(f"R4 각주 없는 버전 번호: {re.search(r'v\d+\.\d+\.\d+', text_of(p)).group(0)}")
-    return name, fails, warns
+    return warns
 
 def main():
     done = applied()
@@ -103,6 +120,22 @@ def main():
                 counts[name] = counts.get(name, 0) + 1
         for x in warns:
             print(f"경고 {name}: {x}")
+    # 자료 목록(D-131): 같은 자료(제목이나 주소)에 키 둘 이상은 실패, 어느 장에서도 인용하지 않은 키는 경고
+    bib = {k: v for k, v in json.load(open(os.path.join(ROOT, "research", "bibliography.json"), encoding="utf-8")).items() if not k.startswith("_")}
+    seen = {}
+    for k, v in bib.items():
+        for field in ("title", "url"):
+            key = (field, (v.get(field) or "").strip().rstrip("/").lower(), v.get("venue") if field == "title" else "")
+            if key[1] in ("",):
+                continue
+            if key in seen:
+                print(f"실패 bibliography: 같은 자료에 키 둘({seen[key]}, {k}, {field})"); n_fail += 1
+            seen[key] = k
+    used = set()
+    for f in files:
+        used |= set(re.findall(r'<sup class="cite" data-ref="([^"]+)"></sup>', open(f, encoding="utf-8").read()))
+    for k in sorted(set(bib) - used):
+        print(f"경고 bibliography: 어느 장에서도 인용하지 않은 자료 {k}")
     if counts:
         print("정비 전 장의 실패 규칙 위반(경고): " + ", ".join(f"{k} {v}" for k, v in sorted(counts.items())))
     print(f"규칙 적용 장: {', '.join(sorted(done)) or '없음'}")
