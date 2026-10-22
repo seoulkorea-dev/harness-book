@@ -4,7 +4,7 @@
 
 ## 적용 범위와 검사
 - 자동 검사: `python lint/check_rules.py`(check_all이 실행). 장별 정비(이슈 #66 ②)를 마친 장은 lint/rules_applied.txt에 적고, 그 장에서는 "실패" 규칙을 어기면 check_all이 실패합니다. 아직 정비하지 않은 장은 경고만 냅니다.
-- 점검 에이전트: 장별 정비와 장 개정마다 flow-reviewer, reader-novice, reader-expert, fact-checker(Bash로 실제 실행 확인)가 필수이고, 장 PR 설명에 에이전트 실행 기록 표를 둡니다(이슈 #66 Neo 보충).
+- 점검 에이전트: 장별 정비와 장 개정마다 flow-reviewer, reader-novice, fact-checker(Bash로 실제 실행 확인, 실무 정확성, reader-expert 통합 D-130)가 필수이고, 장 PR 설명에 에이전트 실행 기록 표를 둡니다(이슈 #66 Neo 보충).
 - 예제 확인 검사: `python tools/check_tasks.py`(R6). lint/rules_applied.txt에 R6이 있으면 실패, 없으면 경고.
 - editor 필수: 아래 표의 "editor 필수" 규칙을 어긴 곳은 병합 불가 사유입니다.
 
@@ -34,7 +34,7 @@
 |---|---|---|
 | 저자 확인 | 작성 에이전트 | 의도와 정책이 기준서(BOOK_STANDARD.md, 확정 전에는 DECISIONS.md와 AUTHOR_PREFS.md)와 맞는가. 새 판단은 AUTHOR_QUEUE |
 | 편집 확인 | editor, flow-reviewer | 논리와 구조(총평, 점검 질문 10개, 내용 정리표) |
-| 기술 확인 | fact-checker, reader-expert | 사실과 동작(명령, 제품 기능, 버전, 인과관계, 인용과 수치를 조건과 근거로 확정) |
+| 기술 확인 | fact-checker(reader-expert 통합, D-130) | 사실과 동작(명령, 제품 기능, 버전, 인과관계, 인용과 수치를 조건과 근거로 확정) |
 | 실습 확인 | practice-checker | 재현과 완료 기준(본문, 표, 실습 파일, 검사를 실제 실행으로 대조) |
 | 교정 확인 | reader-novice, check_all | 용어와 표현(용어표 기준 통일, 지시어, 참조 일치) |
 | 제작 확인 | production-checker, CI | 최종 화면(그림, 표 표시, 각주, 링크, 코드 블록, 빌드된 HTML) |
@@ -50,7 +50,7 @@
 
 - 공식 문서의 권고 수치(예: 규칙 문서 200줄 미만)는 출처의 권고로 유지하고, 다른 성격(참고 목표 등)으로 다시 규정하지 않습니다. 권고와 제품의 강제 한도를 구분해 씁니다.
 
-## 장별 점검 질문(editor와 reader-expert가 장마다 답을 표로 남김, 장 정비 PR 설명에 붙임)
+## 장별 점검 질문(editor와 fact-checker가 장마다 답을 표로 남김, 장 정비 PR 설명에 붙임)
 1. 개념(용어가 같은 뜻으로 쓰이는가
 )
 2. 분류(표의 행과 열이 하나의 기준인가

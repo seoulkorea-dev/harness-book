@@ -24,7 +24,7 @@ STATE = os.path.join(ROOT, "logs", "dashboard.json")
 FILE = os.path.join(ROOT, "DASHBOARD.md")
 TITLE, LABEL, AUTHOR = "작업 대시보드", "dashboard", "@seoulkorea-dev"
 KST = datetime.timezone(datetime.timedelta(hours=9))
-AGENTS = ["작성 에이전트", "editor", "flow-reviewer", "fact-checker", "reader-expert", "researcher",
+AGENTS = ["작성 에이전트", "editor", "flow-reviewer", "fact-checker", "researcher",
           "reader-novice", "practice-checker", "production-checker", "자동 실행"]
 PARTS = [("시작하며", ["src/chapters/prologue.html"])] + \
         [(f"{n}장", [f"src/chapters/ch{n:02d}.html"]) for n in range(1, 12)] + \
@@ -51,6 +51,9 @@ def load():
         st.update(json.load(open(STATE, encoding="utf-8")))
     for a in AGENTS:
         st["agents"].setdefault(a, {"status": "대기", "work": "", "start": "", "end": "", "result": "", "next": ""})
+    st["agents"].pop("reader-expert", None)  # fact-checker에 통합(D-130)
+    if st["agents"]["자동 실행"]["status"] == "대기":
+        st["agents"]["자동 실행"].update(status="사용 중지", work="D-130: /autopilot만 사용")
     return st
 
 def save(st):
@@ -88,7 +91,7 @@ def merged_today():
     for p in sorted(json.loads(r.stdout or "[]"), key=lambda x: x["mergedAt"]):
         t = datetime.datetime.fromisoformat(p["mergedAt"].replace("Z", "+00:00")).astimezone(KST)
         parts = [n for n, paths in PARTS if any(f["path"] in paths for f in p.get("files", []))]
-        rows.append([t.strftime("%H:%M"), f"#{p['number']} {p['title']}", ", ".join(parts) or "장 변경 없음"])
+        rows.append([t.strftime("%H:%M"), f"#{p['number']} {p['title']}", "예" if parts else "아니오", ", ".join(parts) or "-"])
     return rows
 
 # ---------- 본문 ----------
@@ -125,7 +128,9 @@ def render(st, parts, merged):
               "- \"CR\": lint/check_rules.py R12와 같은 기준(코드와 파일 경로 제외, \"CR이\", \"CR은\"도 셈). 같은 장 링크는 R10, 표 체계 위반은 R9 기준",
               "- 여섯 확인: D-129(2026-10-22) 이후 장 PR부터 기록(1장 정비 PR #69는 그 전이라 아니오)",
               "- 주장 줄: \"아니라\", \"반드시\", \"항상\", \"결국\", \"해야 합니다\"가 있으면 단정형. 마지막 정비 PR: 그 파일을 바꾼 마지막 병합 PR", ""]
-    lines += ["## 오늘 병합된 PR(한국 시간)", table(["시각", "PR", "바뀐 장"], merged) if merged else "- 없음", ""]
+    done = sum(1 for m in merged if m[2] == "예")
+    lines += ["## 오늘 병합된 PR(한국 시간)", f"- 원고 변경 PR {done} / 전체 {len(merged)}(원고 작업 비율)",
+              table(["시각", "PR", "원고 변경", "바뀐 장"], merged) if merged else "- 없음", ""]
     return "\n".join(lines)
 
 # ---------- 이슈 ----------
@@ -164,7 +169,7 @@ def main(argv):
     t = stamp()
     if cmd == "start" and len(rest) >= 2:
         a = st["agents"].setdefault(rest[0], {})
-        a.update(status="진행 중", work=" ".join(rest[1:]), start=t, end="", result="")
+        a.update(status="진행 중", work=" ".join(rest[1:]), start=t, end="", result="", next="")
     elif cmd == "end" and len(rest) >= 2:
         a = st["agents"].setdefault(rest[0], {})
         a.update(status="완료", end=t, result=rest[1], next=rest[2] if len(rest) > 2 else "")
