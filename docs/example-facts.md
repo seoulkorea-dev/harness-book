@@ -26,8 +26,8 @@
 - 여섯 절: 목적, 읽는 순서, 작업 순서, 수정 범위, 중단 규칙, 명령
 - 읽는 순서: docs/CR.md, DECISIONS.md, tasks.json, HANDOFF.md(있으면)
 - 수정할 수 있음: expense/, app.py, tests/, tasks.json의 통과 값, HANDOFF.md. 수정하지 않음: data/, acceptance/, check.py, CLAUDE.md, DECISIONS.md, .claude/
-- 작업 단위를 마치면 python check.py, 출력이 그 단위의 확인 방법을 충족하면 그 단위의 통과 값만 true(작업 2, 3을 마친 시점에는 작업 4가 맡은 수용 시험 1, 2, 3이 실패해 check.py 전체는 종료 코드 1), 완료 보고에 출력 원문, 확인 방법을 충족하면 commit 전에 reviewer 하위 에이전트에게 바뀐 파일 목록(git status 출력)과 함께 수용 기준 대조 요청, 작업 단위를 마치면 commit(사람 확인 후)
-- 중단: 지금 작업 단위의 확인 방법에 든 시험이 세 번 연속 실패하면 중단하고 HANDOFF.md 작성
+- 작업 단위를 마치면 python check.py, 출력이 그 단위의 확인 방법을 충족하면 그 단위의 통과 값만 true(작업 2, 3을 마친 시점에는 작업 4가 맡은 수용 시험 1, 2, 3이 실패해 check.py 전체는 종료 코드 1), 완료 보고에 출력 원문, 확인 방법을 충족하면 commit 전에 reviewer 하위 에이전트에게 바뀐 파일 목록과 변경 내용(git status, git diff 출력)을 넘겨 수용 기준 대조 요청, 사람이 commit 확인에서 수정을 요청하면 그 단위의 통과 값을 false로 되돌림(완료 확정은 사람의 commit 승인), 작업 단위를 마치면 commit(사람 확인 후)
+- 중단: 작업 단위를 마칠 때 실행한 check.py에서 그 단위의 확인 방법에 든 시험이 세 번 연속 실패하면 중단하고 HANDOFF.md 작성(편집 뒤 훅의 실패는 세지 않음)
 
 ## 권한(reference/settings.example.json)
 - 허용: 단위 테스트, python check.py, git status, git diff
