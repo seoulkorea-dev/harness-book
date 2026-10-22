@@ -51,3 +51,15 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
   - "Tool use > Tool usage" 절: "Claude's latest models are trained for precise instruction following… If you say 'can you suggest some changes,' Claude will sometimes provide suggestions rather than implementing them, even if making changes might be what you intended."
 - 판정: 4장 30, 32, 33행 일치. 30행은 3~5개가 예시를 쓸 때의 팁임을 밝히는 범위 보강을 권장(이슈 #48 항목 6)
 - 미확인 유지: 게시일과 개정일. 대상 모델 목록은 페이지 도입부에서 바뀔 수 있음
+
+## C4-2 재확인(2026-10-22 fact-checker, 외부 검수 브랜치 ch04-external-review)
+- S: C4-2 Anthropic, Prompting best practices
+- URL: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices, 확인 2026-10-22
+- 게시일: 표기 없음, 작성: Anthropic(Claude Platform Docs)
+- 사용한 내용:
+  - "Use examples effectively": 첫 문장 "one of the most reliable ways to steer Claude's output format, tone, and structure". 조건 Relevant("Mirror your actual use case closely"), Diverse("Cover edge cases and vary enough…"), Structured. 3–5개는 Tip 블록("Include 3–5 examples for best results.")
+  - "Control the format of responses": 첫 항목 "Tell Claude what to do instead of what not to do"
+  - "Tool usage": "…can you suggest some changes… sometimes provide suggestions rather than implementing them"
+- 내부 대조: ch02 표 2-3, 2-4(되돌리기 어려운 규칙은 권한 규칙으로 강제), ch02 tool-scope 절(모델은 요청만, 실행은 하네스. Agent SDK 문서 인용), ch02#instruct-enforce와 ch02#tool-scope 앵커 존재 확인
+- 판정: 4장 31행은 형식과 어조만 쓰고 구조를 뺐고(표 4-3과 불일치), 조건 목록과 Tip을 한 문장으로 합침(권장). 33, 34행과 확인 방법 절 끝 문장은 일치
+- 미확인 유지: 두 페이지의 게시일과 개정일. git diff는 실행하지 못해 지정한 여섯 곳만 대조
