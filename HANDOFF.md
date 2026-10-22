@@ -62,6 +62,7 @@
 
 ## 작업 목록
 - [ ] 이슈 #66 ② 장별 정비: 1장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] (작가 확인 대기) 1장 정비 병합 뒤 멈춤: HANDOFF "지금 상태"와 이슈 #66에 "1장 정비 병합, 작가 확인 대기"를 남기고, 이슈 #66에 Neo의 "계속" 댓글이 있을 때만 이 항목을 체크하고 2장부터 진행(이슈 #66 작가 결정)
 - [ ] 이슈 #66 ② 장별 정비: 2장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [ ] 이슈 #66 ② 장별 정비: 3장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [ ] 이슈 #66 ② 장별 정비: 4장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
@@ -133,7 +134,7 @@
 | 2026-10-22 | 자동 실행 자가 복구와 상태 알림(이슈 #34) | #52 | 병합 가능(필수 0, reviews/2026-10-22-autorun-recovery-editor.md) | 통과(--selftest 통과) | Q-077~Q-080 |
 | 2026-10-22 | 1장 절 제목 변경(이슈 #51) | #59 | 병합 가능(필수 0, reviews/2026-10-22-ch01-meanings-title-editor.md) | 통과 | 없음 |
 | 2026-10-22 | 하네스 정의 문안 교체(이슈 #53) | #61 | 병합 가능(필수 0, reviews/2026-10-22-harness-definition-editor.md) | 통과 | Q-081, Q-082 |
-| 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(필수 0, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
+| 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(3차, 필수 0, 1차 .pyc, 2차 작가 확인 대기 지점 → 반영, reviews/2026-10-22-review-rules-editor-1.md, -2.md, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
