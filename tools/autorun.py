@@ -47,12 +47,14 @@
   /next는 인자가 unit이 아니고 잠금이 최근 갱신이면 "자동 실행 중"이라고만 답한다.
 단위마다 시작, 끝, 작업, PR 번호, 결과를 logs/autorun.log에 남긴다(.gitignore).
 """
-import argparse, atexit, datetime, hashlib, json, os, re, shutil, subprocess, sys, tempfile, time
+import argparse, atexit, csv, datetime, hashlib, json, os, re, shutil, subprocess, sys, tempfile, time
 from types import SimpleNamespace
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG = os.path.join(ROOT, "logs", "autorun.log")
 LOCK = os.path.join(ROOT, "logs", "autorun.lock")
+STAGE_FAILED = os.path.join(ROOT, "logs", "autorun_stage_failed.txt")
+FM_KEYS = ("tools", "allowed-tools", "disallowedTools", "hooks", "permissionMode", "mcpServers")
 CO_AUTHOR = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 STAGE = "docs/staged-claude"
 CHECK_CMD = [sys.executable, "tools/check_all.py"]
@@ -149,8 +151,8 @@ def pid_alive(pid):
     if not pid or pid <= 0:
         return False
     if os.name == "nt":
-        r = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"], capture_output=True, text=True, errors="replace")
-        return re.search(rf"\b{pid}\b", r.stdout) is not None
+        r = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"], capture_output=True, text=True, errors="replace")
+        return any(len(row) > 1 and row[1].strip() == str(pid) for row in csv.reader(l for l in r.stdout.splitlines() if l.strip()))
     try:
         os.kill(pid, 0); return True
     except OSError:
@@ -256,8 +258,9 @@ def classify(out):
     failed = out.get("timeout") or out.get("code") not in (0, None) or out.get("is_error")
     if not failed:
         return None
-    # 한도와 일시 오류 문구는 실패한 실행에서만 봄(정상 보고에 그 말이 들어 있어도 멈추지 않게)
-    res = str(out.get("result") or "") + " " + str(out.get("stderr") or "")
+    # 한도와 일시 오류 문구는 실패한 실행의 오류 출력과 짧은 결과(500자 이하)에서만 봄(긴 작업 보고 본문의 같은 말에 걸리지 않게)
+    result = str(out.get("result") or "")
+    res = (result if len(result) <= 500 else "") + " " + str(out.get("stderr") or "")
     if LIMIT_RE.search(res):
         return "limit"
     if out.get("timeout"):
@@ -373,20 +376,44 @@ def staged_plan(root):
                 bad.append(rel)
     return plan, bad
 
-def permission_widening(cur, new):
-    """settings.json에서 권한이 넓어지는 변경: deny나 ask 삭제, allow 추가, 훅이나 기본 모드 변경"""
+def settings_violation(cur, new):
+    """허용 목록 방식: permissions.deny와 ask는 추가만, allow는 삭제만 허용. 그 밖의 키가 하나라도 다르면 위반(env, apiKeyHelper, hooks 등)"""
     cp, np = cur.get("permissions") or {}, new.get("permissions") or {}
     out = []
-    for key, sign in (("deny", "-"), ("ask", "-"), ("allow", "+")):
+    for key, mode in (("deny", "add"), ("ask", "add"), ("allow", "remove")):
         a, b = set(cp.get(key) or []), set(np.get(key) or [])
-        diff = sorted(a - b) if sign == "-" else sorted(b - a)
-        if diff:
-            out.append(f"{key} {'삭제' if sign == '-' else '추가'}: {', '.join(diff)}")
-    if cur.get("hooks") != new.get("hooks"):
-        out.append("hooks 변경")
-    if cp.get("defaultMode") != np.get("defaultMode"):
-        out.append(f"defaultMode 변경({cp.get('defaultMode')} → {np.get('defaultMode')})")
+        if mode == "add" and a - b:
+            out.append(f"{key} 삭제: {', '.join(sorted(a - b))}")
+        if mode == "remove" and b - a:
+            out.append(f"{key} 추가: {', '.join(sorted(b - a))}")
+    keys = sorted(k for k in set(cur) | set(new) if k != "permissions" and cur.get(k) != new.get(k))
+    keys += sorted("permissions." + k for k in set(cp) | set(np) if k not in ("deny", "ask", "allow") and cp.get(k) != np.get(k))
+    if keys:
+        out.append("그 밖의 키 변경: " + ", ".join(keys))
     return "; ".join(out)
+
+def frontmatter(text):
+    """--- 사이의 머리말을 키별 문자열로(여러 줄 값은 이어 붙임)"""
+    m = re.match(r"---\s*\n(.*?)\n---", text or "", re.S); fm, key = {}, None
+    for line in (m.group(1).splitlines() if m else []):
+        mm = re.match(r"([A-Za-z-]+)\s*:\s*(.*)", line)
+        if mm:
+            key = mm.group(1); fm[key] = mm.group(2).strip()
+        elif key:
+            fm[key] += "\n" + line.strip()
+    return fm
+
+def md_violation(dst, cur_text, new_text):
+    """agents, commands 머리말의 권한 관련 키(tools, allowed-tools, hooks 등) 변경. 새 에이전트는 tools 줄이 있어야 하고 나머지 키는 없어야 함"""
+    nf = frontmatter(new_text)
+    if cur_text is None:
+        bad = [k for k in FM_KEYS if k != "tools" and k in nf]
+        if dst.startswith(".claude/agents/") and "tools" not in nf:
+            bad.append("tools 없음(모든 도구를 물려받음)")
+    else:
+        cf = frontmatter(cur_text)
+        bad = [k for k in FM_KEYS if cf.get(k) != nf.get(k)]
+    return f"{dst}: {', '.join(bad)}" if bad else ""
 
 def wait_ci(pr, cwd):
     """PR의 CI가 끝날 때까지 기다림(최대 20분). 검사가 아직 없으면 잠시 뒤 다시"""
@@ -403,6 +430,9 @@ def apply_staged():
     sh(["git", "fetch", "-q", "origin", "main"])
     if sh(["git", "cat-file", "-e", f"origin/main:{STAGE}"]).returncode != 0:
         return None
+    key = sh(["git", "rev-parse", f"origin/main:{STAGE}"]).stdout.strip()
+    if os.path.exists(STAGE_FAILED) and open(STAGE_FAILED, encoding="utf-8").read().strip() == key:
+        log("설정 반영 건너뜀\t같은 내용이 이미 실패함(상태 이슈의 작가 할 일 참고)"); return None
     wt = os.path.join(tempfile.mkdtemp(prefix="autorun-apply-"), "wt")
     br = "autorun-apply-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     pr, merged, pushed = None, False, False
@@ -411,20 +441,22 @@ def apply_staged():
         plan, bad = staged_plan(wt)
         if bad:
             raise ApplyError("허용 밖 경로: " + ", ".join(bad))
-        if not plan:
-            raise ApplyError("반영할 파일 없음")
+        bad_perm = []
         for src, dst in plan:
+            cur_p = os.path.join(wt, *dst.split("/"))
             if dst.endswith("settings.json"):
                 try:
                     new = json.load(open(src, encoding="utf-8"))
                 except ValueError as e:
                     raise ApplyError(f"settings.json이 JSON이 아님({e})")
-                cur_p = os.path.join(wt, ".claude", "settings.json")
-                cur = json.load(open(cur_p, encoding="utf-8")) if os.path.exists(cur_p) else {}
-                widen = permission_widening(cur, new)
-                if widen:
-                    raise ApplyError("settings.json 권한 확대라 자동 반영하지 않음: " + widen,
-                                     "docs/staged-claude/settings.json의 권한 변경을 직접 확인해 .claude/settings.json에 반영하고 그 파일을 지움")
+                v = settings_violation(json.load(open(cur_p, encoding="utf-8")) if os.path.exists(cur_p) else {}, new)
+                if v: bad_perm.append(f"settings.json: {v}")
+            else:
+                v = md_violation(dst, open(cur_p, encoding="utf-8").read() if os.path.exists(cur_p) else None, open(src, encoding="utf-8").read())
+                if v: bad_perm.append(v)
+        if bad_perm:
+            raise ApplyError("권한에 닿는 변경이라 자동 반영하지 않음: " + "; ".join(bad_perm),
+                             "docs/staged-claude/의 권한 변경을 직접 확인해 .claude/에 반영하고 docs/staged-claude/를 지움")
         for src, dst in plan:
             d = os.path.join(wt, *dst.split("/"))
             os.makedirs(os.path.dirname(d), exist_ok=True); shutil.copyfile(src, d)
@@ -432,9 +464,10 @@ def apply_staged():
         r = sh(CHECK_CMD, cwd=wt)
         if r.returncode != 0:
             raise ApplyError("check_all 실패: " + (r.stdout + r.stderr).strip()[-300:])
-        sh(["git", "add", "--", *[dst for _, dst in plan]], True, wt)
+        if plan:
+            sh(["git", "add", "--", *[dst for _, dst in plan]], True, wt)
         stat = sh(["git", "diff", "--cached", "--stat"], True, wt).stdout.strip()
-        files = ", ".join(dst for _, dst in plan)
+        files = ", ".join(dst for _, dst in plan) or "반영할 파일 없음, 폴더만 정리"
         sh(["git", "commit", "-q", "-m", f"설정 반영(docs/staged-claude → .claude): {files}\n\n{CO_AUTHOR}"], True, wt)
         sh(["git", "push", "-q", "-u", "origin", br], True, wt); pushed = True
         tmp = os.path.join(os.path.dirname(LOG), "apply_body.md"); os.makedirs(os.path.dirname(tmp), exist_ok=True)
@@ -449,6 +482,8 @@ def apply_staged():
         merged = True
         log(f"설정 반영\tPR #{pr}\t{files}")
         notify(f"설정 반영: PR #{pr} 병합({files})")
+        if os.path.exists(STAGE_FAILED): os.remove(STAGE_FAILED)
+        refresh_local()
         return "반영"
     except Exception as e:
         todo = getattr(e, "todo", "logs/autorun.log를 확인하고 docs/staged-claude/를 고친 뒤 다시 실행")
@@ -458,15 +493,29 @@ def apply_staged():
             if pr:
                 gh("pr", "close", pr, check=False, cwd=wt)
             reason = f"설정 반영 실패: {e}"
+            os.makedirs(os.path.dirname(STAGE_FAILED), exist_ok=True); open(STAGE_FAILED, "w", encoding="utf-8").write(key)
         log(reason)
         notify(reason, todo)
         return reason
     finally:
         sh(["git", "worktree", "remove", "--force", wt])
         sh(["git", "worktree", "prune"])
+        shutil.rmtree(os.path.dirname(wt), ignore_errors=True)
         sh(["git", "branch", "-q", "-D", br])
         if pushed:
             sh(["git", "push", "-q", "origin", "--delete", br])
+
+def refresh_local():
+    """반영 뒤 이 폴더의 .claude/를 새 판으로: 지금 main이고 깨끗하면 pull, 아니면 상태 이슈에 안내(@ 없음)"""
+    cur = "?"
+    try:
+        cur = sh(["git", "branch", "--show-current"], True).stdout.strip()
+        if cur == "main" and not dirty():
+            sh(["git", "pull", "-q", "--ff-only", "origin", "main"], True); return True
+    except RuntimeError as e:
+        log(f"main 받기 실패\t{e}")
+    notify(f"설정은 main에 반영됨. 이 폴더의 .claude/는 main을 받을 때 바뀜(지금 브랜치 {cur}, 또는 커밋하지 않은 변경). 다음 /next 단위가 main을 받으면 적용됨")
+    return False
 
 # ---------------- 자기 다시 시작 ----------------
 def sync_main():
@@ -613,6 +662,9 @@ def loop(args):
                 code = restart(remaining, last_fail, args.restarts)
                 if code is not None:
                     return code
+            elif not synced:
+                log("다시 시작 확인 못 함\t작업 트리에 커밋하지 않은 변경이 있어 main을 받지 못함")
+                notify("다시 시작 확인 못 함: 작업 트리에 커밋하지 않은 변경이 있어 main을 받지 못함. 지금 판으로 계속")
         st = state()
     log(f"끝남\t최대 단위 수 {n} 도달")
     if live: notify(f"끝남: 최대 단위 수 {n} 도달")
@@ -646,6 +698,8 @@ def selftest():
     global ROOT, LOG, LOCK, gh, CHECK_CMD, SLEEP, run_unit
     tmp = tempfile.mkdtemp(prefix="autorun-selftest-")
     LOG = os.path.join(tmp, "logs", "autorun.log"); LOCK = os.path.join(tmp, "logs", "autorun.lock")
+    global STAGE_FAILED
+    STAGE_FAILED = os.path.join(tmp, "logs", "autorun_stage_failed.txt")
     SLEEP = lambda s: None
     empty = {"issues": [], "prs": [], "tasks": []}
     # 작업 고르기와 멈춤 표시
@@ -714,6 +768,9 @@ def selftest():
     def fake_gh(*a, check=True, cwd=None, timeout=None, token=None):
         calls.append(a + (("token=" + token,) if token else ()))
         key = " ".join(a[:2])
+        if a[:2] == ("pr", "merge"):  # 병합 흉내: 반영 브랜치를 원격 main으로 올림
+            br = [b for b in remote_branches() if b.startswith("autorun-apply-")][-1]
+            sh(["git", "fetch", "-q", "origin", br], True); sh(["git", "push", "-q", "origin", "FETCH_HEAD:refs/heads/main"], True)
         return SimpleNamespace(stdout=outs.get(key, ""), stderr="", returncode=rc.get(key, 0))
     gh = fake_gh
     # 상태 이슈: 없으면 만들고 댓글, 작가 알림에만 @, 토큰이 있으면 토큰으로
@@ -728,12 +785,22 @@ def selftest():
     notify("다시 찾기"); assert calls[-1][:3] == ("issue", "comment", "5") and calls[-1][-1] == "token=bot"
     del os.environ["AUTORUN_GH_TOKEN"]
     assert editor_verdict("editor 2차 병합 가능") == "병합 가능" and editor_verdict("병합 불가 1회") == "병합 불가"
-    # 권한 확대 판정
+    # 권한 판정(허용 목록): deny, ask 추가와 allow 삭제만 통과, 그 밖의 키 변경은 모두 위반
     cur = {"permissions": {"allow": ["Read"], "ask": ["Bash(git commit:*)"], "deny": ["Bash(git push origin main:*)"]}, "hooks": {"a": 1}}
-    assert permission_widening(cur, cur) == ""
-    assert "deny 삭제" in permission_widening(cur, {"permissions": {"allow": ["Read"], "ask": ["Bash(git commit:*)"]}, "hooks": {"a": 1}})
-    assert "allow 추가: Bash(*)" in permission_widening(cur, {"permissions": dict(cur["permissions"], allow=["Read", "Bash(*)"]), "hooks": {"a": 1}})
-    assert "hooks 변경" in permission_widening(cur, dict(cur, hooks={}))
+    narrower = {"permissions": {"allow": [], "ask": ["Bash(git commit:*)", "Bash(git tag:*)"], "deny": ["Bash(git push origin main:*)", "Bash(rm:*)"]}, "hooks": {"a": 1}}
+    assert settings_violation(cur, cur) == "" and settings_violation(cur, narrower) == ""
+    assert "deny 삭제" in settings_violation(cur, {"permissions": {"allow": ["Read"], "ask": ["Bash(git commit:*)"]}, "hooks": {"a": 1}})
+    assert "allow 추가: Bash(*)" in settings_violation(cur, {"permissions": dict(cur["permissions"], allow=["Read", "Bash(*)"]), "hooks": {"a": 1}})
+    assert "그 밖의 키 변경: hooks" in settings_violation(cur, dict(cur, hooks={}))
+    assert "그 밖의 키 변경: env" in settings_violation(cur, dict(cur, env={"X": "1"}))
+    assert "apiKeyHelper" in settings_violation(cur, dict(cur, apiKeyHelper="sh x"))
+    assert "permissions.additionalDirectories" in settings_violation(cur, {"permissions": dict(cur["permissions"], additionalDirectories=["/"]), "hooks": {"a": 1}})
+    ed = "---\nname: editor\ntools: Read, Grep\n---\n본문\n"
+    assert md_violation(".claude/agents/editor.md", ed, ed.replace("본문", "새 본문")) == ""
+    assert "tools" in md_violation(".claude/agents/editor.md", ed, ed.replace("Read, Grep", "Read, Grep, Bash"))
+    assert "allowed-tools" in md_violation(".claude/commands/x.md", "본문\n", "---\nallowed-tools: Bash(*)\n---\n본문\n")
+    assert "tools 없음" in md_violation(".claude/agents/new.md", None, "본문\n")
+    assert md_violation(".claude/agents/new.md", None, ed) == "" and md_violation(".claude/commands/new.md", None, "본문\n") == ""
     # 할 일 없음이면 바로 멈추고 이유를 로그에 남김(기록할 변경이 없어 커밋하지 않음)
     record_stop("할 일 없음(selftest)", empty)
     assert "할 일 없음(selftest)" in open(LOG, encoding="utf-8").read()
@@ -748,7 +815,7 @@ def selftest():
     w("HANDOFF.md", "# 인계\n\n## 지금 상태\n- 이전\n"); w(".claude/commands/next.md", "옛 판\n"); w(".claude/settings.json", json.dumps(cur))
     sh(["git", "add", "-A"], True); sh(["git", "commit", "-q", "-m", "init"], True); sh(["git", "push", "-q", "-u", "origin", "main"], True)
     def stage(files, msg):
-        sh(["git", "switch", "-q", "main"], True)
+        sh(["git", "switch", "-q", "main"], True); sh(["git", "pull", "-q", "--ff-only", "origin", "main"], True)
         for rel, text in files.items(): w(rel, text)
         sh(["git", "add", "--", *files], True); sh(["git", "commit", "-q", "-m", msg], True); sh(["git", "push", "-q"], True)
         sh(["git", "switch", "-q", "feature"], True)  # 사용자는 다른 브랜치에서 작업 중
@@ -757,23 +824,27 @@ def selftest():
         return [l.split("refs/heads/")[1] for l in sh(["git", "ls-remote", "--heads", "origin"], True).stdout.splitlines()]
     # 설정 반영 성공: 임시 작업 폴더에서 허용 경로 복사, 폴더 삭제, check_all, PR, CI, 병합. 사용자의 브랜치와 작업 트리는 그대로
     CHECK_CMD = [sys.executable, "-c", "pass"]
-    stage({STAGE + "/commands/next.md": "새 판\n", STAGE + "/agents/editor.md": "editor 새 판\n", STAGE + "/settings.json": json.dumps(cur),
+    stage({STAGE + "/commands/next.md": "새 판\n", STAGE + "/agents/editor.md": ed, STAGE + "/settings.json": json.dumps(narrower),
            STAGE + "/README.md": "설명\n"}, "stage")
     outs["pr create"] = "https://github.com/x/y/pull/88\n"; calls.clear()
     assert apply_staged() == "반영"
     assert [c[:2] for c in calls if c[0] == "pr"] == [("pr", "create"), ("pr", "checks"), ("pr", "merge")]
     assert sh(["git", "branch", "--show-current"], True).stdout.strip() == "feature" and os.path.exists(os.path.join(ROOT, "메모.txt"))
+    assert "main을 받을 때" in open(os.path.join(os.path.dirname(LOG), "status_body.md"), encoding="utf-8").read()  # 다른 브랜치라 안내만
+    assert sh(["git", "show", "origin/main:.claude/agents/editor.md"], True).stdout == ed and sh(["git", "ls-tree", "origin/main", STAGE]).stdout == ""
     assert "worktree" not in sh(["git", "worktree", "list"], True).stdout.split("\n", 1)[-1]  # 임시 작업 폴더 정리
     assert not [b for b in sh(["git", "branch"], True).stdout.split() if b.startswith("autorun-apply-")]
-    # 실패 되돌림: 잘못된 JSON, 허용 밖 경로, 권한 확대, check_all 실패, CI 실패(병합이 가짜라 main에는 아직 폴더가 있음)
+    # 실패 되돌림: 잘못된 JSON, 허용 밖 경로, 권한(deny 삭제, env 추가, 에이전트 tools 변경), check_all 실패, CI 실패
     cases = [({STAGE + "/settings.json": "{잘못된 JSON"}, "JSON이 아님", None),
-             ({STAGE + "/settings.json": json.dumps(cur), STAGE + "/hooks/x.py": "print(1)\n"}, "허용 밖 경로", None),
-             ({STAGE + "/hooks/x.py": None, STAGE + "/settings.json": json.dumps({"permissions": dict(cur["permissions"], deny=[]), "hooks": {"a": 1}})}, "권한 확대", None),
-             ({STAGE + "/settings.json": json.dumps(cur)}, "check_all 실패", "check"),
-             ({STAGE + "/agents/editor.md": "다시\n"}, "CI 실패", "ci")]
+             ({STAGE + "/settings.json": json.dumps(narrower), STAGE + "/hooks/x.py": "print(1)\n"}, "허용 밖 경로", None),
+             ({STAGE + "/hooks/x.py": None, STAGE + "/settings.json": json.dumps(dict(narrower, permissions=dict(narrower["permissions"], deny=[])))}, "deny 삭제", None),
+             ({STAGE + "/settings.json": json.dumps(dict(narrower, env={"X": "1"}))}, "env", None),
+             ({STAGE + "/settings.json": json.dumps(narrower), STAGE + "/agents/editor.md": ed.replace("Read, Grep", "Read, Grep, Bash")}, "editor.md: tools", None),
+             ({STAGE + "/agents/editor.md": ed.replace("본문", "본문 2")}, "check_all 실패", "check"),
+             ({STAGE + "/agents/editor.md": ed.replace("본문", "본문 3")}, "CI 실패", "ci")]
     for files, expect, mode in cases:
         if None in files.values():
-            sh(["git", "switch", "-q", "main"], True)
+            sh(["git", "switch", "-q", "main"], True); sh(["git", "pull", "-q", "--ff-only", "origin", "main"], True)
             for rel in [r for r, t in files.items() if t is None]: sh(["git", "rm", "-q", rel], True)
             sh(["git", "commit", "-q", "-m", "rm"], True); sh(["git", "push", "-q"], True); sh(["git", "switch", "-q", "feature"], True)
             files = {r: t for r, t in files.items() if t is not None}
@@ -781,7 +852,7 @@ def selftest():
         CHECK_CMD = [sys.executable, "-c", "import sys; print('금칙어 실패'); sys.exit(1)"] if mode == "check" else [sys.executable, "-c", "pass"]
         rc["pr checks"] = 1 if mode == "ci" else 0
         calls.clear(); res = apply_staged()
-        assert res.startswith("설정 반영 실패") and expect in res, res
+        assert res and res.startswith("설정 반영 실패") and expect in res, res
         assert not [c for c in calls if c[:2] == ("pr", "merge")]
         if mode == "ci":
             assert [c[:2] for c in calls if c[:2] == ("pr", "close")]
@@ -789,6 +860,16 @@ def selftest():
         assert sh(["git", "branch", "--show-current"], True).stdout.strip() == "feature"
         assert not [b for b in sh(["git", "branch"], True).stdout.split() if b.startswith("autorun-apply-")]
         assert not [b for b in remote_branches() if b.startswith("autorun-apply-")]
+    # 같은 내용이 이미 실패했으면 다시 시도하지 않고 알리지도 않음
+    calls.clear(); assert apply_staged() is None and not calls
+    rc.clear(); CHECK_CMD = [sys.executable, "-c", "pass"]
+    # 반영 뒤 이 폴더가 main이고 깨끗하면 .claude/가 새 판으로
+    stage({STAGE + "/agents/editor.md": ed.replace("본문", "본문 4")}, "good stage")
+    sh(["git", "switch", "-q", "main"], True)
+    calls.clear(); assert apply_staged() == "반영"
+    assert open(os.path.join(ROOT, ".claude", "agents", "editor.md"), encoding="utf-8").read() == ed.replace("본문", "본문 4")
+    assert not os.path.exists(os.path.join(ROOT, *STAGE.split("/"))) and not os.path.exists(STAGE_FAILED)
+    sh(["git", "switch", "-q", "feature"], True)
     rc.clear(); CHECK_CMD = [sys.executable, "-c", "pass"]
     # 멈춤 기록: 작업 트리가 더러우면 기록하지 않고, 깨끗하면 PR 브랜치에 HANDOFF.md만 커밋, push
     os.remove(os.path.join(ROOT, "메모.txt")); sh(["git", "switch", "-q", "main"], True); sh(["git", "pull", "-q"], True)
