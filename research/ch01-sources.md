@@ -353,3 +353,32 @@
 - S17/S30 재확인, Hooks reference https://code.claude.com/docs/en/hooks (앞 100,000자): Stop은 응답을 마칠 때 실행, 종료 코드 2나 decision "block"은 멈추지 못하게 하고 대화를 계속. 연속 차단 상한은 이번 열람 범위에서 다시 확인하지 못함(S30 유지)
 - S6 재확인, Glossary(Claude Code Docs) https://code.claude.com/docs/en/glossary : Agentic harness "The tools, context management, and execution environment that turn a language model into a capable coding agent. Claude Code is the harness; Claude is the model inside it." Turn 문장 일치. 기본 권한 모드는 버전에 따라 다름 → 40행 "Claude Code 용어집은"
 - 열람 실패: https://openai.com/index/unrolling-the-codex-agent-loop/ HTTP 403(턴 정의, 수백 번 도구 호출 미확인, Q-040, Q-090 유지), https://openai.com/index/harness-engineering/ 이번에 열지 않음(약 1,500 PR 미확인)
+
+# 2026-10-22 1장 다시 만들기 사전 확인(fact-checker, 이슈 #66 18:20)
+확인일: 2026-10-22. 원문을 직접 열어 확인한 내용만 적는다.
+
+## S34. Mitchell Hashimoto, My AI Adoption Journey
+- URL: https://mitchellh.com/writing/my-ai-adoption-journey , 게시일 2026-02-05
+- "Step 5: Engineer the Harness" 절: 에이전트가 실수할 때마다 같은 실수를 되풀이하지 않도록 해결책을 설계하는 일을 "harness engineering"이라 부른다고 씀("I don't know if there is a broad industry-accepted term for this yet, but I've grown to calling this 'harness engineering.'"). OpenAI 글(2026-02-11)보다 앞선 1차 사용 예 → 하네스 엔지니어링 절 "먼저 Mitchell Hashimoto의 글은"
+
+## S2/S4 재시도(OpenAI, Harness engineering)
+- https://openai.com/index/harness-engineering/ HTTP 403(2026-10-22) 열람 실패. 5개월, 직접 작성 코드 0줄, 약 100만 줄은 검색 요약과 InfoQ(2차)로만 일치. 약 1,500 PR은 2026-10-04 S2 기록 유지. 이 글이 이름이 알려진 계기라는 1차 근거는 찾지 못함 → 첫머리는 "제목으로 쓰였습니다"(Q-108)
+
+## S18 재확인, Configure permissions
+- URL: https://code.claude.com/docs/en/permissions
+- 평가 순서 deny, ask, allow, 첫 일치 적용, deny가 거부한 호출은 거부로 유지. 권한 모드는 "control how it approves tool calls"(default, acceptEdits, plan, auto, dontAsk, bypassPermissions) → 루프 절 권한 모드 정의(Q-110)
+- Read and Edit 절: Read(./.env) 예시. Read와 Edit 금지 규칙은 내장 파일 도구, Claude Code가 인식하는 Bash 파일 명령(cat, head, tail, sed, tee), 리다이렉션 대상에 적용, 파일을 지정하지 않고 읽는 명령(grep -r)이나 스크립트가 직접 파일을 여는 경우는 적용되지 않음, OS 수준 차단은 샌드박스 → 루프 절 금지 규칙 문단, 한 요청 절의 .env 예
+
+## S7 재확인, How Claude Code works
+- URL: https://code.claude.com/docs/en/how-claude-code-works
+- Work with sessions: 작업하는 동안 각 메시지, 도구 사용, 결과를 ~/.claude/projects/ 아래 파일에 기록 → 루프 절 세션 기록 문장
+- When context fills up: 한도에 가까워지면 오래된 도구 출력을 먼저 지우고 필요하면 대화를 요약, 초반의 세부 지시는 사라질 수 있음 → 표 1-1 이전 대화 행, background 표 소개 문단, 표 1-8 긴 작업 행
+
+## S17 재확인, Hooks reference(Stop)
+- stop_hook_active는 이미 Stop 훅 때문에 계속하는 중이면 true("Check this value ... to avoid blocking on a condition that will never resolve") → 루프 절 Stop 훅 문장. 연속 8회 뒤 다음 차단 무시(제품 안전장치, 본문에는 쓰지 않음)
+
+## S5 재확인, How the agent loop works
+- 거부 메시지가 도구 결과로 돌아가고 "typically" 다른 방법 시도나 진행 불가 보고, max_turns와 max_budget_usd 기본 No limit, 결과 subtype 5종 → 문장 유지
+
+## S36. Codex 소개 문구
+- https://github.com/openai/codex : "Codex CLI is a coding agent from OpenAI that runs locally on your computer."(CLI 한정). 제품 전체를 정의한 1차 문구는 미확인 → 본문은 "OpenAI의 Codex"를 코딩 에이전트 제품의 예로만 씀

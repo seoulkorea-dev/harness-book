@@ -171,7 +171,6 @@ def page(pid, body):
 <a class="brand" href="{rel(cp, 'index.html')}">{BOOK}</a>
 <span class="spacer"></span>
 <a class="navlink" href="#sidenav">전체 목차</a>
-<a href="https://github.com/seoulkorea-dev/harness-book">저장소</a>
 </header>
 <div class="layout">
 {build_nav(pid)}
