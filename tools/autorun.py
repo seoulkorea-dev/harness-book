@@ -86,6 +86,13 @@ def gh(*a, check=True, cwd=None, timeout=None, token=None):
 def now():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+def dashboard(*args):
+    """작업 대시보드 갱신(tools/dashboard.py, 이슈 #66 작가 요청). 실패해도 자동 실행은 계속"""
+    try:
+        sh([sys.executable, os.path.join(ROOT, "tools", "dashboard.py"), *args], timeout=120)
+    except Exception as e:  # 보고 장치라 실패가 작업을 막지 않음
+        print(f"대시보드 갱신 실패: {e}")
+
 def log(line):
     os.makedirs(os.path.dirname(LOG), exist_ok=True)
     with open(LOG, "a", encoding="utf-8") as f:
@@ -624,12 +631,14 @@ def loop(args):
             if live: notify("끝남: 할 일 없음(열린 요청 이슈, 열린 PR, 작업 목록이 모두 없음)")
             return 0
         log(f"시작\t{k + 1}/{n}\t{work}")
+        if live: dashboard("start", "자동 실행", f"{k + 1}/{n} {work}")
         out, problem = run_with_recovery(args, work)
         if out.get("dry"):
             log(f"실행할 명령(dry-run)\t{out['cmd']}"); return 0
         before, st = st, state()
         prs = json.loads(gh("pr", "list", "--state", "all", "--limit", "1", "--json", "number,state,title", check=False).stdout or "[]")
         last_pr = f"#{prs[0]['number']} {prs[0]['state']}" if prs else "-"
+        if live: dashboard("end", "자동 실행", f"PR {last_pr}, 종료 코드 {out.get('code')}")
         log(f"끝\t{work}\tPR {last_pr}\t종료 코드 {out.get('code')}\t{out.get('subtype')}\t비용 {out.get('total_cost_usd')}\t{str(out.get('result'))[:300]!r}")
         if problem:
             kind, reason = problem
