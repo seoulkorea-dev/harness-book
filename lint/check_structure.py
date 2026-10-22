@@ -119,6 +119,7 @@ if _pairs:
         _m = re.search(r'<main\b.*?</main>', _t, re.S)
         _t = _m.group(0) if _m else _t
         _t = re.split(r'<h2 id="refs"', _t)[0]
+        _t = re.sub(r'<footer\b.*?</footer>', ' ', _t, flags=re.S)  # 쪽 바닥글(책 제목)은 본문이 아님. 참고 자료 절이 없는 장(D-131)에서도 제외
         _t = re.sub(r'<(h[1-6]|table|figure|figcaption|pre|aside|svg)\b.*?</\1>', ' ', _t, flags=re.S)
         _t = re.sub(r'<ul class="summary">.*?</ul>', ' ', _t, flags=re.S)
         _t = re.sub(r'<p class="(claim|principle)">.*?</p>', ' ', _t, flags=re.S)  # 주장 제목과 원칙(D-104)은 제목처럼 병기 제외
