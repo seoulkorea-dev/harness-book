@@ -26,14 +26,14 @@
 - 여섯 절: 목적, 읽는 순서, 작업 순서, 수정 범위, 중단 규칙, 명령
 - 읽는 순서: docs/CR.md, DECISIONS.md, tasks.json, HANDOFF.md(있으면)
 - 수정할 수 있음: expense/, app.py, tests/, tasks.json의 통과 값, HANDOFF.md. 수정하지 않음: data/, acceptance/, check.py, CLAUDE.md, DECISIONS.md, .claude/
-- 작업 단위를 마치면 python check.py, 통과하면 그 단위의 통과 값만 true, 완료 보고에 출력 원문, 마치기 전에 reviewer 하위 에이전트에게 수용 기준 대조 요청, 작업 단위를 마치면 commit(사람 확인 후)
-- 중단: 같은 시험이 세 번 연속 실패하면 중단하고 HANDOFF.md 작성
+- 작업 단위를 마치면 python check.py, 출력이 그 단위의 확인 방법을 충족하면 그 단위의 통과 값만 true(작업 2, 3을 마친 시점에는 작업 4가 맡은 수용 시험 1, 2, 3이 실패해 check.py 전체는 종료 코드 1), 완료 보고에 출력 원문, 확인 방법을 충족하면 commit 전에 reviewer 하위 에이전트에게 바뀐 파일 목록(git status 출력)과 함께 수용 기준 대조 요청, 작업 단위를 마치면 commit(사람 확인 후)
+- 중단: 지금 작업 단위의 확인 방법에 든 시험이 세 번 연속 실패하면 중단하고 HANDOFF.md 작성
 
 ## 권한(reference/settings.example.json)
 - 허용: 단위 테스트, python check.py, git status, git diff
 - 확인 요청: git commit
 - 금지: data/, acceptance/, check.py, CLAUDE.md, DECISIONS.md, .claude/의 수정, git push, WebFetch, WebSearch
-- 훅: 파일 편집(Edit, Write) 뒤 단위 테스트 실행, 실패하면 종료 코드 2
+- 훅: 파일 편집(Edit, Write) 뒤 프로젝트 폴더($CLAUDE_PROJECT_DIR)로 이동해 단위 테스트 실행, 실패하면 종료 코드 2
 
 ## 검토 에이전트(reference/reviewer.example.md)
 - 이름 reviewer, 도구 Read, Grep, Glob, 수용 기준마다 충족, 미충족, 확인 불가를 근거 파일과 줄 번호와 함께 보고, 파일은 수정하지 않음
