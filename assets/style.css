@@ -242,3 +242,6 @@ sup.fnref { font-size: 0.7em; line-height: 0; margin-left: 1px; color: var(--mut
 ol.fn { margin: -0.4rem 0 1.1rem; padding: 0.35rem 0 0 1.4rem; border-top: 1px solid #EAEAE6; font-size: 0.82em; line-height: 1.55; color: var(--muted, #625D52); }
 ol.fn li { margin: 0.1rem 0; word-break: keep-all; }
 @media (max-width: 600px) { ol.fn { font-size: 0.86em; padding-left: 1.2rem; } }
+
+/* 버전 주석(STYLE 5절): 각주와 구분되는 상자. 장 정비 전 aside.footnote와 같은 모양 */
+aside.version-note { margin: 1rem 0; padding: 0.7rem 0.9rem; border-left: 3px solid #0284c7; background: #F8F8F6; font-size: 0.92em; }

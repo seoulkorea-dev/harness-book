@@ -77,7 +77,7 @@ def check_file(path):
     if sorted(sups) != sorted(notes):
         fails.append(f"R11 위첨자 {len(sups)}개와 각주 {len(notes)}개가 1:1이 아님")
     # 경고: R1, R3, R4
-    plain = text_of(strip_code(re.sub(r'<p class="(claim)">.*?</p>', " ", s, flags=re.S)))
+    plain = text_of(strip_code(s))  # 주장 줄도 포함(D-126)
     n1 = len(R1_WORDS.findall(plain))
     if n1:
         warns.append(f"R1 단정 표현 후보 {n1}곳(반드시, 항상, 결국, 이 아니라)")

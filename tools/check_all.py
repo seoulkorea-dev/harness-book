@@ -93,7 +93,7 @@ if rule_warns:
     print("[경고] 검수 규칙(REVIEW_RULES, 정비 전 장과 경고 규칙)\n" + "\n".join(rule_warns[:20]) + "\n")
 # 예제 작업 단위의 확인이 구현 전에 실패하는지(R6): rules_applied.txt에 R6이 있으면 실패, 없으면 경고
 code, out = run("python tools/check_tasks.py")
-r6_strict = "R6" in open("lint/rules_applied.txt", encoding="utf-8").read().split()
+r6_strict = "R6" in {l.strip() for l in open("lint/rules_applied.txt", encoding="utf-8") if l.strip() and not l.startswith("#")}
 if r6_strict:
     add("예제 확인(R6)", code == 0, out[-800:])
 elif code != 0:

@@ -21,6 +21,7 @@ model: sonnet
 - REVIEW_RULES.md의 R1~R12를 모두 점검한다. "editor 필수"인 R1(단정, 과장), R3(제품이 실험한 것처럼 읽히는 주어), R5(표와 목록의 층위와 방향), R7(예제 사실이 docs/example-facts.md와 같은가), R9(표 체계 D-124)는 어기면 필수
 - 장별 정비(이슈 #66 ②) PR이면: lint/rules_applied.txt에 그 장이 더해졌는지, python lint/check_rules.py가 그 장에서 실패 0인지, PR에 적용한 규칙과 남은 "확인 필요" 목록이 있는지 확인한다. R10(같은 장 링크를 지운 곳)과 R12(변경 요청 사항으로 바꾼 곳)는 바뀐 문장이 앞뒤와 이어지는지 흐름 기준(D-117)으로 본다
 - 예제 작업 단위를 바꾼 PR이면 python tools/check_tasks.py 출력(R6)을 확인한다
+- 장별 정비와 장 개정 PR은 설명의 에이전트 실행 기록 표를 확인한다. flow-reviewer, reader-novice, reader-expert, fact-checker(그림을 바꿨으면 figure-checker) 가운데 실행되지 않은 필수 에이전트가 있으면 병합 불가
 
 ## 점검 순서
 0. **흐름과 이해도(첫째 필수, D-117)**: 장 전체를 통독한 결과로 판정한다. 하나라도 어기면 필수
