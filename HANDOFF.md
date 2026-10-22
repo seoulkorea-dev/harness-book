@@ -4,7 +4,7 @@
 - 브랜치: autorun-recovery(이슈 #34, PR #52)
 
 ## 지금 상태
-- 작업 시작: R13~R17, 판정 등급, 장별 점검 질문 반영(이슈 #66 Neo 보충), 브랜치 review-rules-2. 1장 정비 PR #69는 그 뒤
+- 2026-10-22: R13~R17, 판정 등급, 장별 점검 질문 10개 반영(이슈 #66 Neo 보충, PR #70, D-128). REVIEW_RULES.md, editor, reader-expert, flow-reviewer 새 판(docs/staged-claude, 병합 뒤 --apply-only). 다음은 1장 정비(초안 PR #69, 브랜치 ch01-rules), PR 설명에 장별 점검 질문 답 표.
 - 2026-10-22: 반복 지적을 규칙과 자동 검사로 승격(이슈 #66 ①, PR #67, D-122~D-127). REVIEW_RULES.md(R1~R12), lint/check_rules.py(정비를 마친 장은 lint/rules_applied.txt에 적어 실패 규칙 강제, 나머지는 경고), tools/check_tasks.py(R6, 작업 2, 3 공백 2건을 잡음), docs/example-facts.md(R7), docs/external-review-prompt.md, STYLE 4, 7~10절(각주, 같은 장 링크, 표 체계, 예제 이름, 단정), AUTHOR_PREFS, 각주 CSS, editor, fact-checker, flow-reviewer 새 판은 docs/staged-claude(병합 뒤 --apply-only). Q-083(CLAUDE.md 예제 이름). 다음은 이슈 #66 ② 장별 정비(1장부터).
 - 2026-10-22: 하네스 정의 문안 교체(이슈 #53, PR #61, D-121). 1장 "이 책의 에이전트와 하네스" 본문과 2장 첫 문단을 작가 문안으로(검사 맞춤 세 곳 Q-081), 하네스 전체를 "모델 바깥의 실행 체계"로(1장 요약, 그림 1-1, 표 1-5, 시작하며, 용어집, AUTHOR_PREFS 핵심 정의), 표 1-3 "실행 장치" 정의 전 사용 해소, 2장 실행 장치 링크, 1장, 2장 논지 사슬 표 갱신. 작가 문안의 "Claude는 그 안에서 판단"은 Q-082. 다음은 이슈 #54.
 - 2026-10-22: 1장 절 제목 "같은 말, 다른 뜻" → "같은 명칭, 다른 맥락"(이슈 #51, PR #59, D-120). 앵커 meanings 유지, 절 첫 문단과 하네스 문단 첫 문장을 명칭과 맥락으로 다듬음, reviews/flow/ch01-flow.md 절 이름. 다음은 이슈 #53.
@@ -136,6 +136,7 @@
 | 2026-10-22 | 1장 절 제목 변경(이슈 #51) | #59 | 병합 가능(필수 0, reviews/2026-10-22-ch01-meanings-title-editor.md) | 통과 | 없음 |
 | 2026-10-22 | 하네스 정의 문안 교체(이슈 #53) | #61 | 병합 가능(필수 0, reviews/2026-10-22-harness-definition-editor.md) | 통과 | Q-081, Q-082 |
 | 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(3차, 필수 0, 1차 .pyc, 2차 작가 확인 대기 지점 → 반영, reviews/2026-10-22-review-rules-editor-1.md, -2.md, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
+| 2026-10-22 | R13~R17, 판정 등급, 점검 질문(이슈 #66 보충) | #70 | 병합 가능(필수 0, reviews/2026-10-22-review-rules-2-editor.md) | 통과 | 없음 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
