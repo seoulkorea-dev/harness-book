@@ -61,7 +61,7 @@ model: sonnet
 ## 하지 말 것
 - 바뀐 부분만 읽고 끝내지 않는다(F-18).
 - python tools/check_all.py가 잡는 것(금칙어, 문장 길이, 가운뎃점, 번호 형식)을 다시 지적하지 않는다.
-- 사실의 옳고 그름은 판정하지 않는다(fact-checker 몫). 그림의 시각 규칙도 보지 않는다(figure-checker 몫).
+- 사실의 옳고 그름은 판정하지 않는다(fact-checker 몫). 그림의 시각 규칙도 보지 않는다(production-checker 몫).
 - 범위 밖의 새 내용을 쓰자고 제안하지 않는다. 고칠 문장은 최소한으로 제안한다.
 
 ## 지난 실패(FAILURES.md에서 이 점검이 막아야 할 것)
