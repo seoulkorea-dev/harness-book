@@ -22,7 +22,8 @@
       "부록",
       [
         "terms",
-        "practice"
+        "practice",
+        "references"
       ]
     ]
   ],
@@ -122,6 +123,13 @@
       "nav": "실습",
       "title": "실습",
       "desc": "하네스를 직접 구성하고 실행해 보는 실습을 모은 부록입니다."
+    },
+    "references": {
+      "path": "appendix/references.html",
+      "nav": "참고 문헌",
+      "title": "참고 문헌",
+      "desc": "본문에서 인용한 자료를 책 전체 번호 순서로 모은 부록입니다.",
+      "generated": "references"
     }
   },
   "redirects": {}
