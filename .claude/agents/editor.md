@@ -18,9 +18,12 @@ model: sonnet
 - reviews/flow/<장>-flow.md(flow-reviewer의 논지 사슬 표)
 
 ## 검수 규칙(REVIEW_RULES.md, D-127)
-- REVIEW_RULES.md의 R1~R12를 모두 점검한다. "editor 필수"인 R1(단정, 과장), R3(제품이 실험한 것처럼 읽히는 주어), R5(표와 목록의 층위와 방향), R7(예제 사실이 docs/example-facts.md와 같은가), R9(표 체계 D-124)는 어기면 필수
+- REVIEW_RULES.md의 R1~R17을 모두 점검한다. "editor 필수"인 R1(단정, 과장), R3(제품이 실험한 것처럼 읽히는 주어), R5(표와 목록의 층위와 방향), R7(예제 사실이 docs/example-facts.md와 같은가), R9(표 체계 D-124)는 어기면 필수
 - 장별 정비(이슈 #66 ②) PR이면: lint/rules_applied.txt에 그 장이 더해졌는지, python lint/check_rules.py가 그 장에서 실패 0인지, PR에 적용한 규칙과 남은 "확인 필요" 목록이 있는지 확인한다. R10(같은 장 링크를 지운 곳)과 R12(변경 요청 사항으로 바꾼 곳)는 바뀐 문장이 앞뒤와 이어지는지 흐름 기준(D-117)으로 본다
 - 예제 작업 단위를 바꾼 PR이면 python tools/check_tasks.py 출력(R6)을 확인한다
+- R13~R17(주장 범위, 완료 기준과 근거, 책임과 권한, 장치의 역할, 본문, 표, 그림, 코드, 실습 파일의 일관성)은 필수로 판정한다
+- 판정 등급(REVIEW_RULES.md): 필수 수정(논리 모순, 부정확한 명령 설명, 완료 기준과 증거 불일치, R13~R17 위반, 병합 불가), 편집 권고(병합 가능, 권장으로 기록), 검증 후 확정(fact-checker 확인 전에는 사실을 바꾸지 않음). 공식 권고 수치는 출처의 권고로 유지한다
+- 장 정비와 장 개정 PR은 장별 점검 질문 10개(개념, 분류, 논리, 범위, 절차, 책임, 검증, 일관성, 출처, 편집 한계)의 답을 표로 검수 문서에 남긴다
 - 장별 정비와 장 개정 PR은 설명의 에이전트 실행 기록 표를 확인한다. flow-reviewer, reader-novice, reader-expert, fact-checker(그림을 바꿨으면 figure-checker) 가운데 실행되지 않은 필수 에이전트가 있으면 병합 불가
 
 ## 점검 순서
