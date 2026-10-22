@@ -85,6 +85,20 @@ if STRICT_FIG:
 elif fig_small:
     print("[경고] 그림 글자 크기(기준 미달, 아직 실패로 보지 않음)\n" + "\n".join(fig_small[:30]) + "\n")
 
+# 검수 규칙(REVIEW_RULES.md, 이슈 #66): 정비를 마친 장(lint/rules_applied.txt)은 실패, 나머지는 경고
+code, out = run("python lint/check_rules.py")
+add("검수 규칙", code == 0, "\n".join(l for l in out.splitlines() if l.startswith("실패"))[:3000])
+rule_warns = [l for l in out.splitlines() if l.startswith(("경고", "정비 전"))]
+if rule_warns:
+    print("[경고] 검수 규칙(REVIEW_RULES, 정비 전 장과 경고 규칙)\n" + "\n".join(rule_warns[:20]) + "\n")
+# 예제 작업 단위의 확인이 구현 전에 실패하는지(R6): rules_applied.txt에 R6이 있으면 실패, 없으면 경고
+code, out = run("python tools/check_tasks.py")
+r6_strict = "R6" in open("lint/rules_applied.txt", encoding="utf-8").read().split()
+if r6_strict:
+    add("예제 확인(R6)", code == 0, out[-800:])
+elif code != 0:
+    print("[경고] 예제 확인(R6, 아직 실패로 보지 않음)\n" + out + "\n")
+
 if CI:
     code, out = run("git diff --exit-code --stat -- index.html chapters appendix")
     add("빌드 결과와 커밋 일치", code == 0, out[-500:])

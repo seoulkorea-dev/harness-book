@@ -236,3 +236,9 @@ figcaption ul.capnote li { margin: 0.1rem 0; }
 .subtitle { margin: -0.4rem 0 1.4rem; font-size: 1.15rem; color: var(--muted); font-weight: 600; }
 /* 부록 머리의 한 줄 안내 상자(요점 상자와 구분) */
 .tip { margin: 0 0 1.6rem; padding: 0.6rem 0.9rem; background: var(--panel); border-left: 3px solid var(--accent); border-radius: 4px; color: var(--ink); }
+
+/* 문단 아래 각주(D-123) */
+sup.fnref { font-size: 0.7em; line-height: 0; margin-left: 1px; color: var(--muted, #625D52); }
+ol.fn { margin: -0.4rem 0 1.1rem; padding: 0.35rem 0 0 1.4rem; border-top: 1px solid #EAEAE6; font-size: 0.82em; line-height: 1.55; color: var(--muted, #625D52); }
+ol.fn li { margin: 0.1rem 0; word-break: keep-all; }
+@media (max-width: 600px) { ol.fn { font-size: 0.86em; padding-left: 1.2rem; } }
