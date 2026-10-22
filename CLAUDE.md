@@ -15,8 +15,9 @@
 
 ## 원고 규칙
 - 원고는 src/만 고친다. 루트의 index.html, chapters/, appendix/는 빌드 결과물이다.
-- 장 틀: 주장 제목 → 원리 → CR 적용 → 실패 표 → 확인 방법 → 원칙 한 문장 → 점검 질문
-- 예제 이름: 첫 등장은 "경비 정산 시스템 개편 변경 요청(Change Request) CR", 이후는 "CR"
+- 장 틀: 주장 제목 → 원리 → 예제 적용 → 실패 표 → 확인 방법 → 원칙 한 문장 → 점검 질문
+- 예제 이름: 장마다 첫 등장은 "경비 정산 시스템 개편 변경 요청 사항(이하 변경 요청 사항)", 이후는 "변경 요청 사항"(D-125)
+- 기준은 BOOK_STANDARD.md(D-131, D-132), 검수 규칙은 REVIEW_RULES.md
 - 문체는 STYLE.md, 그림은 FIGURE_STYLE.md(다이어그램을 그릴 때만 diagram_guide.md도 읽는다)
 - 사실은 원문을 확인한 뒤 쓰고, research/에 출처와 확인 날짜를 남긴다.
 
@@ -26,14 +27,14 @@
 | 작가 | 결정, 최종 검수와 의견(Neo에게 전달) | 전부(바꾸면 DECISIONS.md에 기록) |
 | 메인 세션(이 세션) | 원고 작성, 하위 에이전트 호출, 보고서 저장, PR | src/, assets/, examples/, HANDOFF.md, FAILURES.md, reviews/, research/, DECISIONS.md(작가 확인 후) |
 | editor | 정식 검수, 병합 가능 판정 | 없음(읽기만, 검수 문서 문안을 돌려줌) |
-| researcher, fact-checker, flow-reviewer, figure-checker, reader-novice, reader-expert, alt-reviewer | 조사와 점검 | 없음(읽기만, 결과는 보고서 문안으로 돌려줌) |
+| researcher, fact-checker, flow-reviewer, reader-novice, practice-checker, production-checker | 조사와 점검 | 없음(읽기만, 결과는 보고서 문안으로 돌려줌) |
 | 감독 대화 Neo(Claude App) | 진행 감시, 역할 준수 확인, 작가 보고, 작가 요청을 GitHub 이슈로 등록 | 이슈만(원고와 커밋 없음) |
 - 주고받기는 파일로만 한다. 하위 에이전트의 보고 문안은 메인 세션이 reviews/agents/YYYY-MM-DD-<장>-<에이전트>.md로 저장한다. 형식: 발견 | 위치 | 근거 | 제안 | 확신(높음, 중간, 낮음)
 - 원고(src/)를 쓰는 주체는 한 번에 하나다. 하위 에이전트는 동시에 여러 개 불러도 된다. 다른 장을 동시에 진행하려면 장마다 브랜치와 작업 폴더(git worktree)를 따로 쓴다.
 - 하위 에이전트는 이 대화를 모른다. 부를 때 범위(파일과 절), 기준 문서, 보고 형식을 넘긴다.
 - 하위 에이전트 의견은 그대로 반영하지 않는다. 반영, 보류, 작가 확인으로 나누어 PR 설명에 표로 적는다. 의견이 부딪히면 DECISIONS.md와 AUTHOR_PREFS.md > editor 판정 > 점검 에이전트 의견 순서로 따르고, 그래도 정해지지 않으면 작가에게 묻는다.
-- 호출 시점: 장 계획 때 researcher, 원고 작성 뒤 PR 전에 fact-checker, flow-reviewer, figure-checker, reader-novice, alt-reviewer, 마무리 단계에 reader-expert
-- 명세 먼저: 장은 templates/chapter-spec.md, 그림은 templates/figure-spec.md로 명세를 먼저 쓰고 editor가 검토한다. 그림은 배치가 다른 시안 두 개를 만들어 reviews/agents/에 확인용 HTML로 남기고, editor와 alt-reviewer 의견으로 하나를 고른다. 고른 이유는 docs/AUTHOR_QUEUE.md에 적는다.
+- 호출 시점: 장 계획 때 researcher, 원고 작성 뒤 PR 전에 여섯 확인(REVIEW_RULES.md)을 맡는 flow-reviewer, reader-novice, fact-checker, practice-checker, production-checker 모두(D-129, D-130)
+- 명세 먼저: 장은 templates/chapter-spec.md, 그림은 templates/figure-spec.md로 명세를 먼저 쓰고 editor가 검토한다. 그림은 배치가 다른 시안 두 개를 만들어 reviews/agents/에 확인용 HTML로 남기고, editor와 production-checker 의견으로 하나를 고른다. 고른 이유는 docs/AUTHOR_QUEUE.md에 적는다.
 - 호출 시점 추가: PR 병합 전에 반드시 editor
 
 ## 작가만 정할 일(멈추지 않고 AUTHOR_QUEUE.md에 적음)
