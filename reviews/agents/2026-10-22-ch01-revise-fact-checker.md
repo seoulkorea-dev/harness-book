@@ -1,11 +1,12 @@
 # ch01 1장 수정(PR #82) 기술 감수: fact-checker
 
 - 날짜: 2026-10-22. 범위: src/chapters/ch01.html 인용 링크 12개와 이번에 고친 사실 문장, 표 1-4 기능적 제약 칸
+- 처리 기준: 이슈 #66 08:39, 08:42로 인용 변경이 취소되어 PR #81 인용(위첨자 번호)으로 되돌림. 아래 "반영" 열은 되돌린 뒤 상태
 - 결과: 필수 5, 검증 후 확정 1, 권장 7, 참고 2. 확인한 사실 문장 약 45개. OpenAI 두 글은 HTTP 403(열람 실패)
 
 | 발견 | 위치 | 근거 | 제안 | 확신 | 반영 |
 |---|---|---|---|---|---|
-| (필수) "같은 용어집은 LLM을 … 다음 토큰을 예측 …, 컨텍스트 윈도를 … 토큰의 범위로 설명"이 원문과 다름(용어집 LLM 항목은 방대한 텍스트로 학습한 언어 모델, 다음 단어 예측은 Pretraining 항목, Context window는 되돌아보고 참고할 수 있는 텍스트의 양) | 7행 | platform.claude.com/docs/en/about-claude/glossary | 원문대로 고치거나 용어집 귀속을 뺌 | 높음 | 반영: 정의는 용어표(BOOK_STANDARD 5절, 작가 결정) 그대로 "이 책에서"로 밝히고, 용어집에는 사전 학습의 다음 단어 예측만 귀속. 용어 정의 문구는 Q-106 |
+| (필수) "같은 용어집은 LLM을 … 다음 토큰을 예측 …, 컨텍스트 윈도를 … 토큰의 범위로 설명"이 원문과 다름(용어집 LLM 항목은 방대한 텍스트로 학습한 언어 모델, 다음 단어 예측은 Pretraining 항목, Context window는 되돌아보고 참고할 수 있는 텍스트의 양) | 7행 | platform.claude.com/docs/en/about-claude/glossary | 원문대로 고치거나 용어집 귀속을 뺌 | 높음 | 보류: 인용 번호 위치를 바꾸는 수정이라 인용 지시가 다시 올 때 함께(Q-106) |
 | (필수) "Claude Code의 컨텍스트 엔지니어링 글"의 주체(Anthropic 엔지니어링 글) | 7, 39, 100, 135행 | anthropic.com/engineering/effective-context-engineering-for-ai-agents | "Anthropic의 …"로 | 높음 | 보류: D-108(제품명 표기), Q-101(발표 주체 표기, 작가 확인 대기) |
 | (필수) "Claude Code의 장기 실행 글"의 주체 | 25행 | anthropic.com/engineering/effective-harnesses-for-long-running-agents | "Anthropic의 …"로 | 높음 | 보류: 위와 같음(Q-101) |
 | (검증 후 확정) Codex 글 귀속 문장(턴 정의, 수백 번 도구 호출, 약 1,500 PR) 1차 원문 미확인 | 62, 98행 | openai.com 두 글 HTTP 403 | 작가 확인 전 삭제나 확인 항목 | 높음 | 보류: 이번 PR에서 바꾸지 않은 기존 문장, Q-040, Q-090 유지 |

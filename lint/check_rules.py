@@ -4,8 +4,8 @@
 src/chapters/*.html, src/appendix/*.html을 검사한다. 장별 정비를 마친 장(lint/rules_applied.txt에 이름이 있음)은
 "실패" 규칙을 어기면 실패, 아직 정비하지 않은 장은 경고만 낸다. "경고" 규칙은 모든 장에서 경고만 낸다.
   실패 규칙: R2 출처 없는 반론, R9 표 열 설계(실패 표와 확인 표의 열 이름, 열 수 4개 이하, 모호하거나 동사형이거나
-             지시 표현이 든 열 이름, 열 이름 나열 설명 줄, 설명 줄의 "이 책"), R10 같은 장 링크와 괄호 절 참조,
-             R11 인용(낱말 링크 a.cite의 자료 키, 같은 장 같은 자료는 한 번, 위첨자 번호 없음, 옛 표기 없음), R12 약어 CR과 (Change Request)
+             지시 표현이 든 열 이름, 열 이름 나열 설명 줄, 설명 줄의 지시 표현), R10 같은 장 링크와 괄호 절 참조,
+             R11 본문의 #ref- 링크와 위첨자 번호와 각주 1:1, R12 약어 CR과 (Change Request)
   경고 규칙: R1 단정 표현, R3 제품이 실험한 것처럼 읽히는 주어, R4 각주 없는 버전 번호
 각주 형식(D-123): 본문 <sup class="fnref">n</sup>, 그 문단 바로 아래 <ol class="fn" start="n"><li>…</li></ol>
 종료 코드: 실패가 하나라도 있으면 1.
@@ -77,35 +77,24 @@ def check_file(path):
             elif DEIXIS.search(h):
                 fails.append(f"R9 {tid} 지시 표현이 든 열 이름 '{h}'")
         for li in re.findall(r'<ul class="capnote">\s*<li>(.*?)</li>', t, re.S):
+            if DEIXIS.search(text_of(li).strip()):
+                fails.append(f"R9 {tid} 설명 줄의 지시 표현: {text_of(li).strip()[:40]}")
             parts = [p.strip() for p in re.split(r",\s*", text_of(li))]
             if len(parts) >= 2 and sum(1 for p in parts if p in heads) >= 2:
                 fails.append(f"R9 {tid} 설명 줄이 열 이름을 나열: {text_of(li).strip()[:40]}")
-            if DEIXIS.search(text_of(li).strip()):
-                fails.append(f"R9 {tid} 설명 줄의 지시 표현: {text_of(li).strip()[:40]}")
-    # R11 인용(D-131, 이슈 #66 08:28): 근거를 말하는 낱말을 <a class="cite" data-ref="키">로 링크, 같은 장에서 같은 자료는 처음 한 번만,
-    # 위첨자 번호 없음, 옛 표기(문단 아래 각주, 장 끝 참고 자료, #ref- 링크) 없음
+    # R11 인용(D-131): 새 방식(sup.cite 자료 키)을 쓰는 장은 옛 표기(문단 아래 각주, 장 끝 참고 자료, #ref- 링크)가 없어야 하고 키가 자료 목록에 있어야 함
     if 'class="cite"' in s:
-        cites = re.findall(r'<a class="cite" data-ref="([^"]+)">(.*?)</a>', s, re.S)
-        for k, _ in cites:
+        for k in re.findall(r'<sup class="cite" data-ref="([^"]+)"></sup>', s):
             if k not in BIB:
                 fails.append(f"R11 bibliography.json에 없는 자료 키 {k}")
-        for k in sorted({k for k, _ in cites if [c for c, _ in cites].count(k) > 1}):
-            fails.append(f"R11 같은 장에서 같은 자료를 두 번 이상 링크 {k}")
-        for k, t in cites:
-            if len(text_of(t).strip()) > 25:
-                fails.append(f"R11 링크 낱말이 김(자료를 가리키는 말만): {text_of(t).strip()[:30]}")
-        if len(re.findall(r'<a\b[^>]*class="cite"', s)) != len(cites):
-            fails.append('R11 형식이 다른 인용 링크(<a class="cite" data-ref="키"> 순서로 씀, 빌드가 바꾸지 못함)')
-        if '<sup class="cite"' in s:
-            fails.append("R11 위첨자 인용 번호 남음(본문 낱말 링크로)")
-        if re.search(r'<a class="cite"(?! data-ref=)', s):
-            fails.append("R11 자료 키 없는 인용 링크(a.cite에는 data-ref만 씀, 주소는 빌드가 채움)")
         for pat, label in [('class="fnref"', "문단 아래 각주 번호"), ('<ol class="fn"', "문단 아래 각주"), ('<h2 id="refs">', "장 끝 참고 자료 절"), ('href="#ref-', "#ref- 링크")]:
             if pat in s:
                 fails.append(f"R11 옛 인용 표기 남음: {label}")
+        if re.search(r'<sup class="cite"(?! data-ref=)', s):
+            fails.append("R11 자료 키 없는 인용 번호(sup.cite에는 data-ref만 씀, 번호는 빌드가 매김)")
         return name, fails, warns + r1_r4(s)
     if name in applied():
-        fails.append("R11 규칙 적용 장은 새 인용 방식(a.cite 자료 키 낱말 링크)을 써야 함(D-131)")
+        fails.append("R11 규칙 적용 장은 새 인용 방식(sup.cite 자료 키)을 써야 함(D-131)")
     if 'href="#ref-' in s:
         fails.append(f"R11 본문의 참고 자료 링크 {s.count('href=\"#ref-')}곳")
     sups = [int(n) for n in re.findall(r'<sup class="fnref">(\d+)</sup>', s)]
@@ -160,7 +149,7 @@ def main():
             seen[key] = k
     used = set()
     for f in files:
-        used |= set(re.findall(r'<a class="cite" data-ref="([^"]+)">', open(f, encoding="utf-8").read()))
+        used |= set(re.findall(r'<sup class="cite" data-ref="([^"]+)"></sup>', open(f, encoding="utf-8").read()))
     for k in sorted(set(bib) - used):
         print(f"경고 bibliography: 어느 장에서도 인용하지 않은 자료 {k}")
     if counts:

@@ -62,7 +62,7 @@ def save(st):
 
 # ---------- 장별 진행(저장소에서 계산) ----------
 def part_row(name, paths):
-    old = new = marks = cr = same = bad = 0
+    old = new = cr = same = bad = 0
     claim, pr = "", ""
     for p in paths:
         full = os.path.join(ROOT, *p.split("/"))
@@ -70,9 +70,7 @@ def part_row(name, paths):
             continue
         s = open(full, encoding="utf-8").read()
         old += s.count('href="#ref-') + len(re.findall(r'<sup class="fnref">', s))
-        keys = re.findall(r'<a class="cite" data-ref="([^"]+)">', s)
-        marks += len(keys)
-        new += len(set(keys))
+        new += len(set(re.findall(r'<sup class="cite" data-ref="([^"]+)"></sup>', s)))
         cr += len(CR.findall(check_rules.text_of(check_rules.strip_code(s))))
         _, fails, _ = check_rules.check_file(full)
         same += sum(1 for f in fails if f.startswith("R10"))
@@ -83,7 +81,7 @@ def part_row(name, paths):
         log = run(["git", "log", "--first-parent", "origin/main", "-1", "--format=%s", "--", p]).stdout.strip()
         n = re.search(r"Merge pull request #(\d+)|\(#(\d+)\)$", log)  # 병합 커밋과 squash 병합 제목
         pr = max(pr, f"#{n.group(1) or n.group(2)}", key=lambda x: int(x[1:] or 0)) if n else pr
-    return [name, str(old), f"{marks} / {new}" if marks else "-", str(cr), str(same), str(bad), claim or "-", "", pr or "-"]
+    return [name, str(old), str(new), str(cr), str(same), str(bad), claim or "-", "", pr or "-"]
 
 def merged_today():
     day = now().strftime("%Y-%m-%d")
@@ -124,9 +122,9 @@ def render(st, parts, merged):
         r[7] = st["six"].get(key, "아니오")
         prow.append(r)
     lines += ["## 장별 진행(저장소에서 계산)",
-              table(["장", "옛 인용 수", "인용 표시 수 / 자료 수", "\"CR\" 수", "같은 장 링크 수", "표 체계 위반 표 수", "주장 줄", "여섯 확인", "마지막 정비 PR"], prow),
+              table(["장", "옛 인용 수", "새 인용 번호 수", "\"CR\" 수", "같은 장 링크 수", "표 체계 위반 표 수", "주장 줄", "여섯 확인", "마지막 정비 PR"], prow),
               "",
-              "- 옛 인용: 본문의 #ref- 링크와 문단 아래 각주 번호(D-123). 인용 표시 수 / 자료 수: 본문 낱말 링크(a.cite data-ref) 수와 서로 다른 자료 수(D-131, 이슈 #66 08:28. 같은 장에서 같은 자료는 한 번만 링크하므로 두 수가 같아야 함)",
+              "- 옛 인용: 본문의 #ref- 링크와 문단 아래 각주 번호(D-123). 새 인용: 서로 다른 자료 키 수(sup.cite data-ref, D-131, 번호는 빌드가 책 전체로 매김)",
               "- \"CR\": lint/check_rules.py R12와 같은 기준(코드와 파일 경로 제외, \"CR이\", \"CR은\"도 셈). 같은 장 링크는 R10, 표 체계 위반은 R9 기준",
               "- 여섯 확인: D-129(2026-10-22) 이후 장 PR부터 기록(1장 정비 PR #69는 그 전이라 아니오)",
               "- 주장 줄: \"아니라\", \"반드시\", \"항상\", \"결국\", \"해야 합니다\"가 있으면 단정형. 마지막 정비 PR: 그 파일을 바꾼 마지막 병합 PR", ""]
