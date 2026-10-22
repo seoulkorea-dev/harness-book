@@ -1,30 +1,22 @@
-# 1장 정비 fact-checker(2026-10-22, PR #69)
+# 1장 다시 만들기: fact-checker(기술 확인, 2026-10-22, PR #85)
 
-범위: src/chapters/ch01.html의 각주 15개(정비 1차)와 사실 문장 약 45개. OpenAI 두 글은 HTTP 403으로 열람 실패.
-결과: 필수 0, 편집 권고 11, 검증 후 확정 4. (각주 번호는 정비 1차 기준. 2차 뒤 번호는 +1~+5)
+판정 요약: 필수 3, 권장 6, 참고 7, 검증 후 확정 2, 확인한 사실 문장 약 60개. 로컬 Claude Code v2.1.302. 출처 기록은 research/ch01-sources.md "2026-10-22 1장 기술 확인"
 
-| # | 발견 | 위치 | 근거 | 제안 | 확신 | 등급 | 처리 |
-|---|---|---|---|---|---|---|---|
-| 1 | 각주 1 일치 | 첫 절 | how-tool-use-works "The model never runs anything on its own … your code (or Anthropic's servers) runs the operation" | 유지 | 높음 | 확정 | 유지 |
-| 2 | "기억" 앞 문장은 문서에 없는 추론 | 첫 절 기억 항목 | 같은 문서, stateless 문장 없음 | 도구 사용 절차로 한정 | 높음 | 편집 권고 | 반영(첫 문장 삭제) |
-| 3 | 각주 2 일치(is_error) | 도구 문단 | handle-tool-calls "Handling errors with is_error" | 유지 | 높음 | 확정 | 유지 |
-| 4 | 각주 3 ReAct 일치, "원형"은 해석 | ReAct 문단, 표 1-2 | arXiv 2210.03629, ICLR 2023 | 조건 표현 | 높음/중간 | 확정/편집 권고 | 반영 |
-| 5 | 각주 4 내용, 날짜 일치, 저자 성 표기 미확인 | 각주 4 | building-effective-agents | 작가 byline 확인 | 중간 | 검증 후 확정 | 유지, Q-090 |
-| 6 | Codex 루프 글 본문 수치와 정의 원문 미열람 | Codex 문단, 각주 5, 13 | 403 | 작가 확인 | 낮음 | 검증 후 확정 | 유지, Q-040, Q-090 |
-| 7 | Codex 문단 앞 문장들에 각주 없음 | Codex 문단 | STYLE 4절 | 각주 위치 | 높음 | 편집 권고 | 반영(문장마다 각주) |
-| 8 | Young 글은 하네스를 정의하지 않고 "주변 체계" 뜻으로 사용 | 하네스 명칭 문단, 표 1-3 | effective-harnesses-for-long-running-agents | 쓰임으로 서술 | 높음 | 편집 권고 | 반영. 주어 표기는 R3대로 유지 |
-| 9 | 각주 7, 14, 15 일치 | 여러 곳 | effective-context-engineering | 유지 | 높음 | 확정 | 유지 |
-| 10 | 각주 8 Glossary 일치 | 둘째 문단 | Claude Code Glossary Agentic harness | 유지 | 높음 | 확정 | 유지 |
-| 11 | 각주 10, 12 일치(Agent SDK, 기본 No limit, 종료 사유 4종) | 루프 절 | agent-sdk/agent-loop | 유지 | 높음 | 확정 | 유지 |
-| 12 | 거부 문장, 종료 사유 문장에 각주 없음, 단계 3 허용/확인/거부 근거 | 루프 절 | 같은 문서, Glossary | 앞의 주 10 | 높음 | 편집 권고 | 거부, 종료 사유에 각주 반영. 단계 3은 보류 |
-| 13 | 각주 11 Hooks 일치(Stop exit 2 차단), Stop 절 본문 미열람 | 그림 1-2 설명 | hooks | 유지 | 중간 | 확정 | 유지 |
-| 14 | 각주 9 저자, 날짜 일치, "약 1,500개 풀 리퀘스트" 미확인 | 하네스 엔지니어링 절 | 403, 2026-10-04 직접 열람 기록 | 유지, 미확인 표시 | 중간 | 검증 후 확정 | 유지, Q-090 |
-| 15 | "Claude Code의 … 글" 표기가 발표 주체와 다름 | 여러 곳 | STYLE 4절 | "Anthropic의 … 글" | 높음 | 편집 권고 | 보류: R3과 STYLE 4절 예가 "Claude Code의 장기 실행 글은"을 정함(D-127, Q-039) |
-| 16 | 토큰 정의는 Platform Glossary와 뜻이 맞음, 각주 없음 | 첫 절 | platform glossary Tokens | 각주 | 높음 | 편집 권고 | 반영(각주 1) |
-| 17 | 컨텍스트 윈도, LLM 정의 각주 없음 | 첫 절 | 같은 용어집 | 확인 필요 | 중간 | 편집 권고 | 보류(v1.1-backlog) |
-| 18 | 턴 비교에서 Claude Code 용어집 턴 누락 | Codex 문단 | Glossary Turn | 문서마다 다름 | 높음 | 편집 권고 | 반영 |
-| 19 | 표 1-9 명령 확인 | 표 1-9 | commands | 유지 | 높음 | 확정 | 유지 |
-| 20 | research 인용 "executes" → "runs" | research S8, S24 | 위 1번 | 정정 | 높음 | 편집 권고 | 반영 |
-| 21 | 열람일 갱신 여부 | 각주 | 2026-10-22 재확인 일치 | 작가 판단 | 높음 | 편집 권고 | 유지 |
+| 발견 | 위치 | 근거 | 제안 | 확신 | 처리 |
+|---|---|---|---|---|---|
+| 필수: LLM, 컨텍스트 윈도 정의에 용어집 각주(용어집 문구와 다름) | background | Platform Glossary(S28), Q-106 | "이 책은"으로 정의 | 높음 | 반영 |
+| 필수: "어느 권한 모드에서도 거부" 각주가 permissions 문서(문장은 permission-modes 문서) | loop | Permission modes "Deny rules block in every mode" | permission-modes 키 추가 | 높음 | 반영 |
+| 필수: 기억 항목 앞 두 문장에 근거 없음 | background 기억 | Messages API "stateless" | messages-api 키 추가 | 높음 | 반영 |
+| 권장: Stop 훅 연속 차단 상한 | loop | Hooks Stop | 제품 상한과 조건 | 높음 | 반영(횟수는 쓰지 않음) |
+| 권장: git push 금지 규칙의 한계 | request, loop | Bash rule doesn't match | 한 문장 | 높음 | 반영 |
+| 권장: .env 규칙 조건(grep -r, 기준 위치) | loop | Read and Edit | 한 문장 | 중간 | grep -r 반영, 기준 위치는 9장 |
+| 권장: request 3번이 기본 권한 모드를 암시 | request | Permission modes 시작 모드 | 조건화 | 높음 | 반영 |
+| 권장: API로 직접 작성 문장 각주 | agent-harness | Messages API 표 | messages-api | 중간 | 반영 |
+| 권장: 엔지니어링 글 주체 표기 | 여러 곳 | S9, S12 | Anthropic의 글 | 중간 | 보류(Q-039, Q-101 작가 결정) |
+| 참고: 확인 요청이 잦으면 형식 승인(근거 없음) | loop | 문서에 없음 | 이 책의 판단으로 표시 | 중간 | 반영("이 책은 … 권합니다") |
+| 참고: ReAct 마지막 문장이 초록 범위 밖 | meanings | S11 | 줄임 | 중간 | 반영 |
+| 참고: 세션 기록 보충, 하네스 일반 뜻 출처, 저자 표기, Codex CLI 한정, 용어집 "is the harness" | | | | | 용어집 표현은 반영, 나머지 유지 |
+| 검증 후 확정: OpenAI Harness engineering 수치와 네 가지(403) | harness | S2 기록만 | 작가 브라우저 확인(Q-090) | | 유지 |
+| 검증 후 확정: Codex 글의 턴 정의(403) | loop | 발췌에 없음 | 약하게 | | 턴 정의 문장 삭제 |
 
-research/ch01-sources.md에 덧붙일 확인 기록 문안은 같은 날짜 절로 반영했다.
+표 1-9 실행 확인(R8): /context, /usage 실행으로 일치, /permissions는 비대화형 실행 불가로 문서 대체. 점검 질문 4(범위): 대체로 구분, 남은 혼선 셋(git push 한계, 기본 권한 모드, 글 주체) 가운데 둘 반영. 9(출처): 필수 3건 반영, OpenAI 수치는 S2 기록 의존
