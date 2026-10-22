@@ -16,5 +16,7 @@
   "permissions": {"type": "web", "author": "Anthropic", "title": "Configure permissions", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permissions"},
   "how-cc-works": {"type": "web", "author": "Anthropic", "title": "How Claude Code works", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/how-claude-code-works"},
   "messages-api": {"type": "web", "author": "Anthropic", "title": "Using the Messages API", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"},
-  "permission-modes": {"type": "web", "author": "Anthropic", "title": "Permission modes", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permission-modes"}
+  "permission-modes": {"type": "web", "author": "Anthropic", "title": "Permission modes", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permission-modes"},
+  "prompt-overview": {"type": "web", "author": "Anthropic", "title": "Prompt engineering overview", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"},
+  "prompting-best-practices": {"type": "web", "author": "Anthropic", "title": "Prompting best practices", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"}
 }
