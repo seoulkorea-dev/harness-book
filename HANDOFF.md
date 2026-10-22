@@ -1,9 +1,10 @@
 # 인계(HANDOFF)
 
-- 갱신: 2026-10-22(자동 실행 자가 복구와 상태 알림, autorun-recovery)
-- 브랜치: autorun-recovery(이슈 #34, PR #52)
+- 갱신: 2026-10-22(1장 정비, ch01-rules)
+- 브랜치: ch01-rules(이슈 #66 ②, PR #69)
 
 ## 지금 상태
+- 2026-10-22: 1장 정비 병합, 작가 확인 대기(이슈 #66 ②, PR #69). 이슈 #66에 "계속" 댓글이 있을 때만 2장 정비로 넘어감(autopilot 멈춤 조건). 1장: R9(표 열 이름, 결론 한 줄 캡션), R10(같은 장 링크 0), R11(인용 15곳 → 각주 20개, 참고 자료 문서 단위 12건), R12(변경 요청 사항), R3 주어, R2 반론 문장 삭제, 토큰 정의(#63). 점검 에이전트(flow 필수 4, novice sonnet 읽기 중단 2, expert 필수 9, fact 필수 0) 반영: 표 1-1 확인 행, 결합형의 안내와 강제 구분, Stop 훅 조건, 턴은 문서마다 다름, 상한은 Agent SDK 옵션(기본 제한 없음), 표 1-6 행 정리, 표 1-8 "먼저 의심할 층", 표 1-9 행 분리, 예제 첫 소개. 지시 밖 변경: lint/check_style.py, lint/check_structure.py(각주로 정비한 장의 참고 자료 인식, D-123의 결과), lint/check_rules.py R2 정규식 확장. 작가 확인 Q-086~Q-092. 다음은 작가 확인 뒤 2장 정비.
 - 2026-10-22: R13~R17, 판정 등급, 장별 점검 질문 10개 반영(이슈 #66 Neo 보충, PR #70, D-128). REVIEW_RULES.md, editor, reader-expert, flow-reviewer 새 판(docs/staged-claude, 병합 뒤 --apply-only). 다음은 1장 정비(초안 PR #69, 브랜치 ch01-rules), PR 설명에 장별 점검 질문 답 표.
 - 2026-10-22: 반복 지적을 규칙과 자동 검사로 승격(이슈 #66 ①, PR #67, D-122~D-127). REVIEW_RULES.md(R1~R12), lint/check_rules.py(정비를 마친 장은 lint/rules_applied.txt에 적어 실패 규칙 강제, 나머지는 경고), tools/check_tasks.py(R6, 작업 2, 3 공백 2건을 잡음), docs/example-facts.md(R7), docs/external-review-prompt.md, STYLE 4, 7~10절(각주, 같은 장 링크, 표 체계, 예제 이름, 단정), AUTHOR_PREFS, 각주 CSS, editor, fact-checker, flow-reviewer 새 판은 docs/staged-claude(병합 뒤 --apply-only). Q-083(CLAUDE.md 예제 이름). 다음은 이슈 #66 ② 장별 정비(1장부터).
 - 2026-10-22: 하네스 정의 문안 교체(이슈 #53, PR #61, D-121). 1장 "이 책의 에이전트와 하네스" 본문과 2장 첫 문단을 작가 문안으로(검사 맞춤 세 곳 Q-081), 하네스 전체를 "모델 바깥의 실행 체계"로(1장 요약, 그림 1-1, 표 1-5, 시작하며, 용어집, AUTHOR_PREFS 핵심 정의), 표 1-3 "실행 장치" 정의 전 사용 해소, 2장 실행 장치 링크, 1장, 2장 논지 사슬 표 갱신. 작가 문안의 "Claude는 그 안에서 판단"은 Q-082. 다음은 이슈 #54.
@@ -62,7 +63,7 @@
 - 2026-10-20: 3장 개정 완료(브랜치 ch03-write). 명세(docs/specs/ch03-spec.md, fig3-1-spec.md) editor 검토 반영, 그림 3-1 시안 A 채택(Q-010), 점검 에이전트 필수 반영(처리표 reviews/agents/2026-10-20-ch03-review-summary.md), editor 정식 검수 "병합 가능"(reviews/2026-10-20-ch03-editor.md), check_all 통과. 4장은 그림 체계 통일(이슈 #9)과 이슈 #10 뒤로 미룸(작가 지시).
 
 ## 작업 목록
-- [ ] 이슈 #66 ② 장별 정비: 1장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [x] 이슈 #66 ② 장별 정비: 1장(REVIEW_RULES R1~R17, lint/rules_applied.txt에 ch01, PR #69)
 - [ ] (작가 확인 대기) 1장 정비 병합 뒤 멈춤: HANDOFF "지금 상태"와 이슈 #66에 "1장 정비 병합, 작가 확인 대기"를 남기고, 이슈 #66에 Neo의 "계속" 댓글이 있을 때만 이 항목을 체크하고 2장부터 진행(이슈 #66 작가 결정)
 - [ ] 이슈 #66 ② 장별 정비: 2장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [ ] 이슈 #66 ② 장별 정비: 3장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
@@ -137,6 +138,7 @@
 | 2026-10-22 | 하네스 정의 문안 교체(이슈 #53) | #61 | 병합 가능(필수 0, reviews/2026-10-22-harness-definition-editor.md) | 통과 | Q-081, Q-082 |
 | 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(3차, 필수 0, 1차 .pyc, 2차 작가 확인 대기 지점 → 반영, reviews/2026-10-22-review-rules-editor-1.md, -2.md, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
 | 2026-10-22 | R13~R17, 판정 등급, 점검 질문(이슈 #66 보충) | #70 | 병합 가능(필수 0, reviews/2026-10-22-review-rules-2-editor.md) | 통과 | 없음 |
+| 2026-10-22 | 1장 정비(이슈 #66 ②) | #69 | 병합 가능(2차, 1차 필수 2: PR 설명과 HANDOFF, reader-novice 모델 → 반영, reviews/2026-10-22-ch01-rules-editor.md) | 통과 | Q-086~Q-092 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.

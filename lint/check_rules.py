@@ -42,7 +42,7 @@ def check_file(path):
     for m in re.finditer(r"\([^()<>]{0,80}에서 다룸\)", text_of(s)):
         fails.append(f"R10 괄호 절 참조 {m.group(0)[:40]}")
     # R2 출처 없는 반론
-    for m in re.finditer(r"[^.]{0,30}라는 의견(?:이|도) 있습니다", text_of(s)):
+    for m in re.finditer(r"[^.]{0,30}(?:라는|다는|는) 의견(?:이|도) 있습니다", text_of(s)):
         fails.append(f"R2 출처 없는 반론: {m.group(0).strip()[:50]}")
     # R12 약어 CR(코드와 파일 경로 예외), 영어 병기
     body = text_of(strip_code(s))
