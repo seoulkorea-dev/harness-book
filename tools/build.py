@@ -3,8 +3,9 @@
 - 원고는 src/ 아래 HTML 조각(본문만)을 고친다. 루트의 index.html, chapters/, appendix/ 는 빌드 결과물이므로 직접 고치지 않는다.
 - 목차와 페이지 정보는 src/site.json 에 있다.
 - 빌드는 다른 쪽의 "표 3-1", "그림 8-1" 참조에만 링크를 건다. 같은 쪽 참조는 글자만 둔다. 없는 번호를 가리키면 멈춘다.
-- 인용(BOOK_STANDARD.md 8절, D-131): 원고의 <sup class="cite" data-ref="키"></sup>에 목차 순서로 처음 인용된 순서대로 책 전체 번호를 매기고,
-  research/bibliography.json으로 부록 끝 "참고 문헌" 쪽(site.json에서 generated)을 만든다. 없는 키를 가리키면 멈춘다.
+- 인용(BOOK_STANDARD.md 8절, D-131, 이슈 #66 08:28): 원고의 <a class="cite" data-ref="키">자료를 가리키는 낱말</a>을 부록 끝 "참고 문헌"
+  쪽(site.json에서 generated)의 해당 항목 링크로 바꾼다. 본문에 번호를 표시하지 않는다. 참고 문헌 번호는 목차 순서로 처음 인용된 순서이고,
+  항목마다 그 자료가 쓰인 곳(장 단위, 목차 순서)을 글자로 붙인다. 없는 키를 가리키면 멈춘다.
 실행: python3 tools/build.py
 """
 import html
@@ -23,17 +24,24 @@ META = site["pages"]
 ORDER = ["index"] + [pid for _, ids in NAV for pid in ids if pid != "index"]
 BODY = {pid: (SRC / META[pid]["path"]).read_text(encoding="utf-8") for pid in ORDER if not META[pid].get("generated")}
 
-# 인용: 책 전체 번호(같은 자료는 같은 번호), 부록 끝 참고 문헌
+# 인용: 본문 낱말 링크, 부록 끝 참고 문헌(번호는 처음 인용된 순서, 항목마다 쓰인 곳)
 BIB = {k: v for k, v in json.loads((ROOT / "research" / "bibliography.json").read_text(encoding="utf-8")).items() if not k.startswith("_")}
-CITE_RUN = re.compile(r'(?:<sup class="cite" data-ref="[^"]+"></sup>)+')
-CITE_KEY = re.compile(r'<sup class="cite" data-ref="([^"]+)"></sup>')
-CITE_NO = {}
+CITE = re.compile(r'<a class="cite" data-ref="([^"]+)">(.*?)</a>', re.S)
+CITE_NO, USED_IN = {}, {}
 for _pid in ORDER:
-    for _k in CITE_KEY.findall(BODY.get(_pid, "")):
+    for _k, _ in CITE.findall(BODY.get(_pid, "")):
         if _k not in BIB:
             raise SystemExit(f"bibliography.json에 없는 자료 키: {META[_pid]['path']} {_k}")
         CITE_NO.setdefault(_k, len(CITE_NO) + 1)
+        USED_IN.setdefault(_k, [])
+        if _pid not in USED_IN[_k]:
+            USED_IN[_k].append(_pid)
 REF_PAGE = next((pid for pid in ORDER if META[pid].get("generated") == "references"), None)
+
+
+def place(pid):
+    m = re.match(r"Chapter (\d+)", META[pid]["nav"])
+    return f"{m.group(1)}장" if m else META[pid]["nav"]
 
 
 def bib_entry(e):
@@ -46,20 +54,16 @@ def bib_entry(e):
 
 def cites(pid, body):
     if not REF_PAGE:
-        return body
+        return CITE.sub(lambda m: m.group(2), body)
     href = rel(META[pid]["path"], META[REF_PAGE]["path"])
-
-    def one(m):
-        keys = CITE_KEY.findall(m.group(0))
-        links = ",".join(f'<a href="{href}#bib-{CITE_NO[k]}">{CITE_NO[k]}</a>' for k in keys)
-        return f'<sup class="cite">{links}</sup>'
-    return CITE_RUN.sub(one, body)
+    return CITE.sub(lambda m: f'<a class="cite" href="{href}#bib-{CITE_NO[m.group(1)]}">{m.group(2)}</a>', body)
 
 
 if REF_PAGE:
-    items = "".join(f'<li id="bib-{n}">{bib_entry(BIB[k])}</li>' for k, n in sorted(CITE_NO.items(), key=lambda x: x[1]))
+    items = "".join(f'<li id="bib-{n}">{bib_entry(BIB[k])} <span class="bib-used">쓰인 곳: {", ".join(place(p) for p in USED_IN[k])}</span></li>'
+                    for k, n in sorted(CITE_NO.items(), key=lambda x: x[1]))
     BODY[REF_PAGE] = (f'<h1>{META[REF_PAGE]["title"]}</h1>\n'
-                      '<p class="lead">본문의 위첨자 번호가 가리키는 자료입니다. 번호는 시작하며부터 목차 순서로 처음 인용된 순서이고, 같은 자료는 몇 번 인용해도 같은 번호입니다.</p>\n'
+                      '<p class="lead">본문에서 점선 밑줄로 표시한 자료 이름이 가리키는 자료입니다. 번호는 시작하며부터 목차 순서로 처음 인용된 순서이고, 항목 끝의 쓰인 곳은 그 자료를 근거로 인용한 장입니다.</p>\n'
                       f'<ol class="bib">{items}</ol>\n')
 
 
