@@ -99,7 +99,7 @@
 - 게시일: 표기 없음, 확인일: 2026-10-19
 - 작성: Anthropic
 - 이 장에서 사용할 내용
-  - 클라이언트 도구는 호출한 애플리케이션이 실행하고 tool_result로 돌려줌. "The model never executes anything on its own."
+  - 클라이언트 도구는 호출한 애플리케이션이 실행하고 tool_result로 돌려줌. "The model never runs anything on its own."
   - 애플리케이션이 stop_reason이 tool_use인 동안 루프를 구동
   - 실패 시 tool_result에 오류 메시지와 is_error: true
   - bash 도구: "The API is stateless. Nothing about your shell session travels between requests"(셸 세션에 대한 문장)
@@ -272,7 +272,7 @@
 ## S24. Anthropic, How tool use works(Claude Platform Docs)
 - URL: https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works
 - 게시일: 표기 없음, 확인일: 2026-10-20, 작성: Anthropic
-- 사용한 내용: "The model never executes anything on its own." 클라이언트 도구는 호출한 애플리케이션이 실행해 tool_result로 돌려줌. 도구 결과를 보낼 때 원래 메시지, 어시스턴트 응답, tool_result를 담은 새 요청을 보냄(1장 "기억" 항목). 대화 상태 일반의 "stateless" 문장은 없음(S8 미확인 3 유지)
+- 사용한 내용: "The model never runs anything on its own." 클라이언트 도구는 호출한 애플리케이션이 실행해 tool_result로 돌려줌. 도구 결과를 보낼 때 원래 메시지, 어시스턴트 응답, tool_result를 담은 새 요청을 보냄(1장 "기억" 항목). 대화 상태 일반의 "stateless" 문장은 없음(S8 미확인 3 유지)
 
 ## S25. Anthropic, API overview(Claude Platform Docs)
 - URL: https://platform.claude.com/docs/en/api/overview
@@ -284,3 +284,38 @@
 
 ## 미확인
 - S3(OpenAI Unrolling the Codex agent loop): 2026-10-20 접근 불가(DNS). Codex 턴 정의 원문 미확인 유지
+
+# 2026-10-22 ch01 각주 대조(fact-checker, 1장 정비 PR #69)
+
+확인일: 2026-10-22. 원문을 직접 열어 확인한 내용만 적는다. S8, S24의 인용 "executes"는 현행 문구 "runs"로 정정함.
+
+## S26. Anthropic, How tool use works(Claude Platform Docs) 재확인
+- URL: https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works
+- 확인일: 2026-10-22, 작성: Anthropic
+- 사용한 내용: "The model never runs anything on its own. It emits a structured request, your code (or Anthropic's servers) runs the operation". 4단계: 원래 메시지, 어시스턴트 응답, tool_result를 담은 새 요청. 대화 상태 일반의 stateless 문장은 없음(미확인 3 유지, 본문 "기억" 항목은 도구 사용 절차로 한정)
+
+## S27. Anthropic, Handle tool calls(Claude Platform Docs)
+- URL: https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls
+- 확인일: 2026-10-22, 작성: Anthropic
+- 사용한 내용: "Handling errors with is_error": 도구 실행 오류 시 content에 오류 메시지와 "is_error": true(각주 3)
+
+## S28. Anthropic, Glossary(Claude Platform Docs)
+- URL: https://platform.claude.com/docs/en/about-claude/glossary
+- 확인일: 2026-10-22, 작성: Anthropic
+- 사용한 내용: Tokens: 언어 모델의 가장 작은 개별 단위로 단어, 부분 단어, 문자, 바이트에 대응할 수 있고, 텍스트는 토큰열로 부호화되어 모델이 처리함(각주 1, 본문 "모델이 텍스트를 나누어 처리하는 단위"). Context window: 모델이 되돌아보고 참고할 수 있는 텍스트의 양
+
+## S5, S6, S17, S20 재확인(2026-10-22)
+- S6 Glossary(Claude Code Docs): Agentic harness 문구 변경 없음. Turn: 사용자 메시지부터 Claude 응답 종료까지(본문 Codex 문단에 반영)
+- S5 Agent SDK(https://code.claude.com/docs/en/agent-sdk/agent-loop): 턴은 도구 호출 왕복 한 번("Each full cycle is one turn"), max_turns와 max_budget_usd 기본 No limit, "Setting a budget is a good default for production agents", 종료 사유 success, error_max_turns, error_max_budget_usd, error_during_execution, 결과에 비용, 사용량, 세션 ID, 거부된 호출은 거부 메시지가 도구 결과로 돌아감
+- S17 Hooks reference(앞 100,000자): Stop "When Claude finishes responding", 종료 코드 2 "Prevents Claude from stopping", decision "block"과 reason. Stop 절 본문과 연속 차단 상한은 미확인
+- S20 Commands: /context [all], /permissions, /usage(/cost, /stats 별칭)
+
+## S9, S10, S11, S12 재확인(2026-10-22)
+- S9: 저자 Prithvi Rajasekaran, Ethan Dixon, Carly Ryan, Jeremy Hadfield, 2025-09-29. 에이전트 정의, "natural progression", context rot, "treating context as a precious, finite resource will remain central"
+- S10: December 19, 2024, workflows "predefined code paths", agents "dynamically direct their own processes and tool usage". 상단 byline 성 표기는 직접 확인 못 함(감사 문구 "Erik S. and Barry Zhang")
+- S11: arXiv 2210.03629 v1 2022-10-06, ICLR 2023 포스터. 초록은 문맥 내 예시 한두 개 프롬프팅, HotpotQA, Fever, ALFWorld, WebShop(표 1-2 "논문이 평가한 과제")
+- S12: Justin Young, 2025-11-26. 하네스를 따로 정의하지 않고 반복 세션을 돌리는 주변 체계의 뜻으로 사용, Claude Agent SDK를 "a powerful, general-purpose agent harness adept at coding"으로 부름(본문을 "주변 체계라는 뜻으로 하네스라는 말을 사용"으로 고침)
+
+## 열람 실패(2026-10-22)
+- OpenAI, Unrolling the Codex agent loop: HTTP 403. 검색 결과 요약으로만: Michael Bolin, 2026-01-23, 하네스가 Codex 제품(CLI, Cloud, VS Code 확장)에 공통인 루프 제공. 턴 정의, 수백 번의 도구 호출, 컨텍스트 소진은 미확인(Q-040, Q-090)
+- OpenAI, Harness engineering: HTTP 403. 검색 결과 요약으로만: Ryan Lopopolo, 2026-02-11, 약 5개월, 약 100만 줄. 약 1,500개 풀 리퀘스트는 미확인(Q-090)
