@@ -4,6 +4,7 @@
 - 브랜치: ch01-rules(이슈 #66 ②, PR #69)
 
 ## 지금 상태
+- 작업 시작: 이슈 #66 개정판 0단계(작업 체계 마지막 변경과 동결: 역할을 출판 역할에 맞춤, 여섯 확인 표), 브랜치 freeze-workflow(/next 1단계: 가장 오래된 열린 요청 #66)
 - 2026-10-22: 1장 정비 병합, 작가 확인 대기(이슈 #66 ②, PR #69). 이슈 #66에 "계속" 댓글이 있을 때만 2장 정비로 넘어감(autopilot 멈춤 조건). 1장: R9(표 열 이름, 결론 한 줄 캡션), R10(같은 장 링크 0), R11(인용 15곳 → 각주 20개, 참고 자료 문서 단위 12건), R12(변경 요청 사항), R3 주어, R2 반론 문장 삭제, 토큰 정의(#63). 점검 에이전트(flow 필수 4, novice sonnet 읽기 중단 2, expert 필수 9, fact 필수 0) 반영: 표 1-1 확인 행, 결합형의 안내와 강제 구분, Stop 훅 조건, 턴은 문서마다 다름, 상한은 Agent SDK 옵션(기본 제한 없음), 표 1-6 행 정리, 표 1-8 "먼저 의심할 층", 표 1-9 행 분리, 예제 첫 소개. 지시 밖 변경: lint/check_style.py, lint/check_structure.py(각주로 정비한 장의 참고 자료 인식, D-123의 결과), lint/check_rules.py R2 정규식 확장. 작가 확인 Q-086~Q-092. 다음은 작가 확인 뒤 2장 정비.
 - 2026-10-22: R13~R17, 판정 등급, 장별 점검 질문 10개 반영(이슈 #66 Neo 보충, PR #70, D-128). REVIEW_RULES.md, editor, reader-expert, flow-reviewer 새 판(docs/staged-claude, 병합 뒤 --apply-only). 다음은 1장 정비(초안 PR #69, 브랜치 ch01-rules), PR 설명에 장별 점검 질문 답 표.
 - 2026-10-22: 반복 지적을 규칙과 자동 검사로 승격(이슈 #66 ①, PR #67, D-122~D-127). REVIEW_RULES.md(R1~R12), lint/check_rules.py(정비를 마친 장은 lint/rules_applied.txt에 적어 실패 규칙 강제, 나머지는 경고), tools/check_tasks.py(R6, 작업 2, 3 공백 2건을 잡음), docs/example-facts.md(R7), docs/external-review-prompt.md, STYLE 4, 7~10절(각주, 같은 장 링크, 표 체계, 예제 이름, 단정), AUTHOR_PREFS, 각주 CSS, editor, fact-checker, flow-reviewer 새 판은 docs/staged-claude(병합 뒤 --apply-only). Q-083(CLAUDE.md 예제 이름). 다음은 이슈 #66 ② 장별 정비(1장부터).
