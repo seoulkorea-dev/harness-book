@@ -162,7 +162,8 @@ def main():
                 print(f"실패 참고 문헌: 주소를 글로 드러냄 {text[:40]}"); n_fail += 1
             if "열람" in text:
                 print(f"실패 참고 문헌: 열람일 표기 {text[:40]}"); n_fail += 1
-            if not re.match(r'<a href="[^"]+">[^<]+</a>(?:, [^<]+\.)?$', li.strip()):
+            inner = re.match(r'<a href="[^"]+">([^<]+)</a>(?:, [^<]+\.)?$', li.strip())
+            if not inner or re.search(r", \d{4}(?:\.\d+\.\d+)?\.?$", inner.group(1)):
                 print(f"실패 참고 문헌: 항목 글이 링크로 감싸이지 않았거나 발행일이 링크 안에 있음 {text[:40]}"); n_fail += 1
     used = set()
     for f in files:
