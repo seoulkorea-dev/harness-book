@@ -14,5 +14,7 @@
   "hooks": {"type": "web", "author": "Anthropic", "title": "Hooks reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/hooks"},
   "hashimoto-adoption": {"type": "article", "author": "Mitchell Hashimoto", "title": "My AI Adoption Journey", "venue": "mitchellh.com", "date": "2026.2.5", "url": "https://mitchellh.com/writing/my-ai-adoption-journey"},
   "permissions": {"type": "web", "author": "Anthropic", "title": "Configure permissions", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permissions"},
-  "how-cc-works": {"type": "web", "author": "Anthropic", "title": "How Claude Code works", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/how-claude-code-works"}
+  "how-cc-works": {"type": "web", "author": "Anthropic", "title": "How Claude Code works", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/how-claude-code-works"},
+  "messages-api": {"type": "web", "author": "Anthropic", "title": "Using the Messages API", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"},
+  "permission-modes": {"type": "web", "author": "Anthropic", "title": "Permission modes", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permission-modes"}
 }

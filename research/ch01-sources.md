@@ -382,3 +382,32 @@
 
 ## S36. Codex 소개 문구
 - https://github.com/openai/codex : "Codex CLI is a coding agent from OpenAI that runs locally on your computer."(CLI 한정). 제품 전체를 정의한 1차 문구는 미확인 → 본문은 "OpenAI의 Codex"를 코딩 에이전트 제품의 예로만 씀
+
+# 2026-10-22 1장 기술 확인(fact-checker, 1장 다시 만들기 PR #85)
+확인일: 2026-10-22. 원문을 직접 열어 확인한 내용만 적는다. 로컬 Claude Code v2.1.302.
+
+## S37. Anthropic, Using the Messages API(Claude Platform Docs)
+- URL: https://platform.claude.com/docs/en/build-with-claude/working-with-messages
+- "Multiple conversational turns": "The Messages API is stateless, which means that you always send the full conversational history to the API" → background "기억" 항목(미확인 3 해소). 상단 표: Messages API "Best for: Custom agent loops and fine-grained control" → agent-harness "모델의 API로 루프를 직접 작성해 하네스를 만들면"
+
+## S38. Anthropic, Permission modes(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/permission-modes
+- "Available modes": "Deny rules block in every mode, including bypassPermissions" → loop 권한 모드 문단. "Which mode a session starts in": v2.1.283 이상 대화형 터미널은 auto로 시작, claude -p와 Agent SDK는 v2.1.302 이상에서 모드를 정하지 않으면 Manual이고 승인이 필요한 호출은 거부 → request 3번은 "사람의 확인이 필요한 동작이면"으로 조건화
+
+## S18 재확인(Configure permissions)
+- "What a Bash rule doesn't match": Bash(git push *)는 git -C . push …, git -c … push …, git 'push' …을 막지 못함, 규칙은 보안 경계가 아님(대안: 샌드박스, PreToolUse 훅) → loop 금지 규칙 문단. Read 금지 규칙은 grep -r처럼 파일을 지정하지 않는 명령에는 적용되지 않음
+
+## S17 재확인(Hooks reference, Stop)
+- stop_hook_active, 연속 8회 차단 뒤 다음 차단 무시(도구 호출 때 초기화, CLAUDE_CODE_STOP_HOOK_BLOCK_CAP), 사용자 중단 때는 실행되지 않음 → loop Stop 훅 문장("연이어 여러 번", 횟수는 쓰지 않음)
+
+## S10 재확인(Building effective agents)
+- workflows "predefined code paths", agents "dynamically direct their own processes and tool usage", prompt chaining 예 "Generating Marketing copy, then translating it into a different language" → meanings 워크플로 예. 저자 줄 "Erik S. and Barry Zhang"(성 표기 직접 확인 못 함)
+
+## 실행 기록(R8, 표 1-9), v2.1.302
+- /context: claude -p "/context" 실행(Git Bash는 MSYS_NO_PATHCONV=1). System prompt, System tools, MCP tools, Memory files, Skills, Messages, Free space, Autocompact buffer가 항목별 토큰 수로 보임 → 표 1-9 일치
+- /usage: 실행 확인. 구독 계정은 요금제 사용량 표시. Manage costs 문서: 금액은 로컬 정가 계산 추정, 청구는 Console → 표 1-9 일치
+- /permissions: 비대화형에서 실행 불가("isn't available in this environment"), 문서로 대체(대화 상자가 모든 권한 규칙과 출처 settings.json을 나열)
+
+## 재시도 실패
+- OpenAI Harness engineering, Unrolling the Codex agent loop: HTTP 403. 1,500 PR과 네 가지 내용은 2026-10-04 기록(S2)에만 근거(Q-090). Codex 글의 턴 정의 문장은 미확인이라 본문에서 뺌(수백 번 도구 호출과 컨텍스트 소진은 검색 결과의 openai.com 발췌로 일치)
+- ReAct: 초록 범위만 확인(S11) → "모델 바깥의 코드가 맡았다" 문장을 빼고 "루프의 원형에 해당"으로 줄임
