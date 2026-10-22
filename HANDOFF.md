@@ -1,9 +1,10 @@
 # 인계(HANDOFF)
 
-- 갱신: 2026-10-22(1장 정비, ch01-rules)
-- 브랜치: ch01-rules(이슈 #66 ②, PR #69)
+- 갱신: 2026-10-22(작업 체계 동결, freeze-workflow)
+- 브랜치: freeze-workflow(이슈 #66 0단계, PR #72)
 
 ## 지금 상태
+- 2026-10-22: 이슈 #66 0단계 작업 체계 마지막 변경과 동결(PR #72, D-129). 에이전트를 출판 역할에 맞춤: editor 편집자 방식(총평, 가장 큰 문제 셋, 점검 질문 10개, 수정 전과 수정 후), flow-reviewer 내용 정리표(논지 사슬 표 대체), fact-checker 실행 확인, reader-expert 장 PR마다 필수, reader-novice 교정, practice-checker(신규, alt-reviewer 대체), production-checker(신규, figure-checker 대체). 장 PR마다 여섯 확인 표(REVIEW_RULES.md). 새 판은 docs/staged-claude/, 병합 뒤 python tools/autorun.py --apply-only. 작업 체계는 이제 동결. 병합 직후 python tools/autorun.py --apply-only를 실행하고, 그 전에는 /next를 쓰지 않음(.claude/의 옛 next, review-chapter, editor가 지운 alt-reviewer, figure-checker를 가리킴). CLAUDE.md 표는 Q-093. 다음은 1단계 기준서(BOOK_STANDARD.md), 병합 뒤 "기준서 승인" 대기
 - 2026-10-22: 1장 정비 병합, 작가 확인 대기(이슈 #66 ②, PR #69). 이슈 #66에 "계속" 댓글이 있을 때만 2장 정비로 넘어감(autopilot 멈춤 조건). 1장: R9(표 열 이름, 결론 한 줄 캡션), R10(같은 장 링크 0), R11(인용 15곳 → 각주 20개, 참고 자료 문서 단위 12건), R12(변경 요청 사항), R3 주어, R2 반론 문장 삭제, 토큰 정의(#63). 점검 에이전트(flow 필수 4, novice sonnet 읽기 중단 2, expert 필수 9, fact 필수 0) 반영: 표 1-1 확인 행, 결합형의 안내와 강제 구분, Stop 훅 조건, 턴은 문서마다 다름, 상한은 Agent SDK 옵션(기본 제한 없음), 표 1-6 행 정리, 표 1-8 "먼저 의심할 층", 표 1-9 행 분리, 예제 첫 소개. 지시 밖 변경: lint/check_style.py, lint/check_structure.py(각주로 정비한 장의 참고 자료 인식, D-123의 결과), lint/check_rules.py R2 정규식 확장. 작가 확인 Q-086~Q-092. 다음은 작가 확인 뒤 2장 정비.
 - 2026-10-22: R13~R17, 판정 등급, 장별 점검 질문 10개 반영(이슈 #66 Neo 보충, PR #70, D-128). REVIEW_RULES.md, editor, reader-expert, flow-reviewer 새 판(docs/staged-claude, 병합 뒤 --apply-only). 다음은 1장 정비(초안 PR #69, 브랜치 ch01-rules), PR 설명에 장별 점검 질문 답 표.
 - 2026-10-22: 반복 지적을 규칙과 자동 검사로 승격(이슈 #66 ①, PR #67, D-122~D-127). REVIEW_RULES.md(R1~R12), lint/check_rules.py(정비를 마친 장은 lint/rules_applied.txt에 적어 실패 규칙 강제, 나머지는 경고), tools/check_tasks.py(R6, 작업 2, 3 공백 2건을 잡음), docs/example-facts.md(R7), docs/external-review-prompt.md, STYLE 4, 7~10절(각주, 같은 장 링크, 표 체계, 예제 이름, 단정), AUTHOR_PREFS, 각주 CSS, editor, fact-checker, flow-reviewer 새 판은 docs/staged-claude(병합 뒤 --apply-only). Q-083(CLAUDE.md 예제 이름). 다음은 이슈 #66 ② 장별 정비(1장부터).
@@ -64,18 +65,23 @@
 
 ## 작업 목록
 - [x] 이슈 #66 ② 장별 정비: 1장(REVIEW_RULES R1~R17, lint/rules_applied.txt에 ch01, PR #69)
-- [ ] (작가 확인 대기) 1장 정비 병합 뒤 멈춤: HANDOFF "지금 상태"와 이슈 #66에 "1장 정비 병합, 작가 확인 대기"를 남기고, 이슈 #66에 Neo의 "계속" 댓글이 있을 때만 이 항목을 체크하고 2장부터 진행(이슈 #66 작가 결정)
-- [ ] 이슈 #66 ② 장별 정비: 2장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 3장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 4장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 5장(이슈 #63 반영분 포함)(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 6장(이슈 #65 반영분, R6 예제 수정은 3, 6, 7장과 부록 함께, 정비 뒤 rules_applied에 R6)(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 7장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 8장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 9장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 10장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 11장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
-- [ ] 이슈 #66 ② 장별 정비: 시작하며, 마치며, 부록(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [x] (작가 확인 대기) 1장 정비 병합 뒤 멈춤: 이슈 #66 개정판(2026-10-22 05:22, 작가 승인 통합 계획)으로 대체됨. 아래 0~2단계를 먼저 하고 장별 정비는 3단계로
+- [x] 이슈 #66 0단계: 작업 체계 마지막 변경과 동결(D-129, PR #72): 에이전트를 출판 역할에 맞춤(practice-checker, production-checker 신규, alt-reviewer, figure-checker 삭제), 여섯 확인 표. 병합 뒤 python tools/autorun.py --apply-only로 .claude/에 반영
+- [ ] 이슈 #66 1단계: 기준서 BOOK_STANDARD.md(독자, 목차, 장 틀, 문체, 용어표, 예제 이름, 하네스 정의, 그림 체계와 그림 흐름 규칙, 표 체계와 표 항목 기준, 인용 방식(책 전체 번호, 책 끝 참고 문헌, 문단 아래 각주와 장 끝 참고 자료 없앰, 이슈 #66 2026-10-22 05:22 작가 결정), 흐름과 문맥 기준, R1~R17(그림 제목도 R1 대상), 구성형 그림 번호, 여섯 확인, 그림 해설표 선택지). 이슈 #66 Neo 댓글(05:25, 05:26, 05:38)의 기준서 항목 포함. 인용 검사를 check_all에 더함
+- [ ] (작가 확인 대기) 기준서 병합 뒤 멈춤: 이슈 #66에 "기준서 승인" 댓글이 있을 때만 이 항목을 체크하고 2단계로
+- [ ] 이슈 #66 2단계: 1장 완성본(기준서 전부 적용, 인용 방식 변경, 내용 정리표, 여섯 확인 표, editor 편집 검토서)
+- [ ] (작가 확인 대기) 1장 완성본 병합 뒤 멈춤: 작가 최종 검수와 수정 비율 기록(5% 미만이면 기준 확정), 이슈 #66에 "계속" 댓글이 있을 때만 3단계로
+- [ ] 이슈 #66 3단계 장별 정비: 2장(기준서와 REVIEW_RULES R1~R17 전부, 그림 2-1 고침(이슈 #66 Neo 05:25, 05:26), 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 3장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 4장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 5장(이슈 #63 반영분 포함)(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 6장(이슈 #65 반영분, R6 예제 수정은 3, 6, 7장과 부록 함께, 정비 뒤 rules_applied에 R6)(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 7장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 8장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 9장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 10장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 11장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 3단계 장별 정비: 시작하며, 마치며, 부록(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [x] 표기 통일(D-108, PR #6, Neo가 직접 반영한 예외)
 - [x] 2장 개정(D-109, PR #7, Neo가 직접 반영한 예외)
 - [x] 3장 개정(장 틀 보강, 그림 규칙 적용, Q-009~Q-011)
@@ -139,6 +145,7 @@
 | 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(3차, 필수 0, 1차 .pyc, 2차 작가 확인 대기 지점 → 반영, reviews/2026-10-22-review-rules-editor-1.md, -2.md, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
 | 2026-10-22 | R13~R17, 판정 등급, 점검 질문(이슈 #66 보충) | #70 | 병합 가능(필수 0, reviews/2026-10-22-review-rules-2-editor.md) | 통과 | 없음 |
 | 2026-10-22 | 1장 정비(이슈 #66 ②) | #69 | 병합 가능(2차, 1차 필수 2: PR 설명과 HANDOFF, reader-novice 모델 → 반영, reviews/2026-10-22-ch01-rules-editor.md) | 통과 | Q-086~Q-092 |
+| 2026-10-22 | 작업 체계 마지막 변경과 동결(이슈 #66 0단계) | #72 | 병합 가능(2차, 1차 필수 1: flow-reviewer 옛 참조 → 반영, reviews/2026-10-22-freeze-workflow-editor.md) | 통과 | Q-093 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
