@@ -37,11 +37,11 @@ REF_PAGE = next((pid for pid in ORDER if META[pid].get("generated") == "referenc
 
 
 def bib_entry(e):
-    if e["type"] == "web":
-        text = f'{e["author"]}, “{e["title"]}”, 《{e["venue"]}》, ({e["accessed"]} 열람).'
-    else:
-        text = f'{e["author"]}, “{e["title"]}”, {e["venue"]}, {e["date"]}.'
-    return html.escape(text, quote=False) + f' <a href="{html.escape(e["url"])}">{html.escape(e["url"])}</a>'
+    # 항목 글(저자, 제목, 매체)을 주소 링크로 감싸고 주소는 글로 드러내지 않음, 발행일은 링크 밖, 열람일 없음(이슈 #66 08:53)
+    venue = f'《{e["venue"]}》' if e["type"] == "web" else e["venue"]
+    text = html.escape(f'{e["author"]}, “{e["title"]}”, {venue}', quote=False)
+    link = f'<a href="{html.escape(e["url"])}">{text}</a>'
+    return link if e["type"] == "web" else f'{link}, {html.escape(e["date"], quote=False)}.'
 
 
 def cites(pid, body):

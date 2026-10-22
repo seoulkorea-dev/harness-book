@@ -5,7 +5,7 @@ src/chapters/*.html, src/appendix/*.html을 검사한다. 장별 정비를 마�
 "실패" 규칙을 어기면 실패, 아직 정비하지 않은 장은 경고만 낸다. "경고" 규칙은 모든 장에서 경고만 낸다.
   실패 규칙: R2 출처 없는 반론, R9 표 열 설계(실패 표와 확인 표의 열 이름, 열 수 4개 이하, 모호하거나 동사형이거나
              지시 표현이 든 열 이름, 열 이름 나열 설명 줄, 설명 줄의 지시 표현), R10 같은 장 링크와 괄호 절 참조,
-             R11 본문의 #ref- 링크와 위첨자 번호와 각주 1:1, R12 약어 CR과 (Change Request)
+             R11 본문의 #ref- 링크와 위첨자 번호와 각주 1:1, 참고 문헌 항목 형식(주소 글 노출, 열람일), R12 약어 CR과 (Change Request)
   경고 규칙: R1 단정 표현, R3 제품이 실험한 것처럼 읽히는 주어, R4 각주 없는 버전 번호
 각주 형식(D-123): 본문 <sup class="fnref">n</sup>, 그 문단 바로 아래 <ol class="fn" start="n"><li>…</li></ol>
 종료 코드: 실패가 하나라도 있으면 1.
@@ -147,6 +147,23 @@ def main():
             if key in seen:
                 print(f"실패 bibliography: 같은 자료에 키 둘({seen[key]}, {k}, {field})"); n_fail += 1
             seen[key] = k
+    # 참고 문헌 항목 형식(이슈 #66 08:53): 열람일 금지, 주소를 글로 드러내지 않음(항목 글을 링크로 감쌈), 발행일은 링크 밖
+    for k, v in bib.items():
+        if "accessed" in v or any("열람" in str(x) for x in v.values()):
+            print(f"실패 bibliography: 열람일 표기 {k}"); n_fail += 1
+    site = json.load(open(os.path.join(ROOT, "src", "site.json"), encoding="utf-8"))
+    for pg in site["pages"].values():
+        out = os.path.join(ROOT, pg["path"])
+        if pg.get("generated") != "references" or not os.path.exists(out):
+            continue
+        for li in re.findall(r'<li id="bib-\d+">(.*?)</li>', open(out, encoding="utf-8").read(), re.S):
+            text = re.sub(r"<[^>]+>", "", li)
+            if re.search(r"https?://|www\.", text):
+                print(f"실패 참고 문헌: 주소를 글로 드러냄 {text[:40]}"); n_fail += 1
+            if "열람" in text:
+                print(f"실패 참고 문헌: 열람일 표기 {text[:40]}"); n_fail += 1
+            if not re.match(r'<a href="[^"]+">[^<]+</a>(?:, [^<]+\.)?$', li.strip()):
+                print(f"실패 참고 문헌: 항목 글이 링크로 감싸이지 않았거나 발행일이 링크 안에 있음 {text[:40]}"); n_fail += 1
     used = set()
     for f in files:
         used |= set(re.findall(r'<sup class="cite" data-ref="([^"]+)"></sup>', open(f, encoding="utf-8").read()))
