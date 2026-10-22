@@ -4,6 +4,7 @@
 - 브랜치: autorun-recovery(이슈 #34, PR #52)
 
 ## 지금 상태
+- 2026-10-22: 반복 지적을 규칙과 자동 검사로 승격(이슈 #66 ①, PR #67, D-122~D-127). REVIEW_RULES.md(R1~R12), lint/check_rules.py(정비를 마친 장은 lint/rules_applied.txt에 적어 실패 규칙 강제, 나머지는 경고), tools/check_tasks.py(R6, 작업 2, 3 공백 2건을 잡음), docs/example-facts.md(R7), docs/external-review-prompt.md, STYLE 4, 7~10절(각주, 같은 장 링크, 표 체계, 예제 이름, 단정), AUTHOR_PREFS, 각주 CSS, editor, fact-checker, flow-reviewer 새 판은 docs/staged-claude(병합 뒤 --apply-only). Q-083(CLAUDE.md 예제 이름). 다음은 이슈 #66 ② 장별 정비(1장부터).
 - 2026-10-22: 하네스 정의 문안 교체(이슈 #53, PR #61, D-121). 1장 "이 책의 에이전트와 하네스" 본문과 2장 첫 문단을 작가 문안으로(검사 맞춤 세 곳 Q-081), 하네스 전체를 "모델 바깥의 실행 체계"로(1장 요약, 그림 1-1, 표 1-5, 시작하며, 용어집, AUTHOR_PREFS 핵심 정의), 표 1-3 "실행 장치" 정의 전 사용 해소, 2장 실행 장치 링크, 1장, 2장 논지 사슬 표 갱신. 작가 문안의 "Claude는 그 안에서 판단"은 Q-082. 다음은 이슈 #54.
 - 2026-10-22: 1장 절 제목 "같은 말, 다른 뜻" → "같은 명칭, 다른 맥락"(이슈 #51, PR #59, D-120). 앵커 meanings 유지, 절 첫 문단과 하네스 문단 첫 문장을 명칭과 맥락으로 다듬음, reviews/flow/ch01-flow.md 절 이름. 다음은 이슈 #53.
 - 2026-10-22: 자동 실행 자가 복구와 상태 알림(이슈 #34, PR #52, D-119). tools/autorun.py: 설정 반영(docs/staged-claude/를 임시 worktree에서 .claude/에 복사, settings.json은 deny와 ask 추가, allow 삭제만 허용하는 허용 목록, agents와 commands는 머리말의 tools, allowed-tools, hooks 변경 차단, check_all, PR, CI 최대 20분, 병합, 실패 되돌림과 같은 내용 재시도 안 함, 반영 뒤 main이면 이 폴더 pull), 자기 다시 시작(실행 중 파일과 main 비교, 자식 프로세스와 잠금 넘겨주기), 상태 이슈 "자동 실행 상태"(작가 알림에만 @, AUTORUN_GH_TOKEN), 분류(사용량 한도 대기, 일시 오류 3회 재시도, 그 밖의 오류 바로 멈춤), 잠금 logs/autorun.lock, 단위 세션 "/next unit". next.md 새 판은 docs/staged-claude/에 두어 병합 뒤 --apply-only로 반영. 작가 확인 Q-077~Q-080(특히 Q-078: 알림을 받으려면 별도 계정 토큰). 다음은 이슈 #51(1장 절 제목).
@@ -60,6 +61,19 @@
 - 2026-10-20: 3장 개정 완료(브랜치 ch03-write). 명세(docs/specs/ch03-spec.md, fig3-1-spec.md) editor 검토 반영, 그림 3-1 시안 A 채택(Q-010), 점검 에이전트 필수 반영(처리표 reviews/agents/2026-10-20-ch03-review-summary.md), editor 정식 검수 "병합 가능"(reviews/2026-10-20-ch03-editor.md), check_all 통과. 4장은 그림 체계 통일(이슈 #9)과 이슈 #10 뒤로 미룸(작가 지시).
 
 ## 작업 목록
+- [ ] 이슈 #66 ② 장별 정비: 1장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] (작가 확인 대기) 1장 정비 병합 뒤 멈춤: HANDOFF "지금 상태"와 이슈 #66에 "1장 정비 병합, 작가 확인 대기"를 남기고, 이슈 #66에 Neo의 "계속" 댓글이 있을 때만 이 항목을 체크하고 2장부터 진행(이슈 #66 작가 결정)
+- [ ] 이슈 #66 ② 장별 정비: 2장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 3장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 4장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 5장(이슈 #63 반영분 포함)(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 6장(이슈 #65 반영분, R6 예제 수정은 3, 6, 7장과 부록 함께, 정비 뒤 rules_applied에 R6)(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 7장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 8장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 9장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 10장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 11장(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- [ ] 이슈 #66 ② 장별 정비: 시작하며, 마치며, 부록(REVIEW_RULES R1~R12 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [x] 표기 통일(D-108, PR #6, Neo가 직접 반영한 예외)
 - [x] 2장 개정(D-109, PR #7, Neo가 직접 반영한 예외)
 - [x] 3장 개정(장 틀 보강, 그림 규칙 적용, Q-009~Q-011)
@@ -120,6 +134,7 @@
 | 2026-10-22 | 자동 실행 자가 복구와 상태 알림(이슈 #34) | #52 | 병합 가능(필수 0, reviews/2026-10-22-autorun-recovery-editor.md) | 통과(--selftest 통과) | Q-077~Q-080 |
 | 2026-10-22 | 1장 절 제목 변경(이슈 #51) | #59 | 병합 가능(필수 0, reviews/2026-10-22-ch01-meanings-title-editor.md) | 통과 | 없음 |
 | 2026-10-22 | 하네스 정의 문안 교체(이슈 #53) | #61 | 병합 가능(필수 0, reviews/2026-10-22-harness-definition-editor.md) | 통과 | Q-081, Q-082 |
+| 2026-10-22 | 규칙과 자동 검사 승격(이슈 #66 ①) | #67 | 병합 가능(3차, 필수 0, 1차 .pyc, 2차 작가 확인 대기 지점 → 반영, reviews/2026-10-22-review-rules-editor-1.md, -2.md, reviews/2026-10-22-review-rules-editor.md) | 통과 | Q-083 |
 
 ## 이전 다음 할 일(참고)
 1. 2장부터 /plan-chapter로 장 명세(templates/chapter-spec.md)와 그림 명세(templates/figure-spec.md)를 먼저 만들고 작가 확인을 받는다(D-107). 확인 전에는 원고와 그림을 쓰지 않는다.
