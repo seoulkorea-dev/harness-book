@@ -65,3 +65,10 @@
 ### S-C6-9. 예제 파일 대조(내부 기록)
 - examples/expense-app/reference/tasks.example.json = 표 6-4와 본문 JSON(작업 2, 3)과 글자 일치, 확인 2026-10-20
 - examples/expense-app/RUNLOG.md(2026-10-16): tests 3건 실패 0건, acceptance 5건 실패 3건(test_1, 2, 3). 넷째·다섯째 통과는 이 목록에서 도출. 실행은 이번에 하지 못함
+
+## 2026-10-23 fact-checker 재확인(PR #98)
+- S-C6-10 Young(2025) 재확인(https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): 실험은 "Opus 4.5 running on the Claude Agent SDK", "Claude Code"는 감사의 말에만(S-C6-8). 두 실패("running out of context in the middle of its implementation", "declare the job done"), 기능 목록 200개 이상과 "failing", 한 번에 기능 하나, JSON은 "After some experimentation, we landed on using JSON … less likely to inappropriately change or overwrite"(선택 이유, 측정 결과 아님), "edit this file only by changing the status of a passes field". 본문 표기 "Claude Code의 장기 실행 글"은 이슈 #65 지시를 따름(작가 결정 Q-039, Q-101)
+- S-C6-11 sub-agents: 비포크는 새 컨텍스트, 대화 기록은 보지 않음, CLAUDE.md는 로드(Explore, Plan 제외). 포크는 대화 전체 상속. "Fork mode is on by default from Claude Code v2.1.302, and in an interactive terminal session from v2.1.232." 끄기: CLAUDE_CODE_FORK_SUBAGENT=0 또는 permissions.deny에 Agent(fork). "each subagent spends tokens of its own while it runs"
+- S-C6-12 agent-loop: 상한은 하위 에이전트 포함, v2.1.217 이상 "Budget limit reached", Budget headroom(응답 도착 뒤 비교). "grows by a summary, not by the subtask's transcript"(맡긴 요청이 남는다는 직접 서술은 없고 What consumes context 표로 추론). costs: "roughly proportional to team size", "disabled by default", "The subagent's own requests still draw on your usage"("실험 기능"은 glossary). glossary: "experimental and disabled by default", 직접 대화. cli-reference: --max-budget-usd는 print mode only. permissions: Read, Edit 규칙은 경로 패턴, 파일 안 항목 단위 규칙은 찾지 못함(부재 확인 범위: Read and Edit, Tool-specific rules)
+- S-C6-13 git 실행(git 2.55.0.windows.5): commit 없는 저장소의 git diff HEAD는 fatal(128). 추적하지 않는 새 파일은 git diff, --cached, HEAD 모두 빈 출력(0), status ??. add 뒤에는 git diff HEAD가 new file로 출력. 스테이징 전후 git diff와 --cached 동작 확인
+- S-C6-14 예제: python -B check.py → tests 3건 실패 0, acceptance 5건 실패 3(test_1~3), 종료 코드 1. tasks.example.json = 표 6-4와 본문 JSON. 실습 5에 tasks.json commit 단계가 없던 것은 이번 PR에서 추가
