@@ -23,5 +23,6 @@
   "commands": {"type": "web", "author": "Anthropic", "title": "Commands", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/commands"},
   "sub-agents": {"type": "web", "author": "Anthropic", "title": "Create custom subagents", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/sub-agents"},
   "context-window": {"type": "web", "author": "Anthropic", "title": "Explore the context window", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/context-window"},
-  "skills": {"type": "web", "author": "Anthropic", "title": "Extend Claude with skills", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/skills"}
+  "skills": {"type": "web", "author": "Anthropic", "title": "Extend Claude with skills", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/skills"},
+  "costs": {"type": "web", "author": "Anthropic", "title": "Manage costs effectively", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/costs"}
 }
