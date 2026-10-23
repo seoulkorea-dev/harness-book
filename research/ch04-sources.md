@@ -79,3 +79,16 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
   - 원고 처리: "도구 사용 절"과 "명확하고 직접적인 지시 절"을 나누어 씀(1차 실무자, 편집자 지적)
 - 예제 사실(R7): 요청문의 EXP-105, EXP-109, "통합 테스트 시작 예정일 2026-10-19"는 docs/example-facts.md와 examples/expense-app/에 없어 뺌. 운영 위원회 날짜는 D-012(2026-10-12, examples/expense-app/DECISIONS.md), 요청 부서, 요청일, 사유는 docs/CR.md와 같음. "정산 요청 화면(등록, 목록)에는 프로젝트 코드 항목이 없음"은 docs/CR.md 수용 기준 1, 3과 example-facts의 구현 전 상태(수용 시험 1, 2, 3 실패)에 따름
 - 미확인 유지: 두 페이지의 게시일과 개정일
+
+## C4-2, C4-1 재확인과 새 출처(2026-10-23 fact-checker, PR #89)
+- S: C4-4 Anthropic, Effective context engineering for AI agents(자료 키 context-engineering)
+- URL: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, 확인 2026-10-23
+- 게시일: 2025-09-29, 작성: Prithvi Rajasekaran 외(Anthropic Engineering)
+- 사용한 내용: 컨텍스트의 토큰이 늘수록 모델이 그 컨텍스트에서 정보를 정확히 기억해 내는 능력이 떨어지는 현상(context rot). 글은 이 특성이 모든 모델에서 나타나며 모델마다 정도가 다르다고 설명. 4장 자료의 양과 선별 항목의 근거
+- S: C4-5 Anthropic, Glossary(자료 키 platform-glossary)
+- URL: https://platform.claude.com/docs/en/about-claude/glossary, 확인 2026-10-23
+- 사용한 내용: Context window("the amount of text a language model can look back on and reference when generating new text"), Tokens("the smallest individual units of a language model"), Temperature 절의 "identical inputs might produce different outputs across API calls"(같은 요청의 결과가 달라질 수 있다는 근거, 4장 확인 방법 절 끝 문장)
+- C4-1 overview, 확인 2026-10-23: "Before prompt engineering" 세 전제와 "When to prompt engineer"의 latency와 cost 문장 원문이 2026-10-22 기록과 같음
+- C4-2 best practices, 확인 2026-10-23: Be clear and direct, Add context(motivation: "give Claude more information about your goals"), Use examples effectively(Relevant, Diverse, Structured, Tip "3–5 examples"), Structure prompts with XML tags, Control the format of responses, Tool usage의 원문이 2026-10-22 기록과 같음
+- 예제 사실(R7) 확인 2026-10-23: CR.md(재무팀, 2026-10-05, 사유, D-012), examples/expense-app/DECISIONS.md D-012(2026-10-12, 운영 위원회 결정, 실시간 연동 규격 없음), docs/example-facts.md와 일치
+- 미확인 유지: prompt-overview와 prompting-best-practices의 게시일과 개정일(페이지에 표기 없음). ch02가 권한 규칙의 적용 범위(Bash 규칙이 매칭하지 않는 경우와 sandbox 병행)를 다루는지(검증 후 확정)
