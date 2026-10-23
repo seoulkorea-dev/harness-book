@@ -411,3 +411,43 @@
 ## 재시도 실패
 - OpenAI Harness engineering, Unrolling the Codex agent loop: HTTP 403. 1,500 PR과 네 가지 내용은 2026-10-04 기록(S2)에만 근거(Q-090). Codex 글의 턴 정의 문장은 미확인이라 본문에서 뺌(수백 번 도구 호출과 컨텍스트 소진은 검색 결과의 openai.com 발췌로 일치)
 - ReAct: 초록 범위만 확인(S11) → "모델 바깥의 코드가 맡았다" 문장을 빼고 "루프의 원형에 해당"으로 줄임
+
+# 2026-10-23 ch01 기술 감수(fact-checker, 1장 플레이북 시범 PR #103)
+확인일: 2026-10-23. 원문을 직접 열어 확인한 내용만 적는다. 로컬 Claude Code v2.1.302. 보고 전문은 reviews/agents/2026-10-23-ch01-fact-checker.md
+
+## S39. Anthropic, Using the Messages API(Claude Platform Docs) 재확인
+- URL: https://platform.claude.com/docs/en/build-with-claude/working-with-messages
+- 사용한 내용: "The Messages API is stateless, which means that you always send the full conversational history to the API"(background 기억 항목, 범위를 API를 사용하는 프로그램으로 한정). 문서 첫 문장 "Anthropic offers two ways to build with Claude"(주체 표기 Anthropic). 상단 표 Messages API "Best for: Custom agent loops and fine-grained control"
+
+## S40. Anthropic, How tool use works 재확인
+- URL: https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works
+- 사용한 내용: "The model never runs anything on its own. It emits a structured request, your code (or Anthropic's servers) runs the operation". Server-executed tools 절: web_search, web_fetch, code_execution, tool_search는 Anthropic이 실행(background 실행 항목, 인용 추가)
+
+## S41. Anthropic, How the agent loop works 재확인
+- URL: https://code.claude.com/docs/en/agent-sdk/agent-loop
+- 사용한 내용: 거부된 도구 호출은 "Claude receives a rejection message as the tool result and typically attempts a different approach or reports that it couldn't proceed"("대개" 유지). 단계 표기는 Receive prompt, Evaluate and respond, Execute tools, Repeat, Return result(권한 확인을 별도 단계로 나눈 것과 완료 기준 확인은 이 책의 정리). 턴, 상한, 기본값, 종료 사유 subtype은 S5와 같음
+
+## S42. Anthropic, How Claude remembers your project / Glossary(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/memory , https://code.claude.com/docs/en/glossary
+- 사용한 내용: CLAUDE.md는 세션 시작 때 읽히고 시스템 프롬프트 뒤 사용자 메시지로 전달됨. 작업 위치와 상위에 CLAUDE.md가 없으면 AGENTS.md를 프로젝트 지침으로 읽음(v2.1.277 이상, Q-145). Hook handler는 shell command, HTTP endpoint, MCP tool, LLM prompt, subagent(Q-146)
+
+## S43. OpenAI, AGENTS.md 안내
+- URL: https://learn.chatgpt.com/docs/agent-configuration/agents-md (https://developers.openai.com/codex/guides/agents-md 에서 308 리디렉션)
+- 사용한 내용: "Codex reads AGENTS.md files before doing any work"(규칙 문서 설명의 "Codex에서는 AGENTS.md")
+
+## S17, S18, S20, S22, S34, S38 재확인(2026-10-23)
+- S17 Hooks: Stop은 "When Claude finishes responding", exit 2는 "Prevents Claude from stopping", stop_hook_active, 8회 연속 계속 상한 뒤 다음 차단 무시(도구 호출 시 초기화)
+- S18 Permissions: What a Bash rule doesn't match(git -C . push 등), Read and Edit 절(cat, head, tail, sed, tee 적용, grep -r과 스크립트 미적용), OS 수준 차단은 sandbox
+- S20/S32 Commands: /context [all], /permissions(별칭 /allowed-tools), /usage
+- S22/S31 Costs: Session block은 API 사용자용, 금액은 list price 로컬 계산 추정, 구독자는 plan usage
+- S34 Hashimoto: Step 5 "I've grown to calling this 'harness engineering.'", 2026-02-05
+- S38 Permission modes: "Deny rules block in every mode, including bypassPermissions"
+
+## 실행 기록(표 1-9), v2.1.302, 2026-10-23, 저장소 밖 빈 임시 폴더
+- claude -p "/context": System prompt, System tools, MCP tools, Skills, Messages, Free space, Autocompact buffer가 항목별 토큰 수로 나옴. 규칙 문서가 없는 폴더라 Memory files 항목 없음(파일이 있을 때만 나옴)
+- claude -p "/context all": 비전체화면에서는 같은 구성. all의 효과는 commands 문서로 확인
+- claude -p "/permissions": "/permissions isn't available in this environment." commands 문서로 대체
+- claude -p "/usage": 구독 계정, 요금제 사용률(Current session, Current week) 표시
+
+## 열람 실패(2026-10-23)
+- https://openai.com/index/unrolling-the-codex-agent-loop/ , https://openai.com/index/harness-engineering/ : HTTP 403. Q-040, Q-090 유지
