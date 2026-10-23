@@ -110,6 +110,7 @@
 - [ ] 이슈 #66 3단계 장별 정비: 9장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [ ] 이슈 #66 3단계 장별 정비: 10장(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [ ] 이슈 #66 3단계 장별 정비: 11장(실제 진행 과정과 맞는지 확인, 사실과 다른 곳은 고치고 판단이 필요한 것은 AUTHOR_QUEUE(19:00), 기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
+- 부록 정비 때(6장 practice-checker): 실습 5 1단계에 tasks.json을 첫 단위 전에 commit하는 단계와 git diff HEAD -- tasks.json 확인 추가. 3장 #88 병합 때: CLAUDE.example.md 작업 순서의 "통과하면"을 "그 단위의 확인 방법에 적힌 시험이 통과하면"으로(작업 4 전 check.py 종료 코드 1)
 - [ ] 이슈 #66 3단계 장별 정비: 시작하며, 마치며, 부록(기준서와 REVIEW_RULES R1~R17 전부, 정비 뒤 lint/rules_applied.txt에 추가)
 - [ ] production-checker 책 전체 한 번(D-139, 11장과 시작하며, 마치며, 부록 뒤)
 - [ ] /autopilot, review-chapter 절차 문서를 D-139 절차로(docs/staged-claude, 작게, 원고 작업 뒤, 병합 뒤 --apply-only)
