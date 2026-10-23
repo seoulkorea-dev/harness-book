@@ -1,0 +1,382 @@
+#!/usr/bin/env python3
+"""gh 대체 스크립트(클라우드 세션용): GraphQL을 쓰는 gh 명령을 REST(gh api)로 바꿔 실행한다.
+
+Claude Code 클라우드 세션의 프록시는 GitHub GraphQL을 막고 REST만 통과시킨다.
+이 스크립트를 PATH에서 진짜 gh보다 앞에 두면, 이 저장소의 절차와 도구가 쓰는
+issue, pr, label 명령을 REST로 처리하고 나머지(gh api 등)는 진짜 gh에 넘긴다.
+지원하지 않는 형태는 진짜 gh에 그대로 넘긴다(그때는 원래 오류가 난다).
+
+설치(앱의 클라우드 환경 설정 > Setup script, 작가 결정 D-137):
+  mkdir -p /root/.local/bin && ln -sf /home/user/harness-book/tools/ccr/gh /root/.local/bin/gh
+/root/.local/bin이 PATH에서 /usr/local/bin보다 앞이라 새 세션부터 이 스크립트가 쓰인다. VS Code(로컬)에는 설치하지 않는다.
+제한: issue pin은 REST가 없어 건너뜀, 원격 브랜치 삭제는 프록시가 거절할 수 있음(병합은 됨).
+"""
+import json, os, re, subprocess, sys, time, datetime
+
+REAL = os.environ.get("GH_REAL", "/usr/local/bin/gh")
+
+
+def real(args, inp=None, check=True):
+    r = subprocess.run([REAL, *args], input=inp, capture_output=True, text=True)
+    if check and r.returncode != 0:
+        sys.stderr.write(r.stderr or r.stdout)
+        sys.exit(r.returncode or 1)
+    return r
+
+
+def api(method, path, data=None, check=True, paginate=False):
+    args = ["api", "-X", method, path]
+    if paginate:
+        args += ["--paginate", "--slurp"]
+    inp = None
+    if data is not None:
+        args += ["--input", "-"]
+        inp = json.dumps(data)
+    r = real(args, inp, check)
+    if r.returncode != 0:
+        return None
+    out = r.stdout.strip()
+    if not out:
+        return None
+    data = json.loads(out)
+    if paginate:  # --slurp은 페이지 배열의 배열을 준다
+        data = [x for page in data for x in page]
+    return data
+
+
+def repo_of(opts):
+    if opts.get("repo"):
+        return opts["repo"]
+    if os.environ.get("GH_REPO"):
+        return os.environ["GH_REPO"]
+    url = subprocess.run(["git", "remote", "get-url", "origin"], capture_output=True, text=True).stdout.strip()
+    m = re.search(r"([^/:]+)/([^/]+?)(?:\.git)?$", url)
+    if not m:
+        sys.exit("gh(REST): 저장소를 알 수 없음(-R 소유자/저장소)")
+    return f"{m.group(1)}/{m.group(2)}"
+
+
+def parse(argv, flags_with_value, bool_flags):
+    """간단한 옵션 해석: 위치 인자와 옵션(--x v, --x=v, -x v)."""
+    pos, opts = [], {}
+    alias = {"-R": "repo", "-t": "title", "-b": "body", "-F": "body-file", "-B": "base", "-H": "head",
+             "-d": "draft", "-L": "limit", "-l": "label", "-s": "state", "-c": "comments", "-m": "merge", "-q": "jq"}
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        key = None
+        if a.startswith("--"):
+            key, _, val = a[2:].partition("=")
+            if _:
+                opts[key] = val
+                i += 1
+                continue
+        elif a in alias:
+            key, val = alias[a], None
+        if key is not None:
+            key = alias.get(a, key)
+            if key in bool_flags:
+                opts[key] = True
+                i += 1
+            elif key in flags_with_value:
+                opts.setdefault(key + "[]", []).append(argv[i + 1])
+                opts[key] = argv[i + 1]
+                i += 2
+            else:
+                return None, None  # 모르는 옵션: 진짜 gh로
+            continue
+        pos.append(a)
+        i += 1
+    return pos, opts
+
+
+def body_of(opts):
+    if "body-file" in opts:
+        f = opts["body-file"]
+        return sys.stdin.read() if f == "-" else open(f, encoding="utf-8").read()
+    return opts.get("body")
+
+
+def pr_number(repo, ref):
+    if ref is None:
+        br = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True).stdout.strip()
+        ref = br
+    m = re.search(r"(\d+)$", str(ref))
+    if m and (str(ref).isdigit() or "/pull/" in str(ref)):
+        return int(m.group(1))
+    owner = repo.split("/")[0]
+    prs = api("GET", f"repos/{repo}/pulls?state=all&head={owner}:{ref}&per_page=1")
+    if not prs:
+        sys.exit(f"gh(REST): PR을 찾지 못함: {ref}")
+    return prs[0]["number"]
+
+
+def emit(items, fields, jq=None):
+    if fields is not None:
+        keys = [f for f in fields.split(",") if f]
+        data = [{k: it.get(k) for k in keys} for it in items] if isinstance(items, list) else {k: items.get(k) for k in keys}
+        if jq:
+            r = subprocess.run(["jq", "-r", jq], input=json.dumps(data), capture_output=True, text=True)
+            sys.stdout.write(r.stdout)
+        else:
+            print(json.dumps(data, ensure_ascii=False))
+        return
+    for it in (items if isinstance(items, list) else [items]):
+        print(f'{it.get("number")}\t{it.get("title")}\t{it.get("state", "")}')
+
+
+# ---------- 변환 ----------
+def conv_issue(r, it):
+    return {"number": it["number"], "title": it["title"], "body": it.get("body") or "", "state": it["state"].upper(),
+            "url": it["html_url"], "labels": [{"name": l["name"]} for l in it.get("labels", [])],
+            "createdAt": it.get("created_at"), "updatedAt": it.get("updated_at")}
+
+
+def checks_of(repo, sha):
+    runs = (api("GET", f"repos/{repo}/commits/{sha}/check-runs?per_page=100") or {}).get("check_runs", [])
+    st = (api("GET", f"repos/{repo}/commits/{sha}/status") or {}).get("statuses", [])
+    out = [{"__typename": "CheckRun", "name": c["name"], "status": c["status"].upper(),
+            "conclusion": (c["conclusion"] or "").upper(), "detailsUrl": c.get("html_url")} for c in runs]
+    out += [{"__typename": "StatusContext", "context": s["context"], "state": s["state"].upper(),
+             "targetUrl": s.get("target_url")} for s in st]
+    return out
+
+
+def conv_pr(repo, p, fields=""):
+    state = "MERGED" if p.get("merged_at") else p["state"].upper()
+    d = {"number": p["number"], "title": p["title"], "body": p.get("body") or "", "state": state,
+         "isDraft": p.get("draft", False), "headRefName": p["head"]["ref"], "headRefOid": p["head"]["sha"],
+         "baseRefName": p["base"]["ref"], "url": p["html_url"], "mergedAt": p.get("merged_at"),
+         "createdAt": p.get("created_at"), "updatedAt": p.get("updated_at")}
+    if "files" in fields:
+        fs = api("GET", f"repos/{repo}/pulls/{p['number']}/files?per_page=100", paginate=True) or []
+        d["files"] = [{"path": f["filename"], "additions": f["additions"], "deletions": f["deletions"]} for f in fs]
+    if "statusCheckRollup" in fields:
+        d["statusCheckRollup"] = checks_of(repo, p["head"]["sha"])
+    if "mergeable" in fields:
+        full = api("GET", f"repos/{repo}/pulls/{p['number']}")
+        d["mergeable"] = {True: "MERGEABLE", False: "CONFLICTING"}.get(full.get("mergeable"), "UNKNOWN")
+    return d
+
+
+# ---------- issue ----------
+def cmd_issue(argv):
+    sub, rest = argv[0], argv[1:]
+    V = {"repo", "label", "state", "json", "limit", "title", "body", "body-file", "jq", "comment", "add-label",
+         "remove-label", "color", "description", "reason", "search", "assignee"}
+    B = {"comments", "web"}
+    pos, o = parse(rest, V, B)
+    if pos is None or o.get("web"):
+        return None
+    repo = repo_of(o)
+    if sub == "list":
+        state = (o.get("state") or "open").lower()
+        q = f"repos/{repo}/issues?state={state}&per_page=100"
+        if o.get("label"):
+            q += "&labels=" + ",".join(o["label[]"])
+        items = [conv_issue(repo, i) for i in (api("GET", q, paginate=True) or []) if "pull_request" not in i]
+        items = items[: int(o.get("limit", 30))]
+        emit(items, o.get("json"), o.get("jq"))
+    elif sub == "view":
+        it = conv_issue(repo, api("GET", f"repos/{repo}/issues/{pos[0]}"))
+        if o.get("json"):
+            if "comments" in o["json"]:
+                it["comments"] = [{"author": {"login": c["user"]["login"]}, "body": c["body"], "createdAt": c["created_at"]}
+                                  for c in api("GET", f"repos/{repo}/issues/{pos[0]}/comments?per_page=100", paginate=True) or []]
+            emit(it, o["json"], o.get("jq"))
+        else:
+            print(f'title:\t{it["title"]}\nstate:\t{it["state"]}\nnumber:\t{it["number"]}\nurl:\t{it["url"]}\n--\n{it["body"]}')
+            if o.get("comments"):
+                for c in api("GET", f"repos/{repo}/issues/{pos[0]}/comments?per_page=100", paginate=True) or []:
+                    print(f'\n--\nauthor:\t{c["user"]["login"]}\ndate:\t{c["created_at"]}\n--\n{c["body"]}')
+    elif sub == "create":
+        d = {"title": o["title"], "body": body_of(o) or ""}
+        if o.get("label"):
+            d["labels"] = o["label[]"]
+        print(api("POST", f"repos/{repo}/issues", d)["html_url"])
+    elif sub == "edit":
+        d = {}
+        if "title" in o:
+            d["title"] = o["title"]
+        b = body_of(o)
+        if b is not None:
+            d["body"] = b
+        if d:
+            api("PATCH", f"repos/{repo}/issues/{pos[0]}", d)
+        for l in o.get("add-label[]", []):
+            api("POST", f"repos/{repo}/issues/{pos[0]}/labels", {"labels": [l]})
+        for l in o.get("remove-label[]", []):
+            api("DELETE", f"repos/{repo}/issues/{pos[0]}/labels/{l}", check=False)
+        print(f"https://github.com/{repo}/issues/{pos[0]}")
+    elif sub == "comment":
+        print(api("POST", f"repos/{repo}/issues/{pos[0]}/comments", {"body": body_of(o)})["html_url"])
+    elif sub in ("close", "reopen"):
+        if o.get("comment"):
+            api("POST", f"repos/{repo}/issues/{pos[0]}/comments", {"body": o["comment"]})
+        d = {"state": "closed" if sub == "close" else "open"}
+        if sub == "close":
+            d["state_reason"] = {"not planned": "not_planned"}.get(o.get("reason", ""), "completed")
+        api("PATCH", f"repos/{repo}/issues/{pos[0]}", d)
+    elif sub == "pin":
+        sys.stderr.write("gh(REST): issue pin은 REST가 없어 건너뜀(고정은 GitHub 화면에서)\n")
+    else:
+        return None
+    return 0
+
+
+def cmd_label(argv):
+    if not argv or argv[0] != "create":
+        return None
+    pos, o = parse(argv[1:], {"repo", "color", "description"}, {"force"})
+    if pos is None:
+        return None
+    repo = repo_of(o)
+    r = api("POST", f"repos/{repo}/labels", {"name": pos[0], "color": o.get("color", "ededed"),
+                                              "description": o.get("description", "")}, check=False)
+    if r is None:
+        sys.stderr.write(f"gh(REST): label {pos[0]} 이미 있음\n")
+        return 1
+    return 0
+
+
+# ---------- pr ----------
+def cmd_pr(argv):
+    sub, rest = argv[0], argv[1:]
+    V = {"repo", "state", "json", "limit", "title", "body", "body-file", "base", "head", "search", "jq", "interval",
+         "comment", "label", "add-label", "remove-label", "subject"}
+    B = {"draft", "merge", "squash", "rebase", "delete-branch", "comments", "watch", "fill", "web", "auto", "required", "admin"}
+    pos, o = parse(rest, V, B)
+    if pos is None or o.get("web") or o.get("fill") or o.get("auto"):
+        return None
+    repo = repo_of(o)
+    if sub == "list":
+        st = (o.get("state") or "open").lower()
+        api_state = {"open": "open", "closed": "closed", "merged": "closed", "all": "all"}[st]
+        ps = api("GET", f"repos/{repo}/pulls?state={api_state}&per_page=100&sort=updated&direction=desc", paginate=True) or []
+        if st == "merged":
+            ps = [p for p in ps if p.get("merged_at")]
+        if st == "closed":
+            ps = [p for p in ps if not p.get("merged_at")]
+        m = re.search(r"merged:>=(\S+)", o.get("search", ""))
+        if m:
+            since = datetime.datetime.fromisoformat(m.group(1).replace("Z", "+00:00"))
+            if since.tzinfo is None:
+                since = since.replace(tzinfo=datetime.timezone.utc)
+            ps = [p for p in ps if p.get("merged_at") and
+                  datetime.datetime.fromisoformat(p["merged_at"].replace("Z", "+00:00")) >= since]
+        if o.get("head"):
+            ps = [p for p in ps if p["head"]["ref"] == o["head"]]
+        ps = ps[: int(o.get("limit", 30))]
+        f = o.get("json") or ""
+        emit([conv_pr(repo, p, f) for p in ps], o.get("json"), o.get("jq"))
+    elif sub == "view":
+        n = pr_number(repo, pos[0] if pos else None)
+        p = conv_pr(repo, api("GET", f"repos/{repo}/pulls/{n}"), o.get("json") or "")
+        if o.get("json"):
+            if "comments" in o["json"]:
+                p["comments"] = [{"author": {"login": c["user"]["login"]}, "body": c["body"], "createdAt": c["created_at"]}
+                                 for c in api("GET", f"repos/{repo}/issues/{n}/comments?per_page=100", paginate=True) or []]
+            emit(p, o["json"], o.get("jq"))
+        else:
+            print(f'title:\t{p["title"]}\nstate:\t{p["state"]}\ndraft:\t{p["isDraft"]}\nnumber:\t{n}\nurl:\t{p["url"]}\n--\n{p["body"]}')
+            if o.get("comments"):
+                for c in api("GET", f"repos/{repo}/issues/{n}/comments?per_page=100", paginate=True) or []:
+                    print(f'\n--\nauthor:\t{c["user"]["login"]}\ndate:\t{c["created_at"]}\n--\n{c["body"]}')
+    elif sub == "create":
+        head = o.get("head") or subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True).stdout.strip()
+        d = {"title": o["title"], "body": body_of(o) or "", "base": o.get("base", "main"), "head": head,
+             "draft": bool(o.get("draft"))}
+        print(api("POST", f"repos/{repo}/pulls", d)["html_url"])
+    elif sub == "edit":
+        n = pr_number(repo, pos[0] if pos else None)
+        d = {}
+        if "title" in o:
+            d["title"] = o["title"]
+        if "base" in o:
+            d["base"] = o["base"]
+        b = body_of(o)
+        if b is not None:
+            d["body"] = b
+        if d:
+            api("PATCH", f"repos/{repo}/pulls/{n}", d)
+        for l in o.get("add-label[]", []):
+            api("POST", f"repos/{repo}/issues/{n}/labels", {"labels": [l]})
+        print(f"https://github.com/{repo}/pull/{n}")
+    elif sub == "comment":
+        n = pr_number(repo, pos[0] if pos else None)
+        print(api("POST", f"repos/{repo}/issues/{n}/comments", {"body": body_of(o)})["html_url"])
+    elif sub == "ready":
+        n = pr_number(repo, pos[0] if pos else None)
+        if api("POST", f"repos/{repo}/pulls/{n}/ccr/ready_for_review", {}, check=False) is None:
+            r = real(["api", "-X", "POST", f"repos/{repo}/pulls/{n}/ccr/ready_for_review"], check=False)
+            if r.returncode != 0:
+                sys.stderr.write(r.stderr)
+                return 1
+        print(f"✓ Pull request #{n} is marked as \"ready for review\"")
+    elif sub == "merge":
+        n = pr_number(repo, pos[0] if pos else None)
+        method = "squash" if o.get("squash") else "rebase" if o.get("rebase") else "merge"
+        d = {"merge_method": method}
+        if o.get("subject"):
+            d["commit_title"] = o["subject"]
+        p = api("GET", f"repos/{repo}/pulls/{n}")
+        if p.get("draft"):
+            sys.stderr.write(f"gh(REST): #{n}은 초안이라 병합할 수 없음(gh pr ready 먼저)\n")
+            return 1
+        api("PUT", f"repos/{repo}/pulls/{n}/merge", d)
+        print(f"✓ Merged pull request #{n}")
+        if o.get("delete-branch"):
+            if api("DELETE", f"repos/{repo}/git/refs/heads/{p['head']['ref']}", check=False) is None:
+                r = real(["api", "-X", "DELETE", f"repos/{repo}/git/refs/heads/{p['head']['ref']}"], check=False)
+                if r.returncode != 0:
+                    sys.stderr.write(f"gh(REST): 원격 브랜치 {p['head']['ref']} 삭제 실패(병합은 됨)\n")
+    elif sub in ("close", "reopen"):
+        n = pr_number(repo, pos[0] if pos else None)
+        if o.get("comment"):
+            api("POST", f"repos/{repo}/issues/{n}/comments", {"body": o["comment"]})
+        api("PATCH", f"repos/{repo}/pulls/{n}", {"state": "closed" if sub == "close" else "open"})
+    elif sub == "checks":
+        n = pr_number(repo, pos[0] if pos else None)
+        interval = int(o.get("interval", 10))
+        while True:
+            sha = api("GET", f"repos/{repo}/pulls/{n}")["head"]["sha"]
+            cs = checks_of(repo, sha)
+            pend = [c for c in cs if c.get("status", "COMPLETED") != "COMPLETED" or c.get("state") == "PENDING"]
+            if not o.get("watch") or (cs and not pend):
+                break
+            if not cs:  # CI가 아직 시작하지 않음
+                pass
+            time.sleep(interval)
+        bad = 0
+        for c in cs:
+            if c["__typename"] == "CheckRun":
+                res = c["conclusion"].lower() or c["status"].lower()
+                print(f'{c["name"]}\t{res}\t{c.get("detailsUrl", "")}')
+                bad |= res not in ("success", "skipped", "neutral")
+            else:
+                print(f'{c["context"]}\t{c["state"].lower()}\t{c.get("targetUrl", "")}')
+                bad |= c["state"] != "SUCCESS"
+        if not cs:
+            print("no checks reported")
+            return 8
+        return 8 if pend else (1 if bad else 0)
+    else:
+        return None
+    return 0
+
+
+def main():
+    argv = sys.argv[1:]
+    if argv and argv[0] in ("issue", "pr", "label") and len(argv) > 1:
+        try:
+            rc = {"issue": cmd_issue, "pr": cmd_pr, "label": cmd_label}[argv[0]](argv[1:])
+        except (KeyError, IndexError) as e:
+            sys.stderr.write(f"gh(REST): 인자 해석 실패({e}), 진짜 gh로 넘김\n")
+            rc = None
+        if rc is not None:
+            sys.exit(rc)
+    os.execv(REAL, [REAL, *argv])
+
+
+if __name__ == "__main__":
+    main()
