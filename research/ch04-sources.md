@@ -63,3 +63,32 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
 - 내부 대조: ch02 표 2-3, 2-4(되돌리기 어려운 규칙은 권한 규칙으로 강제), ch02 tool-scope 절(모델은 요청만, 실행은 하네스. Agent SDK 문서 인용), ch02#instruct-enforce와 ch02#tool-scope 앵커 존재 확인
 - 판정: 4장 31행은 형식과 어조만 쓰고 구조를 뺐고(표 4-3과 불일치), 조건 목록과 Tip을 한 문장으로 합침(권장). 33, 34행과 확인 방법 절 끝 문장은 일치
 - 미확인 유지: 두 페이지의 게시일과 개정일. git diff는 실행하지 못해 지정한 여섯 곳만 대조
+
+## C4-1, C4-2 재확인(2026-10-22 작성 에이전트, 3단계 4장 정비, 이슈 #66)
+- 자료 키: prompt-overview(C4-1), prompting-best-practices(C4-2)를 research/bibliography.json에 추가(옛 표기 "Anthropic, 2026"은 두 문서를 한 항목에 묶었으므로 문서 하나에 키 하나로 나눔, 기준서 8절)
+- C4-1 overview, 확인 2026-10-22: "This guide assumes that you have: 1. A clear definition of the success criteria for your use case 2. Some ways to empirically test against those criteria 3. A first draft prompt you want to improve". "Not every success criterion or failing eval is best solved by prompt engineering. For example, you can sometimes improve latency and cost more easily by choosing a different model."
+  - 원고 처리: 성공 기준은 사용 사례 전체를 평가로 시험하는 기준이므로, 4장은 "이 책은 같은 순서를 요청 한 건에 적용"으로 범위를 밝힘(실무자, 편집자 1차 R13 지적). 세 문제(자료의 양과 선별, 반복 작업의 일관성, 결과 검증)는 이 책의 정리이고 원문 예는 지연 시간과 비용임을 본문에 밝힘
+- C4-2 best practices, 확인 2026-10-22(현행 문구)
+  - Be clear and direct: "If you want Claude to do more than the task strictly requires, explicitly request it rather than relying on the model to infer this from vague prompts." 이전 기록의 "above and beyond" 문구는 현행 페이지에 없음. 원고는 "과제가 요구하는 것보다 더 많은 일을 원하면"으로 옮김
+  - 같은 절 목록: "Be specific about the output format and constraints you want." "Provide instructions as sequential steps using numbered lists or bullet points when the order or completeness of steps matters."
+  - Add context to improve performance: "Providing context or motivation behind your instructions … can give Claude more information about your goals and help it deliver more targeted responses."
+  - Use examples effectively: "Examples are one of the most reliable ways to steer Claude's output format, tone, and structure." Relevant, Diverse, Structured. Tip "Include 3–5 examples for best results."
+  - Structure prompts with XML tags: "XML tags help Claude parse complex prompts unambiguously, especially when your prompt mixes instructions, context, examples, and variable inputs."
+  - Control the format of responses: "Tell Claude what to do instead of what not to do", 예 "Do not use markdown in your response" → "Your response should be composed of smoothly flowing prose paragraphs."
+  - Tool usage: "Claude's latest models are trained for precise instruction following … If you say "can you suggest some changes," Claude will sometimes provide suggestions rather than implementing them, even if making changes might be what you intended."
+  - 원고 처리: "도구 사용 절"과 "명확하고 직접적인 지시 절"을 나누어 씀(1차 실무자, 편집자 지적)
+- 예제 사실(R7): 요청문의 EXP-105, EXP-109, "통합 테스트 시작 예정일 2026-10-19"는 docs/example-facts.md와 examples/expense-app/에 없어 뺌. 운영 위원회 날짜는 D-012(2026-10-12, examples/expense-app/DECISIONS.md), 요청 부서, 요청일, 사유는 docs/CR.md와 같음. "정산 요청 화면(등록, 목록)에는 프로젝트 코드 항목이 없음"은 docs/CR.md 수용 기준 1, 3과 example-facts의 구현 전 상태(수용 시험 1, 2, 3 실패)에 따름
+- 미확인 유지: 두 페이지의 게시일과 개정일
+
+## C4-2, C4-1 재확인과 새 출처(2026-10-23 fact-checker, PR #89)
+- S: C4-4 Anthropic, Effective context engineering for AI agents(자료 키 context-engineering)
+- URL: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, 확인 2026-10-23
+- 게시일: 2025-09-29, 작성: Prithvi Rajasekaran 외(Anthropic Engineering)
+- 사용한 내용: 컨텍스트의 토큰이 늘수록 모델이 그 컨텍스트에서 정보를 정확히 기억해 내는 능력이 떨어지는 현상(context rot). 글은 이 특성이 모든 모델에서 나타나며 모델마다 정도가 다르다고 설명. 4장 자료의 양과 선별 항목의 근거
+- S: C4-5 Anthropic, Glossary(자료 키 platform-glossary)
+- URL: https://platform.claude.com/docs/en/about-claude/glossary, 확인 2026-10-23
+- 사용한 내용: Context window("the amount of text a language model can look back on and reference when generating new text"), Tokens("the smallest individual units of a language model"), Temperature 절의 "identical inputs might produce different outputs across API calls"(같은 요청의 결과가 달라질 수 있다는 근거, 4장 확인 방법 절 끝 문장)
+- C4-1 overview, 확인 2026-10-23: "Before prompt engineering" 세 전제와 "When to prompt engineer"의 latency와 cost 문장 원문이 2026-10-22 기록과 같음
+- C4-2 best practices, 확인 2026-10-23: Be clear and direct, Add context(motivation: "give Claude more information about your goals"), Use examples effectively(Relevant, Diverse, Structured, Tip "3–5 examples"), Structure prompts with XML tags, Control the format of responses, Tool usage의 원문이 2026-10-22 기록과 같음
+- 예제 사실(R7) 확인 2026-10-23: CR.md(재무팀, 2026-10-05, 사유, D-012), examples/expense-app/DECISIONS.md D-012(2026-10-12, 운영 위원회 결정, 실시간 연동 규격 없음), docs/example-facts.md와 일치
+- 미확인 유지: prompt-overview와 prompting-best-practices의 게시일과 개정일(페이지에 표기 없음). ch02가 권한 규칙의 적용 범위(Bash 규칙이 매칭하지 않는 경우와 sandbox 병행)를 다루는지(검증 후 확정)

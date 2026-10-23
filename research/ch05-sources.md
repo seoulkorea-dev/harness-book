@@ -64,3 +64,16 @@
 - "Like Claude Code creating a to-do list, or your custom agent maintaining a NOTES.md file" 일치(주체 Rajasekaran 외로 밝힘)
 - "overly aggressive compaction can result in the loss of subtle but critical context"(본문 "미묘하지만 중요한 맥락"으로 맞춤)
 - 말하는 주체는 "At Anthropic, we"(본문 "Claude Code는 … 설명합니다" 두 곳은 Q-039)
+
+## C5-8. 5장 PR #94 기술 감수(fact-checker, 2026-10-23)
+확인일 2026-10-23. 원문은 영어, 인용은 짧게.
+- Anthropic, Commands (https://code.claude.com/docs/en/commands): "/clear: Start a new conversation with empty context"; "/compact: Free up context by summarizing the conversation so far"; "/context [all]: ... In fullscreen mode, /context collapses the per-item breakdown ... Pass all to expand it". 본문 일치
+- Anthropic, How Claude Code works, "When context fills up" (https://code.claude.com/docs/en/how-claude-code-works): "Claude Code manages context automatically as you approach the limit. It clears older tool outputs first, then summarizes the conversation if needed." 자동 요약 문장의 근거(agent-loop의 "the SDK automatically compacts"는 SDK 주체). "The context window": 대화, 파일 내용, 명령 출력, CLAUDE.md, 자동 메모리, 불러온 Skill, 시스템 지침이 윈도에 들어감. MCP 도구 정의는 지연 로드. 하위 에이전트는 "starts fresh unless it's a fork"
+- Anthropic, Explore the context window (https://code.claude.com/docs/en/context-window): 시작 때 CLAUDE.md, 자동 메모리, MCP 도구 이름, Skill 설명 로드. 압축 뒤 루트 CLAUDE.md와 paths 없는 규칙은 다시 주입, paths 규칙과 하위 폴더 CLAUDE.md는 필요할 때 다시 로드. 도구 정의가 윈도를 차지한다는 명시 문장은 없음
+- Anthropic, Extend Claude with skills (https://code.claude.com/docs/en/skills): 기본은 설명이 항상 컨텍스트에 있고 본문은 호출 때 로드. disable-model-invocation: true이면 설명이 컨텍스트에 없음
+- Anthropic, Create custom subagents (https://code.claude.com/docs/en/sub-agents): 비포크 하위 에이전트는 새 컨텍스트에서 시작하고 대화 기록을 보지 못함. 시작 컨텍스트는 자기 시스템 프롬프트, 위임 메시지, CLAUDE.md 계층(Explore와 Plan은 제외), git 상태, skills 필드의 Skill. 포크는 대화 전체를 상속
+- Anthropic, How Claude remembers your project (https://code.claude.com/docs/en/memory): 200줄 미만 목표("reduce adherence", 문제 해결 절 "may reduce adherence"), 모순 지침 "may pick one arbitrarily", @path 가져온 파일은 가져오는 CLAUDE.md와 함께 로드(컨텍스트 비용은 줄지 않음), 추가 시점 네 가지("same mistake a second time"), "context, not enforced configuration ... PreToolUse hook", "Reading AGENTS.md directly requires Claude Code v2.1.277 or later"(Bedrock이나 텔레메트리 끈 세션은 v2.1.281 이전에는 읽지 못함), 압축 뒤 루트 CLAUDE.md 다시 주입, "/context ... Memory files", 200줄 초과 시 시작과 /status에서 경고
+- Rajasekaran 외 재열람: "smallest set of high-signal tokens", "often 1,000-2,000 tokens", "overly aggressive compaction", "Claude Code creating a to-do list", "runtime exploration is slower than retrieving pre-computed data", "At Anthropic, we". 사전 검색의 단점으로 "작업 중 새로 필요해진 자료가 빠짐"은 원문에 없음(본문은 이 책의 정리로 밝힘)
+- OpenAI, Harness engineering: 2026-10-23 403. 판정은 research/ch01-sources.md S2(2026-10-04)에 의존. Q-030 유지
+- 예제 대조: CLAUDE.example.md 32줄 6절(wc -l 32, PowerShell Count 32), settings.example.json deny 6개 경로 일치, reviewer.example.md tools Read, Grep, Glob, 실습 5 요청 문장 일치
+- 미확인: Codex가 AGENTS.md를 읽는다는 문장은 Codex 문서 열람 불가로 ch10 기록에 의존. 권한 설정 Edit 금지 규칙의 한계(셸이 실행한 프로그램의 파일 쓰기)는 9장 감수에서 확정
