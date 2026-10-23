@@ -62,7 +62,7 @@ def check_file(path):
         tid, t = m.group(1), m.group(2)
         heads = [text_of(h).strip() for h in re.findall(r"<th[^>]*>(.*?)</th>", t, re.S)]
         cap = text_of((re.search(r"<b>(.*?)</b>", t, re.S) or [None, ""])[1]) if re.search(r"<b>(.*?)</b>", t, re.S) else ""
-        if "실패와 막는 장치" in cap or "실패와 방지 장치" in cap or (heads and heads[0] in ("실패", "실패 유형")):
+        if "실패와 막는 장치" in cap or "실패와 방지 장치" in cap or "실패를 예방하는 장치" in cap or (heads and heads[0] in ("실패", "실패 유형")):
             if heads[:3] != FAIL_HEAD:
                 fails.append(f"R9 {tid} 실패 표 열 이름 {heads[:3]}")
         if "확인 방법" in cap or (heads and heads[0] in ("확인할 것", "확인 항목")):
