@@ -18,5 +18,9 @@
   "messages-api": {"type": "web", "author": "Anthropic", "title": "Using the Messages API", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"},
   "permission-modes": {"type": "web", "author": "Anthropic", "title": "Permission modes", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permission-modes"},
   "prompt-overview": {"type": "web", "author": "Anthropic", "title": "Prompt engineering overview", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"},
-  "prompting-best-practices": {"type": "web", "author": "Anthropic", "title": "Prompting best practices", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"}
+  "prompting-best-practices": {"type": "web", "author": "Anthropic", "title": "Prompting best practices", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"},
+  "memory": {"type": "web", "author": "Anthropic", "title": "How Claude remembers your project", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/memory"},
+  "commands": {"type": "web", "author": "Anthropic", "title": "Commands", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/commands"},
+  "sub-agents": {"type": "web", "author": "Anthropic", "title": "Create custom subagents", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/sub-agents"},
+  "context-window": {"type": "web", "author": "Anthropic", "title": "Explore the context window", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/context-window"}
 }
