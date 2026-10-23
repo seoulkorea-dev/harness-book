@@ -10,6 +10,7 @@
   "context-engineering": {"type": "article", "author": "Prithvi Rajasekaran 외", "title": "Effective context engineering for AI agents", "venue": "Anthropic", "date": "2025.9.29", "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"},
   "cc-glossary": {"type": "web", "author": "Anthropic", "title": "Glossary", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/glossary"},
   "harness-engineering": {"type": "article", "author": "Ryan Lopopolo", "title": "Harness engineering: leveraging Codex in an agent-first world", "venue": "OpenAI", "date": "2026.2.11", "url": "https://openai.com/index/harness-engineering/"},
+  "sandboxing": {"type": "article", "author": "Anthropic", "title": "Beyond permission prompts: making Claude Code more secure and autonomous", "venue": "Anthropic", "date": "2025.10.20", "url": "https://www.anthropic.com/engineering/claude-code-sandboxing"},
   "agent-loop": {"type": "web", "author": "Anthropic", "title": "How the agent loop works", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/agent-sdk/agent-loop"},
   "hooks": {"type": "web", "author": "Anthropic", "title": "Hooks reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/hooks"},
   "hashimoto-adoption": {"type": "article", "author": "Mitchell Hashimoto", "title": "My AI Adoption Journey", "venue": "mitchellh.com", "date": "2026.2.5", "url": "https://mitchellh.com/writing/my-ai-adoption-journey"},
