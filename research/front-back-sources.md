@@ -33,3 +33,13 @@
 - **S-FB-23. 미확인 기록(개정 후)**. (a) developers.openai.com, arxiv.org, git-scm.com이 DNS 오류로 열리지 않았습니다(승인 정책 Codex 정의, ReAct 연도, `git config --global` 범위). (b) 부모 폴더의 `.claude/settings.json`이 하위 폴더 세션에 적용되는지는 settings 문서를 열지 않아 확인하지 못했습니다. (c) 실습 3의 "설정 JSON 형식 오류 때 Claude Code가 설정을 읽지 못함" 증상. (d) PostToolUse 종료 코드 2의 사용자 화면 알림(S-FB-19). (e) `/context`의 "메모리 파일" 항목 이름(S-FB-18).
 
 Sources: https://code.claude.com/docs/en/memory, /setup, /terminal-guide, /permissions, /permission-modes, /tools-reference, /hooks, /hooks-guide, /commands, /sandboxing, /sub-agents, /costs, https://claude.com/pricing, https://github.com/seoulkorea-dev/harness-book. Codex 승인 정책과 `/status`에 관한 검색 결과는 제3자 요약이라 판정 근거로 쓰지 않았습니다.
+
+## 시작하며 사실 점검(2026-10-23, fact-checker, PR #108)
+공통: 게시일 없음(저장소 내부 대조), 확인일 2026-10-23, 작성 fact-checker. 외부 문서는 열지 않았고 이전 기록의 확인일을 인용했습니다.
+
+- **S-FB-24. 시작하며와 Chapter 1~11, 부록 실습 대조** (src/chapters/prologue.html, ch01~ch11.html, src/appendix/practice.html, BOOK_SPEC.md 1, 3, 4, 5, 6, 7, 9절, docs/specs/prologue-spec.md). 정의 문장은 Chapter 1과 BOOK_SPEC 4, 5절과 같은 뜻. Chapter 10 비교 기준은 네 기준(규칙 문서, 권한, 격리, 설정 파일)이라 "같은 구성 요소를 대조"를 "같은 정책을 두 제품의 설정으로 옮긴 결과를 대조"로 고침(ch10.html:6). 사용처: 시작하며 message 마지막 문단, guide 제품 도입 경로.
+- **S-FB-25. 링크와 앵커 검사** (src와 빌드 결과의 chapters/prologue.html). 링크 11개의 도착 파일, 앵커, 링크 문구와 도착 절 제목 모두 일치.
+- **S-FB-26. 인용 체계 대조** (tools/build.py 6~7, 26~60행, appendix/references.html, src/site.json). 위첨자 번호는 책 전체 번호, 참고 문헌은 nav의 마지막 부록. 위첨자 인용은 ch01, 02, 04, 05, 06에만 있고 ch03, 07~11, 부록 실습은 (저자, 연도) 방식이 남음(정비 중). 사용처: 시작하며 scope 셋째 문단.
+- **S-FB-27. 기준 일자 확인** (research/ch01~ch11-sources.md). Claude Code 문서 확인일 2026-10-20, Codex 문서 2026-10-04(ch10.html:8). OpenAI 문서는 2026-10-20 DNS 오류로 재확인 대기(research/ch10-sources.md:6, 84). 사용처: 시작하며 "2026년 10월에 확인한 공식 문서".
+- **S-FB-28. 저장소 공개 재확인 시도** (https://github.com/seoulkorea-dev/harness-book). gh repo view가 GraphQL 제한(HTTP 403)으로 실패. 공개 여부는 S-FB-22(2026-10-20)에 따름. 사용처: 집필 목적 셋째 항목.
+- **S-FB-29. 실습 비용** (src/appendix/practice.html:5~9). 실습 2부터 Claude Code 사용, 유료 요금제 또는 API 키 필요. 사용처: 시작하며 scope 둘째 문단.
