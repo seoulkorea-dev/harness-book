@@ -1,3 +1,5 @@
 # 장별 정비(이슈 #66 ②)를 마친 장 이름(ch01, prologue 등)과 R6. 여기 적힌 장은 REVIEW_RULES의 실패 규칙을 어기면 check_all이 실패한다
 ch01
 ch02
+ch04
+ch05

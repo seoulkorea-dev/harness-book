@@ -4,7 +4,7 @@
 src/chapters/*.html, src/appendix/*.html을 검사한다. 장별 정비를 마친 장(lint/rules_applied.txt에 이름이 있음)은
 "실패" 규칙을 어기면 실패, 아직 정비하지 않은 장은 경고만 낸다. "경고" 규칙은 모든 장에서 경고만 낸다.
   실패 규칙: R2 출처 없는 반론, R9 표 열 설계(실패 표와 확인 표의 열 이름, 열 수 4개 이하, 모호하거나 동사형이거나
-             지시 표현이 든 열 이름, 열 이름 나열 설명 줄, 설명 줄의 지시 표현), R10 같은 장 링크와 괄호 절 참조,
+             지시 표현이 든 열 이름, 열 이름 나열 설명 줄, 설명 줄의 지시 표현, 본문 연계 열 이름), R10 같은 장 링크와 괄호 절 참조,
              R11 본문의 #ref- 링크와 위첨자 번호와 각주 1:1, 참고 문헌 항목 형식(주소 글 노출, 열람일), R12 약어 CR과 (Change Request)
   경고 규칙: R1 단정 표현, R3 제품이 실험한 것처럼 읽히는 주어, R4 각주 없는 버전 번호
 각주 형식(D-123): 본문 <sup class="fnref">n</sup>, 그 문단 바로 아래 <ol class="fn" start="n"><li>…</li></ol>
@@ -21,6 +21,7 @@ CHECK_HEAD = ["확인 항목", "확인 방법", "확인 기준"]
 VAGUE_HEAD = {"설명", "내용", "무엇인가", "예", "방법", "기준", "이유"}
 VERB_HEAD = re.compile(r"(?:할|일할|하는|된) (?:때|것|쪽)$|할 것$|는가$|^적합한 ")
 DEIXIS = re.compile(r"이 책|^(?:이|그) ")
+LINK_HEAD = re.compile(r"절$|본문|다루는 (?:곳|장)")  # 본문 연계 열(관련 절, 본문의 절, 본문 적용 위치 등) 금지(D-136)
 R1_WORDS = re.compile(r"반드시|항상|결국|(?:이|가) 아니라")
 
 def applied():
@@ -76,6 +77,8 @@ def check_file(path):
                 fails.append(f"R9 {tid} 동사형이나 질문형 열 이름 '{h}'")
             elif DEIXIS.search(h):
                 fails.append(f"R9 {tid} 지시 표현이 든 열 이름 '{h}'")
+            elif LINK_HEAD.search(h):
+                fails.append(f"R9 {tid} 본문 연계 열 이름 '{h}'(D-136)")
         for li in re.findall(r'<ul class="capnote">\s*<li>(.*?)</li>', t, re.S):
             if DEIXIS.search(text_of(li).strip()):
                 fails.append(f"R9 {tid} 설명 줄의 지시 표현: {text_of(li).strip()[:40]}")
