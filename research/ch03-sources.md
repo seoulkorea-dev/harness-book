@@ -90,3 +90,13 @@
 - CLI reference(C3-10): --max-turns, --max-budget-usd는 -p 전용. 본문은 "명령 줄 상한 옵션은 -p 실행 전용"까지만 쓰고, 대화형 세션의 상한 설정 유무는 쓰지 않음
 - Permission modes(permission-modes): 기본 모드(default)는 허용 목록에 없는 도구 사용 전에 확인을 요청함. 본문은 "권한 모드가 사람에게 묻는 기본 모드라면"으로 조건을 밝힘(Q-116과 같은 처리)
 - Permission modes(permission-modes), 확인 2026-10-22(실무자 역할 검토자 3차 WebFetch): v2.1.283 이상 대화형 세션은 auto로 시작, Manual 모드의 설정 값은 default(별칭 manual), 시작 옵션 claude --permission-mode default. 금지 규칙은 모든 모드에서 막음. 명령 내용에 일치하는 ask 규칙은 auto에서도 확인 요청. auto 분류기의 기본 허용 목록에 "Pushing to any branch of the repository you're working in, including the default branch". 본문 files 절 권한 모드 문단과 표 3-6 넷째 행
+
+## C3-12. fact-checker 4차 확인(2026-10-24, ch03 전체)
+- Configure permissions(https://code.claude.com/docs/en/permissions), 확인 2026-10-24: 허용, 확인 요청, 금지 목록, Edit 규칙의 적용 범위와 한계, 명령 규칙의 문자열 비교, 도구 이름만 적은 금지 규칙. 본문 files 절과 일치
+- Permission modes(https://code.claude.com/docs/en/permission-modes), 확인 2026-10-24: v2.1.283 이상은 모든 요금제에서 대화형 세션이 auto 모드로 시작, 그 전 버전은 Pro, Max, Team 요금제만 auto로 시작. auto 모드는 작업 중인 저장소로의 push를 확인 없이 허용하되 강제 push 등은 예외. 본문 "규칙으로는 차단되지 않을 수 있습니다"와 버전 주석의 근거
+- Hooks reference(https://code.claude.com/docs/en/hooks), 확인 2026-10-24: PostToolUse 종료 코드 2는 stderr를 Claude에 보여 주고 이미 실행된 도구는 막지 못함. 표 3-7 훅 행 확인 기준을 "실패 내용이 에이전트에게 전달"로 맞춤
+- Create custom subagents(https://code.claude.com/docs/en/sub-agents), 확인 2026-10-24: tools를 생략하면 "inherits every tool available to subagents". 본문을 "하위 에이전트가 사용할 수 있는 도구를 모두 물려받으므로"로 맞춤
+- CLI reference(https://code.claude.com/docs/en/cli-reference), 확인 2026-10-24: --max-turns, --max-budget-usd는 -p 전용. 본문과 일치
+- Commands(https://code.claude.com/docs/en/commands), 확인 2026-10-24: /permissions, /hooks. 본문과 일치
+- 실행 확인: examples/expense-app에서 python3 check.py 기준 상태 출력(수용 시험 3건 실패, project_code 시험 0건, 종료 코드 1)이 표 3-7 첫 행과 일치. unittest 결과가 stderr로 출력됨
+- 미확인: 훅 실패 시 사용자 화면 표시(문서에 없음), 목표 상태(종료 코드 0) 실행 기록(부록 실습 6 실행 때)
