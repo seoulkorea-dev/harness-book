@@ -139,3 +139,25 @@ OpenAI Codex 문서(developers.openai.com, learn.chatgpt.com)는 이 환경에�
 
 ### S-C9-6 보강(Codex). 확인일 2026-10-20
 - developers.openai.com/codex/agent-approvals-security와 .md 주소를 다시 열었으나 DNS 오류(ENOTFOUND). 웹 검색 발췌(2차)는 승인 정책과 샌드박스를 독립 설정으로 설명. 본문 Codex 문장은 여전히 미확인(원문 미개봉). 참고 자료의 확인일 10월 4일은 유지.
+
+## 2026-10-24 fact-checker 재확인(9장 개정 원고)
+
+### S-C9-9. Claude Code 문서와 Prompting best practices 원문 재대조
+- URL: https://code.claude.com/docs/en/permissions, /permission-modes, /sandboxing, /costs, /cli-reference, https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+- 게시일: 표기 없음, 확인일: 2026-10-24
+- 작성: Anthropic
+- 확인한 내용(요약)
+  - permissions: 평가 순서 deny, ask, allow와 "rule specificity doesn't change the order", 예시는 Bash(aws *) 대 Bash(aws s3 ls)이고 ask와 allow 사이에도 같은 우선순위. "Permission rules are enforced by Claude Code, not by the model". Bash 규칙 한계 표에 git -C . push origin main, git -c push.default=current push, git 'push'가 불일치로 있음("isn't a security boundary around the program"). Read/Edit 금지는 내장 파일 도구, 인식되는 셸 파일 명령(cat, head, tail, sed, tee), 리다이렉션 대상에 적용되고 Python/Node 스크립트의 간접 쓰기에는 미적용. Permissions와 sandboxing은 "complementary security layers", "sandbox restrictions still apply even if a prompt injection bypasses Claude's decision-making". 경로 규칙은 ./path가 현재 디렉터리 기준이며 deny는 같은 이름 디렉터리를 어느 깊이에서든 일치. Edit(path), Read(path)만 참조(Write 등은 미일치). /permissions는 모든 규칙과 출처 settings.json을 보여 줌.
+  - permission-modes: bypassPermissions는 "disables permission prompts and safety checks", deny는 모든 모드에서 차단, 명시적 ask 규칙은 이 모드에서도 묻고, allow 규칙은 효력 없음, "Only use this mode in isolated environments like containers, VMs, or dev containers without internet access". 이 모드는 프롬프트 주입 보호를 제공하지 않는다고 명시. 대화형 터미널과 VS Code의 내장 시작 모드는 v2.1.283 이상에서 auto, `claude -p`와 Agent SDK는 v2.1.302 이상에서 default. auto에서도 명시적 ask 규칙은 프롬프트.
+  - sandboxing: "The sandbox is off by default", /sandbox 또는 sandbox.enabled. 대상은 Bash, PowerShell, Monitor 명령과 하위 프로세스이고 Read, Edit, Write, WebFetch, WebSearch, 훅, 로컬 MCP 서버 등은 밖. 지원은 macOS(Seatbelt), Linux와 WSL2(bubblewrap, socat), WSL1 미지원, 네이티브 Windows는 샌드박스 없이 실행. 의존성이 없거나 미지원이면 기본은 샌드박스 없이 실행(sandbox.failIfUnavailable로 변경). 기본 쓰기 범위는 작업 디렉터리, 사용자별 임시 디렉터리, 추가 디렉터리이고 기본 읽기는 기기 대부분. Permission rules 표: Edit 허용은 쓰기 허용, Read와 Edit 금지는 접근 차단으로 샌드박스 설정에 합쳐짐. 허용 도메인은 빈 상태로 시작하고 목록 밖 도메인은 모드별로 처리(Manual과 acceptEdits는 확인 요청, auto와 dontAsk는 거부, bypassPermissions는 허용). 검증 `touch ~/sandbox-probe`는 macOS에서 Operation not permitted, Linux와 WSL2에서 Read-only file system이고 ! 프롬프트에서 입력하면 샌드박스 밖에서 실행될 수 있음. 이 페이지에는 prompt injection 문구가 없음(permissions 페이지에 있음). "Sandboxing reduces risk but is not a complete isolation boundary".
+  - costs: "Claude Code charges by API token consumption", 개요 여섯 방법. /usage 첫 화면 위쪽 Session 블록은 API 사용자용이고 금액은 정가 기준 로컬 추정치(modelPricing 설정 시 계약 요율 기준 추정치, v2.1.242 이상), /clear 때 합계 초기화(v2.1.211 이상). Teams와 Enterprise는 사용 크레딧을 켠 뒤 조직, 그룹, 개인 단위 지출 한도. Console은 워크스페이스 지출 한도. 클라우드 제공자는 해당 클라우드의 예산 통제. 하위 에이전트 요청도 사용량에 포함.
+  - cli-reference: `--max-budget-usd`는 print 모드 전용, 클라이언트 측 비용 추정치 기준, 하위 에이전트 지출 포함.
+  - Prompting best practices "Balancing autonomy and safety": Claude Opus 4.6 대상 안내, 세 분류(파괴적, 되돌리기 어려운, 다른 사람에게 보이는)와 예시, 로컬 되돌릴 수 있는 동작 권장.
+- 본문 사용 판정: 문장 모두 일치 또는 단순화 허용 범위. 필요한 보강은 보고 항목 1(필수), 2, 3, 4, 5, 8, 11, 13, 17.
+- 한계: 쪽수가 길어 WebFetch 요약에 의존한 쪽이 있고 sandboxing, permission-modes, costs는 끝 3~6천 자를 읽지 못함. Claude Code를 직접 실행하지 못해 명령 동작은 문서로만 확인.
+
+### S-C9-6 보강(Codex). 확인일 2026-10-24
+- developers.openai.com/codex/agent-approvals-security를 다시 열었으나 DNS 오류(ENOTFOUND). 웹 검색 요약(2차)은 sandbox mode와 approval policy의 두 계층, 기본값 네트워크 꺼짐과 작업 공간 쓰기 제한을 설명하고, approval_policy = "untrusted"는 일부 언어판 공식 문서가 더는 지원되지 않는다고 하는 반면 다른 페이지는 나열해 충돌. 본문 Codex 문장은 값 이름을 쓰지 않으므로 영향 없음. 판정은 "미확인(원문 미개봉)"으로 유지.
+
+### R8 실행 확인 기록
+- cd examples/expense-app && python3 check.py: 실행 5건, 실패 3건(CR 구현 전 정상 상태). reference/settings.example.json의 allow/ask/deny를 표 9-4와 대조해 일치. data/projects.csv에 PRJ-2604가 없음을 확인(표 9-6 요청 문장이 유효).
