@@ -212,3 +212,26 @@
 - 확인일: 2026-10-20(작업 트리 기준)
 - 사용한 내용: 에이전트 8개, 명령 7개, Skill 5개, 훅 4종, 설정의 금지 규칙(main으로의 push, 강제 옵션), pre_bash 훅(main 커밋, 강제 push, main push 차단), book-check(pull_request, push main, 검사 스크립트의 CI 옵션), verify-site(page_build, workflow_dispatch). editor와 figure-checker의 도구에는 Bash가 있고 Edit, Write는 없음(Bash 제한은 정의 본문 지시). F-08(2026-10-15~18, 원인 기록)과 F-17(2026-10-20, 원인 검증, D-114~D-116)은 다른 실패. D-110, D-100, D-107, D-108의 변경은 대체 열이 비어 있고 D-115, D-116은 대체 번호가 있음. docs/metrics.md는 값이 없어 "검수가 판단 항목에 집중됨"의 근거가 되지 않음. Lopopolo 원문은 열지 못함(S2 기록과 일치만)
 - 확신: 높음(파일 내용), 낮음(Lopopolo, 브랜치 보호, 지난 책 원 기록)
+
+## 2026-10-24 fact-checker 재확인
+확인일: 2026-10-24. 저장소 파일은 작업 트리 기준. 원고와 파일은 고치지 않았다.
+
+### S-C11-9. 이 저장소, ch11 최종 원고 대조(플레이북 정리, 이슈 #119)
+- URL: 저장소 파일(.claude/agents/*.md, .claude/commands/*.md, .claude/skills/, .claude/settings.json, tools/hooks/pre_bash.py, tools/check_all.py, lint/check_style.py, .github/workflows/check.yml, verify-site.yml, FAILURES.md, DECISIONS.md D-001, D-099, D-107, D-110, D-114~D-117, D-129, D-139, CLAUDE.md, .claude/commands/next.md 23행)
+- 작성: 작성 에이전트(저장소), 확인: fact-checker
+- 사용한 내용
+  - 에이전트 정의 8개: chief-editor, editor, fact-checker, flow-reviewer, practice-checker, production-checker, reader-novice, researcher. Bash가 있는 것은 editor, fact-checker, practice-checker, production-checker 네 개이고 Edit, Write가 있는 정의는 없다. (표 11-2 "검사를 실행하는 두 에이전트"는 네 개로 정정 대상)
+  - 명령 7개, Skill 5개, 훅 4종(SessionStart, PreToolUse Bash, PostToolUse Edit|Write|MultiEdit, Stop)은 본문과 일치.
+  - settings.json deny: git push origin main, --force, -f. pre_bash 훅: main 커밋, 강제 push, main 대상 push를 종료 코드 2로 차단.
+  - python tools/check_all.py 실행 출력(검사 요약): 통과 빌드 / 금칙어 / 번호 / 구조 / 문체 / 그림 안 이름 / 검수 규칙. --ci는 여기에 "빌드 결과와 커밋 일치" 추가, 모두 통과. ch11은 rules_applied.txt에 없어 R1 후보 3곳이 경고.
+  - 병합 규칙 현재형: next.md 23행(check_all과 CI 통과면 병합, 편집장 필수가 남아도 작가 검수 목록에 적으면 병합), D-139(반영하지 못한 필수는 병합). D-110의 "editor 병합 가능이 병합 조건"은 낡음. 편집 검토 주체는 CLAUDE.md(chief-editor)와 D-139(editor)가 다름 -> 작가 확인.
+  - F-08(2026-10-15~18, 기록)과 F-17(2026-10-20, 검증, D-114~D-116)은 다른 실패. D-116 대체 열 = "D-115(예외 삭제), D-114(폐지)". F-08 원인 서술(결정이 흩어져 유효한 것을 알 수 없었다)은 FAILURES.md에 없음(작가 진술).
+  - 지난 책 수치: 현재 NEW_BOOK_PLAYBOOK.md에는 73차, 26건, 세 번이 없다(S-C11-7의 플레이북 0장 표 근거는 낡음, 이력상 ca4dd0c에서 추가되어 a21e7b1 개편에서 빠진 것으로 보임). 현재 확인 가능한 기록: research/ch03-10-sources.md 57행, research/ch01-sources.md 36행, FAILURES.md F-04("생성형 AI 책 26건"), ch01.html 170행. 지난 책 저장소(ai-book)의 원 기록은 열람 불가. 본문은 "작가의 검수 기록 기준"으로 표기함.
+  - git 이력은 2026-10-16부터 시작. 10-04 시점의 장치 존재는 D-001로만 확인(이력으로 미확인).
+- 확신: 높음(파일 내용, 실행 출력), 낮음(지난 책 원 기록, 브랜치 보호, 10-04 시점 장치)
+
+### S-C11-6 재확인(OpenAI, Lopopolo, Harness engineering)
+- URL: https://openai.com/index/harness-engineering/
+- 확인일: 2026-10-24. WebFetch는 getaddrinfo ENOTFOUND로 실패(10-20과 같음). 웹 검색(standard)에서 원문 페이지는 나오지 않고, 2차 글(codenote.net, latent.space, InfoQ 등)에서만 "what capability is missing, and how do we make it both legible and enforceable for the agent?" 문구가 보임. 2차 출처이므로 판정 근거로 쓰지 않는다.
+- 판정: 미확인(1차). research/ch01-sources.md S2(2026-10-04 열람 기록)와 본문 문장은 일치. bibliography.json harness-engineering 항목(Ryan Lopopolo, 2026.2.11, OpenAI)과 research가 일치.
+- 찾은 범위: openai.com, 웹 검색 결과 요약

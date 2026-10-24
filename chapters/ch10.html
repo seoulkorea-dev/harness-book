@@ -102,7 +102,7 @@
 <h2 id="example">예제: 변경 요청 사항의 정책을 두 제품에 설정하기</h2>
 <p>선택 기준을 정했으면 같은 정책을 두 제품의 설정으로 옮깁니다. 정책은 설정 파일에 적히며, 같은 정책도 제품마다 금지와 확인 요청이 다르게 갈릴 수 있습니다. 변경 요청 사항에서 두 제품의 구현이 갈리는 정책은 두 가지입니다. 웹 도구 금지는 Claude Code의 금지 규칙으로 다루고, Codex에서는 같은 정책을 셸 명령의 네트워크 차단으로 비교합니다. push는 사람만 실행하고, 외부 자료를 읽지 않습니다. 원격 저장소에 반영하는 일은 다른 사람에게 보이는 동작이고, 작업은 저장소 안의 자료만으로 하기 때문입니다(<a href="ch09.html#example">Chapter 9의 예제: 변경 요청 사항의 위험 관리</a>).</p>
 <h3 id="example-claude">Claude Code 설정(.claude/settings.json)</h3>
-<p>다음 상자는 변경 요청 사항의 설정 파일 가운데 두 정책에 해당하는 금지 규칙과, 이 장에서 추가하는 샌드박스 설정을 발췌한 것입니다. deny 세 항목은 <a href="../appendix/practice.html#lab-3">부록 실습의 실습 3</a>에서 만든 .claude/settings.json에 이미 있으므로 다시 적지 않습니다. 샌드박스 설정은 텍스트 편집기로 이 파일을 열어 permissions 블록을 닫는 중괄호 뒤에 쉼표를 찍고 "sandbox": { "enabled": true }를 더합니다. 에이전트에게는 .claude/의 수정이 금지되어 있으므로 사람이 직접 편집합니다. 저장한 뒤 Claude Code를 새로 시작하고, /permissions에 금지 규칙이 그대로 보이면 파일 형식에 오류가 없는 것입니다.</p>
+<p>다음 상자는 변경 요청 사항의 설정 파일 가운데 두 정책에 해당하는 금지 규칙과, 이 장에서 추가하는 샌드박스 설정을 발췌한 것입니다. deny 세 항목은 <a href="../appendix/practice.html#lab-3">부록의 실습 3. 권한 설정</a>에서 만든 .claude/settings.json에 이미 있으므로 다시 적지 않습니다. 샌드박스 설정은 텍스트 편집기로 이 파일을 열어 permissions 블록을 닫는 중괄호 뒤에 쉼표를 찍고 "sandbox": { "enabled": true }를 더합니다. 에이전트에게는 .claude/의 수정이 금지되어 있으므로 사람이 직접 편집합니다. 저장한 뒤 Claude Code를 새로 시작하고, /permissions에 금지 규칙이 그대로 보이면 파일 형식에 오류가 없는 것입니다.</p>
 <pre>{
   "permissions": {
     "deny": ["Bash(git push *)", "WebFetch", "WebSearch"]
@@ -152,7 +152,7 @@ network_access = false</pre>
 <tr><td>3. 셸 명령의 네트워크 접근</td><td>"curl https://example.com을 실행해 줘" 요청</td><td>Claude Code는 바로 접속하지 않고 승인을 물음. Codex는 차단하거나 승인을 물음. Codex는 config.toml에 network_access = false가 있음</td></tr>
 <tr><td>4. Claude Code의 규칙 문서</td><td>expense-practice에 AGENTS.md를 만들고 CLAUDE.md 첫 줄에 @AGENTS.md를 적은 뒤 Claude Code의 /memory(두 파일은 텍스트 편집기로 직접 수정하고, 확인 뒤 AGENTS.md는 지우고 CLAUDE.md 첫 줄의 @AGENTS.md도 지움)</td><td>목록에 AGENTS.md의 경로가 있음(이 목록에 AGENTS.md가 표시되는 것은 v2.1.280 이상)</td></tr>
 <tr><td>5. 샌드박스 동작 여부</td><td>touch ~/sandbox-probe 실행 요청(행 2와 같음)</td><td>파일 생성 실패(성공하면 샌드박스 없이 실행되는 환경이므로, 팀 설정에 sandbox.failIfUnavailable을 true로 둠)</td></tr>
-<tr><td>6. 확인 날짜</td><td>비교 기준 절의 확인 날짜(Claude Code 2026년 10월 20일, Codex 2026년 10월 4일)와 도입 시점의 문서</td><td>기본값과 설정 이름이 이 장의 기준과 일치함(실행 확인이 아닌 문서 대조)</td></tr>
+<tr><td>6. 확인 날짜</td><td>비교 기준 절의 확인 날짜(Claude Code 2026년 10월 20일, Codex 2026년 10월 4일)와 도입 시점의 문서</td><td>기본값과 설정 이름이 비교 기준 절의 확인 날짜 기준과 일치함(실행 확인이 아닌 문서 대조)</td></tr>
 </tbody></table></div><figcaption><b>표 10-5. 두 제품 설정의 확인 방법</b></figcaption></figure>
 <h2 id="principle">설계 원칙과 점검 질문</h2>
 <p class="principle">제품은 모델 성능이 아니라, 조직이 운영하려는 하네스를 구성 요소마다 어떻게 구현하는지로 비교합니다.</p>
