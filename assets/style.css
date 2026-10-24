@@ -217,6 +217,7 @@ aside.footnote h4 { margin: 0 0 0.3rem; font-size: 18px; }
   .sidenav { order: 2; position: static; max-height: none; border-top: 1px solid var(--rule); }
   .topbar { gap: 0.9rem; padding: 0.6rem 1rem; font-size: 15px; }
   .topbar a.navlink { display: inline; }
+  .topbar .brand { white-space: normal; min-width: 0; }
   .quick { grid-template-columns: minmax(0, 1fr); }
 }
 
