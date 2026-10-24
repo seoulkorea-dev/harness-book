@@ -184,3 +184,40 @@
 
 ### S-C8-8 갱신
 - 2026-10-20 재시도에서도 openai.com 접속 실패. 검색은 게시일, 작성자, Codex 실험 개요까지만 확인. 인용 문장은 계속 미확인
+
+## 2026-10-24 fact-checker 재확인(8장 플레이북 정리, 이슈 #116)
+
+### S-C8-12. 재확인: Claude Code 문서 7건
+- URL: https://code.claude.com/docs/en/how-claude-code-works, /claude-directory, /memory, /agent-sdk/agent-loop, /costs, /monitoring-usage, /hooks
+- 게시일: 표기 없음, 확인일: 2026-10-24
+- 작성: Anthropic
+- 사용한 내용 요약
+  - how-claude-code-works Work with sessions, Resume or fork sessions, When context fills up: "Sessions are independent. Each new session starts with a fresh context window." JSONL은 ~/.claude/projects/. --continue/--resume은 같은 세션 ID로 다시 열고 --fork-session과 /branch는 이력을 새 세션 ID로 복사. 압축 시 이른 대화의 상세 지시가 사라질 수 있음
+  - claude-directory Application data: cleanupPeriodDays 기본 30, 최솟값 1, 0은 검증 오류. projects/<project>/<session>.jsonl은 전체 대화(메시지, 도구 호출, 도구 결과). 하위 에이전트 기록은 <session>/subagents/, 큰 도구 출력은 <session>/tool-results/. 자동 메모리 디렉터리는 정리 대상이 아니며 v2.1.228 이전에는 메모리 디렉터리 안의 폴더를 세션 데이터로 취급해 그 아래 오래된 파일을 지울 수 있었음. 정리는 --bare(-p)에서 실행하지 않고, 보존 기간을 안전하게 정할 수 없으면 일시 중지. 기록은 평문이며 CLAUDE_CODE_SKIP_PROMPT_HISTORY, --no-session-persistence(-p)로 기록 생략 가능
+  - memory: 첫 문장 "Each Claude Code session begins with a fresh context window." 자동 메모리는 "machine-local", 같은 git 저장소의 worktree는 한 디렉터리를 공유하고 다른 컴퓨터나 클라우드 환경과는 공유하지 않음
+  - agent-loop Handle the result, Hooks: 모든 result subtype이 total_cost_usd, usage, num_turns, session_id를 가짐. 충돌 시 error_during_execution, 비용 필드 0 가능, stop_reason null. 훅 표 PostToolUse(출력 감사), SubagentStart/SubagentStop(병렬 작업 결과 추적), PreCompact(요약 전 전체 대화 보관). 훅은 애플리케이션 프로세스에서 실행되는 콜백
+  - hooks(앞 100,000자만 읽음): 이벤트 표에 PostToolUse, SubagentStart, SubagentStop, PreCompact가 있고 settings.json의 command 훅 등으로 설정. PreCompact 상세 절은 미열람
+  - costs: /usage Session 블록 금액은 로컬 계산한 목록 가격 기준 추정치(관리형 modelPricing이 있으면 계약 요율, 그래도 추정치). 구독자에게는 세션 금액이 청구와 무관. OpenTelemetry는 every setup, only option(near real time). /insights 보고서도 시작 때 cleanupPeriodDays로 삭제
+  - monitoring-usage(앞 100,000자만 읽음): 텔레메트리 기본 꺼짐. CLAUDE_CODE_ENABLE_TELEMETRY=1과 내보내기 변수 필요. 저장소의 .claude/settings.json, settings.local.json의 OTEL 변수는 무시. 프롬프트 본문은 OTEL_LOG_USER_PROMPTS=1일 때만, 도구 세부는 OTEL_LOG_TOOL_DETAILS=1일 때만 내보냄
+- 확신: 높음(hooks, monitoring-usage는 뒤쪽 미열람)
+
+### S-C8-13. 재확인: Young(2025)
+- URL: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+- 게시일: 2025-11-26, 확인일: 2026-10-24
+- 작성: Justin Young
+- 사용한 내용 요약: discrete sessions, 새 세션은 이전 기억 없음. init.sh, claude-progress.txt, 기능 목록 JSON, 첫 git 커밋. 세션 시작 때 git 로그와 진행 파일 읽기. 설명 있는 커밋으로 되돌리기와 복구. 실험 환경은 "Opus 4.5 running on the Claude Agent SDK". 본문에 Claude Code 언급 없음(감사의 말에만). 정성적 서술이며 측정 비교 실험이 아님
+- 확신: 높음
+
+### S-C8-8 갱신(2026-10-24)
+- openai.com, www.openai.com이 getaddrinfo ENOTFOUND로 열리지 않음. 검색은 게시일 2026-02-11, 저자 Ryan Lopopolo, 5개월 실험 개요까지만 확인. "접근할 수 없는 지식은 없는 것과 같다" 문장은 계속 미확인(Q-030)
+
+### 미확인(2026-10-24)
+- JSONL(JSON Lines) 정의: jsonlines.org 이름 해석 실패
+- OpenTelemetry 정의: opentelemetry.io 이름 해석 실패. Claude Code 문서가 확인해 주는 범위는 지표와 이벤트 내보내기까지
+- hooks 문서 뒤 179,616자, monitoring-usage 문서 뒤 72,246자 미열람
+
+### 예제 실행 기록(2026-10-24)
+- 명령: python3 examples/expense-app/check.py (작업 폴더 examples/expense-app)
+- 결과: 종료 코드 1. tests: 실행 3건, 실패 0건, 건너뜀 0건, project_code 시험 0건. acceptance: 실행 5건, 실패 3건, 건너뜀 0건(정한 수 5건). 실패는 test_1_form_offers_project_codes, test_2_unknown_code_rejected_with_reason, test_3_list_shows_project_code. test_4, test_5는 통과
+- 명령: python3 tools/check_tasks.py → 마지막 줄 "요약: 공백 1건(작업 2)", 작업 4는 "구현 전 상태에서 실패(FAILED (failures=3))"로 정상, 작업 5는 사람 판단으로 건너뜀
+- D-012 줄 비교: src/chapters/ch08.html 코드 상자의 D-012 줄과 examples/expense-app/DECISIONS.md의 D-012 줄은 문자열 완전 일치

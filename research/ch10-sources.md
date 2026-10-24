@@ -292,3 +292,25 @@ Claude Code 문서 5건은 원문을 직접 열어 확인했습니다. 긴 페�
 - URL: https://developers.openai.com/codex/agent-approvals-security
 - 확인일: 2026-10-20 시도(getaddrinfo ENOTFOUND, 열기 실패). 판정은 S-C10-5와 S6(2026-10-04) 기록 일치만 근거
 - 확신: 낮음
+
+## 2026-10-24 fact-checker 재확인
+
+### S-C10-13. Anthropic, Claude Code Docs 5건 재확인 (10장 플레이북 정리, 이슈 #118)
+- URL: https://code.claude.com/docs/en/memory , /permission-modes , /sandboxing , /settings , /permissions
+- 게시일: 표기 없음, 확인일: 2026-10-24 (원문 열어 확인)
+- 작성: Anthropic
+- 사용한 내용 요약
+  - memory: CLAUDE.md 범위(Project, Local 행 직접 확인), 작업 폴더와 그 위 폴더의 CLAUDE.md/CLAUDE.local.md를 시작 때 읽고 덮어쓰지 않고 이어 붙임. AGENTS.md는 작업 폴더나 그 위에 CLAUDE.md, .claude/CLAUDE.md, CLAUDE.local.md가 없을 때만 읽음(~/.claude/CLAUDE.md와 조직 관리형은 세지 않음). 직접 읽기 v2.1.277 이상, Bedrock과 텔레메트리 끈 세션은 v2.1.281 이상. 설정 claude-md-and-agents-md로 둘 다 읽을 수 있음. AGENTS.md를 읽었는지는 /memory 목록에서 경로 확인, v2.1.280 이전에는 /memory와 /context에 나열되지 않음. @AGENTS.md 불러오기는 두 번 읽히지 않음.
+  - permission-modes: 설정값 6개(default=Manual, acceptEdits, plan, auto, dontAsk, bypassPermissions). 시작 모드: 터미널과 VS Code v2.1.283 이상은 모든 요금제와 제공자에서 auto. claude -p와 Agent SDK는 default. v2.1.302 이상은 모드 미지정 시 Manual이고 승인이 필요한 호출은 거부. 자동 모드 비활성 또는 HIPAA(v2.1.285 이상)는 default. 프로젝트 .claude/settings.json과 settings.local.json의 auto, bypassPermissions는 효력 없음. 작업 폴더 밖 쓰기: default는 확인(문서가 inferred라고 밝힘), acceptEdits는 확인, plan은 승인 전 수정 차단, auto는 분류기, dontAsk는 거부, bypassPermissions는 허용.
+  - sandboxing: 기본 꺼짐, /sandbox 또는 sandbox.enabled. 쓰기 범위는 작업 폴더, 사용자별 임시 폴더, --add-dir 등 추가 폴더, 보호 경로는 거부. 네트워크는 프록시가 allowedDomains(처음엔 비어 있음)와 대조. 목록 밖 호스트: default, acceptEdits 확인, auto 거부(호스트를 적고 분류기가 승인하면 예외), dontAsk 거부, plan 확인, bypassPermissions 허용. macOS, Linux, WSL2 지원, 네이티브 Windows는 샌드박스 없이 실행. failIfUnavailable true면 시작 때 종료. touch ~/sandbox-probe: macOS는 Operation not permitted, Linux와 WSL2는 Read-only file system. Linux와 WSL2는 bubblewrap, socat 필요.
+  - settings: 우선순위(관리형, 명령줄, 프로젝트 로컬, 공유 프로젝트, 사용자). 관리형은 --settings로도 덮을 수 없음. 일부 보안 키는 하위 범위의 더 엄격한 값을 따르는 예외 표 있음.
+  - permissions: Bash rule limits 표에서 Bash(git push *)는 git push origin main과 일치하고 git -C . push origin main 등은 일치하지 않음. /permissions는 규칙과 출처 settings.json을 보여 줌.
+- 확신: 높음
+- 본문 대조 지적: 표 10-2 '작업 폴더 밖 파일 수정' 행의 '기본 동작(default 모드)'은 시작 모드 auto와 어긋남. 22행 AGENTS.md 조건의 '프로젝트에'는 '작업 폴더나 그 위 폴더'가 정확함.
+
+### S-C10-14. OpenAI, Codex 문서 재시도 (fact-checker, 2026-10-24)
+- URL: https://developers.openai.com/codex/agent-approvals-security , https://developers.openai.com/codex/rules , https://learn.chatgpt.com/docs/agent-configuration/rules.md
+- 확인일: 2026-10-24 시도, 세 주소 모두 getaddrinfo ENOTFOUND로 열기 실패. 원문 확인 못함.
+- 단서(WebSearch 요약, 판정 근거 아님): rules는 실험 단계, 파일은 활성 설정 층 옆 rules/ 아래 .rules(예 ~/.codex/rules/default.rules), decision 값은 allow, prompt, forbidden이고 기본 allow, 여러 규칙 일치 시 forbidden > prompt > allow, pattern은 비어 있지 않은 문자열 목록이며 위치마다 대안 목록 가능, 프로젝트 로컬 rules는 .codex/ 층을 신뢰할 때만 읽음.
+- 판정: Codex 사실 문장 전체는 미확인(S-C10-5와 2026-10-04 기록, 위 단서와 일치하는 범위). 기본 샌드박스와 승인 정책이 프로젝트 신뢰 여부로 달라지는지, on-request와 network_access=false 조합에서 push가 확인 요청이 되는지는 계속 미확인.
+- 확신: 낮음

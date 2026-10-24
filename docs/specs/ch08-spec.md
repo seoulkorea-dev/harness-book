@@ -144,3 +144,10 @@
 - 확인 표: 결정 기록 행은 "D-012 한 건 확인, 대체 관계는 D-015를 직접 추가해 보는 선택 과제", 진행 기록 행은 git log --oneline의 commit과 tasks.json에서 true인 작업 대조
 - Q-051에 ch03 13행 링크(#kinds → #logs 검토) 한 줄, 저장소와 commit은 2장, 3장 상기
 - 작가 확인: Q-051, Q-052 등록, Q-030에 8장 Lopopolo 인용(session 논증은 S-C8-1, 3으로 성립하게, 주체 "OpenAI는 Codex로 제품을 개발한 경험을 다룬 글에서"), Q-039에 8장 Young 인용 두 곳
+
+## 플레이북 정리(이슈 #116, 2026-10-24)
+- 기준: NEW_BOOK_PLAYBOOK.md, BOOK_SPEC.md, 정리된 Chapter 1~7과 시작하며
+- 장 틀: session → kinds → decisions → handover → logs → example → fail → check → principle(앵커 유지). 장 끝 참고 자료 절은 위첨자 인용으로(claude-directory, monitoring 키 추가)
+- 1차 정리: 도입부 세 문단, "이 책" 12곳, CR → 변경 요청 사항(결정 기록 코드 상자 안의 CR은 파일 그대로 두고 풀이), 공통 절 제목, 예제 절 제목, 표 열(해설표 두 열, 실패 표, 확인 표), 칸 안 링크와 근거 괄호, 버전 주석 상자 형식, 장기 실행 글과 하네스 엔지니어링 글 표기를 1장과 같게, 결정 기록 D-012 줄을 DECISIONS.md 그대로, 실습 폴더(expense-practice), 출처 없는 반론 문장
+- 그림 8-1, 8-2: 구조 유지(시안 생략), 캡션 근거 괄호와 설명 줄 삭제
+- 7장 지침: 앞 장 용어 되살림(훅, 하위 에이전트, Claude Agent SDK, 수용 시험), 장의 핵심 용어 먼저 정의, 점검 문안을 넣은 뒤 문단 다시 읽기

@@ -92,3 +92,26 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
 - C4-2 best practices, 확인 2026-10-23: Be clear and direct, Add context(motivation: "give Claude more information about your goals"), Use examples effectively(Relevant, Diverse, Structured, Tip "3–5 examples"), Structure prompts with XML tags, Control the format of responses, Tool usage의 원문이 2026-10-22 기록과 같음
 - 예제 사실(R7) 확인 2026-10-23: CR.md(재무팀, 2026-10-05, 사유, D-012), examples/expense-app/DECISIONS.md D-012(2026-10-12, 운영 위원회 결정, 실시간 연동 규격 없음), docs/example-facts.md와 일치
 - 미확인 유지: prompt-overview와 prompting-best-practices의 게시일과 개정일(페이지에 표기 없음). ch02가 권한 규칙의 적용 범위(Bash 규칙이 매칭하지 않는 경우와 sandbox 병행)를 다루는지(검증 후 확정)
+
+
+## C4-1, C4-2, C4-4, C4-5 재확인과 새 출처 C4-6(2026-10-24 fact-checker, ch04-playbook)
+- S: C4-1 Anthropic, Prompt engineering overview(자료 키 prompt-overview)
+- URL: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview, 확인 2026-10-24
+- 게시일: 표기 없음, 작성: Anthropic(Claude Platform Docs)
+- 사용한 내용: "Before prompt engineering"의 세 전제와 "If not, spend time establishing that first". "When to prompt engineer"의 "Not every success criterion or failing eval is best solved by prompt engineering. For example, you can sometimes improve latency and cost more easily by choosing a different model." 2026-10-23 기록과 같음. "more easily"는 지연 시간과 비용 예에만 붙음
+- S: C4-2 Anthropic, Prompting best practices(자료 키 prompting-best-practices)
+- URL: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices, 확인 2026-10-24
+- 사용한 내용: Be clear and direct, Add context to improve performance, Use examples effectively(Relevant/Diverse/Structured, Tip 3–5), Structure prompts with XML tags("Use consistent, descriptive tag names"), Control the format of responses, Tool use > Tool usage의 원문이 2026-10-23 기록과 같음. 현행 페이지는 모델별 안내 페이지(Sonnet 5.5, Opus 5.5 등)를 먼저 읽으라고 안내함(도입부 표). 한글 태그 이름에 대한 안내는 찾지 못함(미확인)
+- S: C4-4 Anthropic Engineering, Effective context engineering for AI agents(자료 키 context-engineering)
+- URL: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, 확인 2026-10-24
+- 게시일: 2025-09-29, 작성: Prithvi Rajasekaran 외
+- 사용한 내용: "as the number of tokens in the context window increases, the model's ability to accurately recall information" 감소(context rot). "While some models exhibit more gentle degradation than others, this characteristic emerges across all models."
+- S: C4-5 Anthropic, Glossary(자료 키 platform-glossary)
+- URL: https://platform.claude.com/docs/en/about-claude/glossary, 확인 2026-10-24
+- 사용한 내용: Context window("the amount of text a language model can look back on and reference when generating new text"), Tokens("smallest individual units of a language model"), Temperature 절 "Even with temperature set to 0, the results will not be fully deterministic, and identical inputs might produce different outputs across API calls"(API 호출 맥락)
+- S: C4-6 Anthropic, Define success criteria and build evaluations(자료 키 develop-tests)
+- URL: https://platform.claude.com/docs/en/test-and-evaluate/develop-tests, 확인 2026-10-24(앞 100,000자만 읽음, 전체 약 153,000자)
+- 게시일: 표기 없음, 작성: Anthropic(Claude Platform Docs)
+- 사용한 내용: "Building a successful LLM-based application starts with clearly defining your success criteria and then designing evaluations to measure performance against them." 시험 사례를 많이 두는 예(트윗 1,000건 등). 4장 "성공 기준은 응용 프로그램을 여러 시험 입력으로 평가하는 경우"의 근거(overview가 아니라 이 문서)
+- 예제 사실(R7) 확인 2026-10-24: examples/expense-app/docs/CR.md(재무팀, 요청일 2026-10-05, 사유), examples/expense-app/DECISIONS.md D-012(2026-10-12, 조건부 수용, 인사 시스템 일 1회 갱신 data/projects.csv, 이유 "운영 위원회 결정, 실시간 연동 규격 없음"), docs/example-facts.md와 일치. python 요일 검산: 2026-10-05 월요일, 2026-10-12 월요일. D-012 원본에 "영향 검토를 거쳐"는 없음
+- 미확인 유지: prompt-overview, prompting-best-practices, develop-tests의 게시일과 개정일. 한글, 띄어쓰기 포함 태그 이름의 효과

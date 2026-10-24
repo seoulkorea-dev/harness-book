@@ -77,3 +77,20 @@
 - OpenAI, Harness engineering: 2026-10-23 403. 판정은 research/ch01-sources.md S2(2026-10-04)에 의존. Q-030 유지
 - 예제 대조: CLAUDE.example.md 32줄 6절(wc -l 32, PowerShell Count 32), settings.example.json deny 6개 경로 일치, reviewer.example.md tools Read, Grep, Glob, 실습 5 요청 문장 일치
 - 미확인: Codex가 AGENTS.md를 읽는다는 문장은 Codex 문서 열람 불가로 ch10 기록에 의존. 권한 설정 Edit 금지 규칙의 한계(셸이 실행한 프로그램의 파일 쓰기)는 9장 감수에서 확정
+
+
+## C5-9. 5장 사실 점검(fact-checker, 2026-10-24, HEAD 127065a)
+확인일 2026-10-24. 원문은 영어, 인용은 짧게. 로컬 Claude Code 2.1.310.
+- Anthropic, How Claude remembers your project (https://code.claude.com/docs/en/memory): "target under 200 lines per CLAUDE.md file", 추가 시점 네 가지, "may pick one arbitrarily", "context, not enforced configuration ... PreToolUse hook", @path 가져온 파일은 가져오는 CLAUDE.md와 함께 로드. AGENTS.md는 "no CLAUDE.md in your working directory or above it"일 때 읽음, v2.1.277 이상, Bedrock과 텔레메트리 끈 세션은 v2.1.281 미만에서 불가, v2.1.280 미만은 /memory와 /context 목록에 직접 읽은 AGENTS.md가 보이지 않음. 압축 뒤 루트 CLAUDE.md는 다시 주입, 하위 폴더 CLAUDE.md와 paths 규칙은 on demand. 하위 에이전트의 자동 메모리는 전달되지 않고 포크는 예외.
+- Anthropic, Explore the context window (https://code.claude.com/docs/en/context-window), "What survives compaction": 루트 CLAUDE.md와 paths 없는 규칙은 디스크에서 재주입, paths 규칙과 하위 폴더 CLAUDE.md는 on demand 재로드이며 메시지 이력에 있다가 요약에 묻힘. Skill 설명 재주입은 v2.1.304 이상.
+- Anthropic, How Claude Code works (https://code.claude.com/docs/en/how-claude-code-works): "When context fills up"(오래된 도구 출력 먼저 삭제, 이어서 요약), "The context window", "Context Claude Code adds on its own"(제품이 직접 더하는 컨텍스트가 네 출처 밖에 있음), 하위 에이전트는 포크가 아니면 새로 시작, `claude --continue`와 `--resume`은 같은 세션 ID로 다시 열기.
+- Anthropic, Create custom subagents (https://code.claude.com/docs/en/sub-agents), "What loads at startup": 비포크는 대화 기록 불가, 시스템 프롬프트, 위임 메시지, CLAUDE.md 계층, git 상태를 받음. Explore와 Plan은 CLAUDE.md와 git 상태를 받지 않음. `omitClaudeMd`로 제외 가능. 포크는 부모 대화를 상속하며 인터랙티브 세션에서 기본 켜짐(CLAUDE_CODE_FORK_SUBAGENT=0으로 끔).
+- Anthropic, Tools reference (https://code.claude.com/docs/en/tools-reference), "Glob tool behavior": macOS, Linux, WSL에서는 Glob과 Grep이 기본 도구 집합에 없고 Bash의 find와 grep(내장 bfs, ugrep)으로 검색. Windows는 기본 도구. (원고 39행 "glob, grep 같은 도구"의 현재 동작 조건)
+- Anthropic, Extend Claude with skills (https://code.claude.com/docs/en/skills): 설명(description)이 상시 컨텍스트, 목록에는 이름도 표시, 본문은 호출될 때 로드, disable-model-invocation: true이면 설명도 컨텍스트에 없음. 설명과 when_to_use는 목록에서 1,536자에서 잘림.
+- Anthropic, Commands (https://code.claude.com/docs/en/commands): /context [all], /clear, /compact 설명이 원고와 일치. 사용 시점("관련 없는 작업으로 넘어갈 때")은 context-window의 "Clear between tasks"에 있고 commands에는 없음.
+- Anthropic, Embeddings (https://platform.claude.com/docs/en/build-with-claude/embeddings): "Text embeddings are numerical representations of text that let you measure semantic similarity". 원고 임베딩 풀이와 일치.
+- Rajasekaran 외(Anthropic, 2025-09-29) 재열람: "context ... must be treated as a finite resource", "embedding-based pre-inference time retrieval"("many AI-native applications employ some form of"), "runtime exploration is slower than retrieving pre-computed data", "smallest possible set of high-signal tokens", "often 1,000-2,000 tokens", "overly aggressive compaction", "Like Claude Code creating a to-do list", 화자 "At Anthropic, we", 저자 Applied AI 팀(Rajasekaran, Dixon, Ryan, Hadfield).
+- 예제 대조: CLAUDE.example.md wc -l 32, 여섯 절, 끝 줄바꿈 있음. 발췌 코드 상자 9줄이 원본과 글자까지 같음. settings.example.json deny 6경로 일치. 표 5-7의 git show --stat HEAD는 파일 단위 통계만 보여 통과 값 한 개만 바뀌었는지는 git show HEAD -- tasks.json으로 확인해야 함(임시 저장소에서 재현, 127065a에서 이미 반영).
+- 발표 주체 판정: 컨텍스트 엔지니어링 글은 Anthropic Applied AI 팀의 에이전트 일반 글이므로 5장 "Anthropic의"가 글의 화자와 맞음. 1장 "Claude Code의 …"는 Q-039, Q-101 대기.
+- 미확인: OpenAI Harness engineering(openai.com DNS 실패, 2차 요약은 방향만 같음, "기대만큼 작동하지 않았다"는 S2의 "실패"를 완화한 옮김), Codex가 AGENTS.md를 읽는다는 문장(developers.openai.com DNS 실패), PowerShell 실행(이 환경에 pwsh 없음, 2026-10-23 기록 의존).
+- 원고 대조 불일치(권고 4~16과 필수 1~3 참조): 루트 CLAUDE.md 읽는 순서와 AUTHOR_PREFS.md, "정보가 오는 곳" 단정, 컨텍스트 엔지니어링 정의의 "최신 상태로".
