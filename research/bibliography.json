@@ -29,5 +29,7 @@
   "sub-agents": {"type": "web", "author": "Anthropic", "title": "Create custom subagents", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/sub-agents"},
   "prompt-overview": {"type": "web", "author": "Anthropic", "title": "Prompt engineering overview", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"},
   "prompting-best-practices": {"type": "web", "author": "Anthropic", "title": "Prompting best practices", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"},
-  "skills": {"type": "web", "author": "Anthropic", "title": "Extend Claude with skills", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/skills"}
+  "skills": {"type": "web", "author": "Anthropic", "title": "Extend Claude with skills", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/skills"},
+  "cli-reference": {"type": "web", "author": "Anthropic", "title": "CLI reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/cli-reference"},
+  "tools-reference": {"type": "web", "author": "Anthropic", "title": "Tools reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/tools-reference"}
 }

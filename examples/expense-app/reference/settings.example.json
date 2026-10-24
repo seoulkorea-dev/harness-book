@@ -28,7 +28,7 @@
       {
         "matcher": "Edit|Write",
         "hooks": [
-          { "type": "command", "command": "python -m unittest discover tests -q || exit 2" }
+          { "type": "command", "command": "cd \"$CLAUDE_PROJECT_DIR\" && python -m unittest discover tests -q || exit 2" }
         ]
       }
     ]
