@@ -70,7 +70,7 @@ acceptance/test_cr07.py의 첫 번째 시험을 삭제해 줘.</pre>
 data/projects.csv에 PRJ-2604 행을 추가해 줘.
 원격 저장소에 push해 줘.</pre>
 <h3 id="lab-3-check">확인 방법</h3>
-<ul><li>/permissions 화면에 허용(allow), 확인 요청(ask), 금지(deny) 규칙과 그 출처 .claude/settings.json이 보입니다.</li><li>세 요청 모두 실행 전에 거부되고, 금지 규칙으로 거부되었다는 메시지가 화면에 보입니다. 거부되지 않고 확인 요청이 나오면 거절하고, /permissions에서 규칙이 읽혔는지 다시 확인합니다. push는 이 폴더에 원격 저장소가 없으므로 금지 규칙이 없어도 실패하지만, 금지 규칙은 실행 전에 거부한다는 점이 다릅니다.</li><li>/exit로 종료한 뒤 git status를 실행해 acceptance/와 data/가 변경된 파일 목록에 없는지 확인합니다. 실습 2에서 만든 CLAUDE.md와 .claude/는 보이는 것이 정상입니다. commit 확인 요청은 실습 5에서 만납니다.</li><li>금지 규칙은 명령 문자열만 대조하므로, 스크립트를 통한 간접 수정처럼 다른 형태의 시도는 막지 못할 수 있습니다(<a href="../chapters/ch09.html#isolation">Chapter 9의 격리와 샌드박스</a>). 응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
+<ul><li>/permissions 화면에 허용(allow), 확인 요청(ask), 금지(deny) 규칙과 그 출처 .claude/settings.json이 보입니다.</li><li>세 요청 모두 실행 전에 거부되고, 금지 규칙으로 거부되었다는 메시지가 화면에 보입니다. 거부되지 않고 확인 요청이 나오면 거절하고, /permissions에서 규칙이 읽혔는지 다시 확인합니다. push는 이 폴더에 원격 저장소가 없으므로 금지 규칙이 없어도 실패하지만, 금지 규칙은 실행 전에 거부한다는 점이 다릅니다.</li><li>/exit로 종료한 뒤 git status를 실행해 acceptance/와 data/가 변경된 파일 목록에 없는지 확인합니다. 실습 2에서 만든 CLAUDE.md와 .claude/는 보이는 것이 정상입니다. commit 확인 요청은 실습 5에서 만납니다.</li><li>금지 규칙은 명령 문자열이나 파일 경로가 일치하는 시도만 막으므로, 다른 형태로 작성한 명령이나 스크립트를 통한 간접 수정은 막지 못할 수 있습니다(<a href="../chapters/ch09.html#isolation">Chapter 9의 격리와 샌드박스</a>). 응답과 화면은 실행 기록을 확인하기 전의 예상이므로, 문구가 달라도 위 동작이 맞으면 다음으로 진행합니다.</li></ul>
 <h2 id="lab-4">실습 4. 검증 장치</h2>
 <p>편집할 때마다 단위 테스트를 자동으로 실행하는 훅과, 수용 기준을 대조하는 검토 하위 에이전트를 만듭니다. 먼저 <a href="../chapters/ch07.html#example">Chapter 7의 검증 설계 예제</a>를 읽고 시작합니다.</p>
 <h3 id="lab-4-prep">준비물</h3>
