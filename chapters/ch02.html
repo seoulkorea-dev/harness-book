@@ -125,7 +125,7 @@
 <tr><td>원본 자료를 수정하지 않음</td><td>규칙 문서의 수정 범위 절(data/)</td><td>금지 규칙 Edit(./data/**)</td><td>되돌리기 어려움: 원본 자료 손상</td></tr>
 <tr><td>push는 사람만 함</td><td>없음</td><td>금지 규칙 Bash(git push *)</td><td>되돌리기 어려움: 다른 사람에게 보이는 반영</td></tr>
 <tr><td>commit 전에 사람이 확인함</td><td>규칙 문서의 작업 순서(사람 확인 뒤 commit)</td><td>확인 요청 규칙 Bash(git commit *)</td><td>되돌리기 어려운 push 전의 사람 확인 지점: 작업 단위의 결과를 기록으로 확정</td></tr>
-<tr><td>파일을 수정할 때마다 단위 테스트 실행</td><td>없음(규칙 문서의 명령 절에는 단위 테스트 명령만 있음)</td><td>편집 뒤 훅</td><td>정해진 시점: 모델이 잊어도 실행</td></tr>
+<tr><td>파일을 수정할 때마다 단위 테스트 실행</td><td>없음(규칙 문서의 명령 절은 단위 테스트 명령을 알려 줄 뿐, 수정할 때마다 실행하라는 규칙은 없음)</td><td>편집 뒤 훅</td><td>정해진 시점: 모델이 잊어도 실행</td></tr>
 <tr><td>같은 시험이 세 번 연속 실패하면 중단</td><td>규칙 문서의 중단 규칙</td><td>없음</td><td>다시 작업하면 됨</td></tr>
 <tr><td>commit 전에 검토 하위 에이전트에게 대조 요청</td><td>규칙 문서의 작업 순서</td><td>없음</td><td>다시 작업하면 됨: commit 확인 때 사람이 검토 보고를 봄</td></tr>
 </tbody></table></div><figcaption><b>표 2-5. 변경 요청 사항의 규칙과 처리 수단</b><ul class="capnote"><li>되돌리기 어려운 규칙과 시점마다 실행할 검사만 강제 수단을 함께 씀</li></ul></figcaption></figure>
@@ -133,7 +133,7 @@
 <h2 id="fail">실패를 예방하는 장치</h2>
 <p>구성 요소 가운데 하나를 정하지 않아도 에이전트는 작업을 수행합니다. 그러나 그 구성 요소를 정했다면 막았을 실패가 생길 수 있고, 생겨도 알아차릴 근거가 남지 않습니다. 구성 요소마다 비었을 때 생기는 실패가 다르므로, 표 2-6은 변경 요청 사항에서 구성 요소별로 생길 수 있는 실패와 방지 장치를 정리합니다. 방지 장치는 표 2-4, 표 2-5와 같은 이름으로 적었습니다.</p>
 <figure class="fig" id="tbl-2-6"><div class="table-wrap"><table><thead><tr><th>실패 유형</th><th>원인</th><th>방지 장치</th></tr></thead><tbody>
-<tr><td>통합 테스트 시나리오의 범위를 에이전트가 정하고 완료로 표시함</td><td>역할: 사람이 승인할 작업의 경계를 정하지 않음</td><td>규칙 문서에 사람이 승인할 작업 단위(작업 5) 명시, 작업 5의 통과 값은 사람만 변경, commit 확인 때 tasks.json 변경 확인</td></tr>
+<tr><td>통합 테스트 시나리오의 범위를 에이전트가 정하고 완료로 표시함</td><td>역할: 사람이 승인할 작업의 경계를 정하지 않음</td><td>규칙 문서에 작업 5의 통과 값은 변경하지 않는다고 명시, 작업 5의 통과 값은 사람만 변경, commit 확인 때 tasks.json 변경 확인</td></tr>
 <tr><td>작업과 관계없는 웹 자료를 읽어 컨텍스트를 차지함</td><td>도구: 작업에 필요하지 않은 도구까지 노출</td><td>웹 접근 도구를 이름만 적은 금지 규칙(WebFetch, WebSearch)으로 목록에서 제외</td></tr>
 <tr><td>원본 자료(data/projects.csv)를 수정함</td><td>권한: 원본 자료의 수정을 허용</td><td>금지 규칙 Edit(./data/**)</td></tr>
 <tr><td>다음 세션이 어느 작업 단위까지 끝났는지 알지 못함</td><td>기록: 진행 상황을 파일로 남기지 않음</td><td>진행 기록(tasks.json)의 통과 값, 인계 메모(HANDOFF.md), 작업 단위별 commit</td></tr>
@@ -142,10 +142,10 @@
 <h2 id="check">설정과 결과의 확인 방법</h2>
 <p>구성 요소가 정한 대로 적용되는지는 설정 파일을 읽는 것만으로는 알 수 없습니다. 설정은 사용자, 프로젝트, 로컬 등 여러 파일에서 합쳐지고<sup class="cite"><a href="../appendix/references.html#bib-25">25</a></sup>, 훅처럼 적어 둔 장치가 실제로 실행되는지는 동작을 일으켜 봐야 압니다. 그래서 제품의 화면과 실행 결과로 확인합니다. 표 2-7은 변경 요청 사항의 에이전트에서 구성 요소별로 확인하는 방법입니다. 표의 /로 시작하는 명령은 프로젝트 폴더에서 Claude Code를 실행한 뒤 대화 입력창에 입력합니다<sup class="cite"><a href="../appendix/references.html#bib-26">26</a></sup>. 설치와 실행 방법은 <a href="../appendix/practice.html#setup">부록 실습의 실습 준비</a>에 있습니다.</p>
 <figure class="fig" id="tbl-2-7"><div class="table-wrap"><table><thead><tr><th>확인 항목</th><th>확인 방법</th><th>확인 기준</th></tr></thead><tbody>
-<tr><td>역할</td><td>/context, 규칙 문서, 검토 하위 에이전트 정의 파일</td><td>/context의 메모리 파일 항목(Claude Code가 규칙 문서를 표시하는 이름)에 CLAUDE.md가 있고, 규칙 문서에 사람이 승인할 작업이 적혀 있으며, 검토 하위 에이전트(.claude/agents/reviewer.md)의 도구가 Read, Grep, Glob임</td></tr>
+<tr><td>역할</td><td>/context, 규칙 문서, 검토 하위 에이전트 정의 파일</td><td>/context의 메모리 파일 항목(Claude Code가 규칙 문서를 표시하는 이름)에 CLAUDE.md가 있고, 규칙 문서에 통과 값을 변경하지 않는 작업 단위(작업 5)가 적혀 있으며, 검토 하위 에이전트(.claude/agents/reviewer.md)의 도구가 Read, Grep, Glob임</td></tr>
 <tr><td>도구</td><td>/permissions, /mcp</td><td>금지 규칙에 WebFetch, WebSearch가 도구 이름만으로 있고, /mcp에 연결된 서버가 없음</td></tr>
 <tr><td>권한</td><td>/permissions, 금지 동작 요청</td><td>금지 규칙에 원본 자료, 수용 시험, git push가 있고 확인 요청 규칙에 git commit이 있으며, 규칙의 출처가 프로젝트 설정(.claude/settings.json)임. data/ 수정을 요청하면 거부됨</td></tr>
-<tr><td>기록</td><td>git log, 진행 기록(tasks.json)</td><td>에이전트가 통과 값을 true로 변경한 작업 단위(작업 2~4)마다 commit이 하나씩 있음</td></tr>
+<tr><td>기록</td><td>git log, 진행 기록(tasks.json)</td><td>에이전트가 통과 값을 true로 변경한 작업 단위(작업 2~4)마다 commit이 하나씩 있음(실습 5, 6을 마친 뒤 확인)</td></tr>
 <tr><td>검증</td><td>/hooks, 실패하는 테스트를 만드는 편집, 검사 스크립트 출력</td><td>/hooks 목록에 편집 뒤 훅이 있고, 테스트가 실패하는 편집 뒤 대화 화면에 훅 오류가 보이며, 검사 스크립트 출력에 폴더별 실행 건수와 실패 건수가 있음</td></tr>
 </tbody></table></div><figcaption><b>표 2-7. 구성 요소별 확인 방법</b><ul class="capnote"><li>설정 파일만으로는 알 수 없어 화면과 실행 결과로 구성 요소를 확인함</li></ul></figcaption></figure>
 <p>훅 목록에 있다는 것과 훅이 실행되었다는 것은 다릅니다. /hooks는 등록된 훅을 보여 주는 읽기 전용 목록이므로, 실행 여부는 일부러 테스트가 실패하는 편집을 해서 대화 화면의 훅 오류로 확인합니다. 성공한 훅의 출력은 대화에 나타나지 않으므로, 실행 기록을 자세히 보려면 claude --debug로 실행합니다<sup class="cite"><a href="../appendix/references.html#bib-27">27</a></sup>.</p>
