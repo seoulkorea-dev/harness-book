@@ -22,17 +22,17 @@
 <dt>승인 정책(Approval Policy)</dt><dd>OpenAI의 에이전트 도구인 Codex가 동작 전에 멈추고 사용자에게 확인하는 시점을 정하는 설정입니다. 동작을 금지하지는 않으며, 금지는 규칙 파일이 맡습니다. <a href="../chapters/ch10.html#perm-codex">(Chapter 10)</a></dd>
 <dt>승인 지점</dt><dd>되돌리기 어려운 동작에서 사람이 개입하는 자리입니다. 사람이 승인하거나 거절하는 확인 요청과, 사람이 직접 하는 금지로 둡니다. <a href="../chapters/ch09.html#approval">(Chapter 9)</a></dd>
 <dt>실패 기록</dt><dd>실패와 원인 구성 요소, 추가한 장치를 적은 문서입니다. 같은 종류가 다시 나온 실패와 위험이 큰 실패를 올립니다. 이 책의 저장소에서는 FAILURES.md입니다. <a href="../chapters/ch11.html#this-book-grow">(Chapter 11)</a></dd>
-<dt>실행 로그</dt><dd>하네스가 남기거나, 설정하면 남는 실행 기록입니다. 세션 기록, 실행 결과, 훅 기록, 조직 지표(조직의 설정으로 켜서 모으는 사용 지표)가 해당합니다. <a href="../chapters/ch08.html#logs">(Chapter 8)</a></dd>
+<dt>실행 로그</dt><dd>하네스가 남기거나, 설정하면 남는 실행 기록입니다. 세션 기록, 실행 결과, 훅 기록, 조직 지표(환경 변수로 켜서 조직의 관측 시스템으로 보내는 사용 지표)가 해당합니다. <a href="../chapters/ch08.html#logs">(Chapter 8)</a></dd>
 <dt>에이전트 명세서</dt><dd>맡길 업무에 필요한 아홉 항목(목적, 역할, 입력, 도구, 권한, 기록, 검증, 종료 조건, 승인 지점)과 그 값을 기록한 문서입니다. <a href="../chapters/ch03.html#spec">(Chapter 3)</a></dd>
 <dt>에이전트(Agent)</dt><dd>모델이 루프(작업을 반복하는 실행 흐름) 안에서 도구를 사용해 다음 행동을 스스로 정하고, 결과를 확인하며, 목표를 이룰 때까지 반복하는 시스템입니다. 모델과 하네스로 이루어집니다. <a href="../chapters/ch01.html#agent-harness">(Chapter 1)</a></dd>
 <dt>완료 기준</dt><dd>요청 한 건이나 작업 단위 하나가 받아들여지기 위해 충족해야 하는 조건입니다. 요청의 네 요소 가운데 하나이며, 작업 단위 목록에서는 작업을 맡기기 전에 검사할 수 있는 형태로 변환합니다. 완료 기준 가운데 사람이 정한 것이 수용 기준입니다. <a href="../chapters/ch04.html#elements">(Chapter 4)</a> <a href="../chapters/ch07.html#criteria">(Chapter 7)</a></dd>
 <dt>워크플로(Workflow)</dt><dd>미리 정한 코드 경로에 따라 모델과 도구를 조율하는 시스템입니다. 다음에 무엇을 할지 모델이 아니라 코드가 정합니다. <a href="../chapters/ch01.html#meanings">(Chapter 1)</a></dd>
-<dt>인계 메모</dt><dd>작업을 다른 세션이나 에이전트에 넘길 때 현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령을 정리한 문서입니다. 이 책의 저장소에서는 HANDOFF.md입니다. <a href="../chapters/ch08.html#handover">(Chapter 8)</a></dd>
+<dt>인계 메모</dt><dd>세션을 넘길 때 결정 기록, 진행 기록, 규칙 문서로 알 수 없는 맥락을 현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령의 다섯 항목으로 묶어 넘기는 문서입니다. 예제에서는 HANDOFF.md입니다. <a href="../chapters/ch08.html#handover">(Chapter 8)</a></dd>
 <dt>자동 메모리</dt><dd>Claude Code가 작업 중에 알게 된 내용을 기기 안의 파일에 스스로 기록하고 다음 세션에 읽는 기능입니다. <a href="../chapters/ch02.html#components">(Chapter 2)</a></dd>
 <dt>작업 단위</dt><dd>한 세션 안에 끝나고 완료 여부를 확인할 수 있는 크기로 나눈 작업입니다. <a href="../chapters/ch01.html#meanings">(Chapter 1)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd>
 <dt>저장소</dt><dd>파일과 그 변경 이력을 Git으로 관리하는 폴더입니다. 변경을 이력에 남기는 일을 commit이라고 합니다. <a href="practice.html#lab-1">(부록 실습 1)</a></dd>
 <dt>지시와 강제</dt><dd>지시는 에이전트가 읽고 따르도록 요청하는 수단(규칙 문서)이고, 강제는 에이전트의 판단과 관계없이 제품이 적용하는 수단(권한 규칙, 훅)입니다. <a href="../chapters/ch02.html#instruct-enforce">(Chapter 2)</a></dd>
-<dt>진행 기록</dt><dd>작업 단위별 상태와 다음 작업을 남기는 기록입니다. 이 책의 예제에서는 tasks.json입니다. <a href="../chapters/ch08.html#kinds">(Chapter 8)</a></dd>
+<dt>진행 기록</dt><dd>어떤 작업 단위가 어디까지 진행되었는지 남기는 기록입니다. 예제에서는 tasks.json의 통과 값과 작업 단위별 commit입니다. <a href="../chapters/ch08.html#kinds">(Chapter 8)</a></dd>
 <dt>컨텍스트 엔지니어링(Context Engineering)</dt><dd>모델이 응답을 생성하는 동안 필요한 정보를 선별하고 유지하는 전략입니다. <a href="../chapters/ch01.html#prompt-context">(Chapter 1)</a></dd>
 <dt>컨텍스트 윈도(Context Window)</dt><dd>모델이 한 번에 처리할 수 있는 토큰의 범위입니다. Claude Code에서는 /context 명령으로 사용 현황을 확인합니다. <a href="../chapters/ch01.html#background">(Chapter 1)</a></dd>
 <dt>컨텍스트(Context)</dt><dd>모델이 응답을 생성할 때 입력되는 정보 전체입니다. 프롬프트는 그 일부입니다. <a href="../chapters/ch01.html#layers">(Chapter 1)</a></dd>
