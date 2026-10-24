@@ -75,3 +75,19 @@ $ python tools/check_tasks.py   (저장소 루트)
 건너뜀	작업 5	사람 승인(통과 값은 사람이 변경)(사람이 판단하는 확인)
 요약: 공백 1건(작업 2)
 ```
+
+## 실습 1 check.py 재확인 (2026-10-24, 작성 에이전트, Linux, Python 3)
+
+현재 check.py의 요약 줄 형식(건너뜀, project_code 시험 건수 포함)으로 다시 실행했다.
+
+```
+$ python3 check.py
+(앞부분: 단위 테스트 출력)
+tests: 실행 3건, 실패 0건, 건너뜀 0건, project_code 시험 0건
+(수용 시험 test_1, test_2, test_3 FAIL과 AssertionError 출력)
+Ran 5 tests in 0.006s
+
+FAILED (failures=3)
+acceptance: 실행 5건, 실패 3건, 건너뜀 0건(정한 수 5건)
+exit=1
+```
