@@ -136,23 +136,23 @@ network_access = false</pre>
 <h2 id="fail">실패를 예방하는 장치</h2>
 <p>변경 요청 사항의 정책을 다른 제품으로 옮길 때 제품의 차이를 확인하지 않으면, 정책의 일부가 설정에 반영되지 않을 수 있습니다. 표 10-4는 실패 유형과 원인, 방지 장치를 정리합니다.</p>
 <figure class="fig" id="tbl-10-4"><div class="table-wrap"><table><thead><tr><th>실패 유형</th><th>원인</th><th>방지 장치</th></tr></thead><tbody>
-<tr><td>Codex에서 push가 금지되지 않고 확인 요청으로 넘어갈 수 있음</td><td>승인 정책은 확인 시점을 정하고, 금지는 규칙 파일이 맡음</td><td>규칙 파일에 forbidden 규칙 추가</td></tr>
-<tr><td>Claude Code에서 git -C . push 같은 다른 형태의 명령이 실행됨</td><td>금지 규칙은 명령 문자열만 대조하고, 샌드박스는 기본으로 꺼져 있음</td><td>샌드박스를 켜고(sandbox의 enabled 값), 원격 저장소의 도메인을 허용 도메인에 두지 않음</td></tr>
-<tr><td>셸 명령이 외부 사이트에 접속함</td><td>셸 명령의 네트워크 접근은 확인 요청이 될 수 있으며, 승인자가 승인함</td><td>승인자에게 변경 요청 사항의 거절 기준(외부 자료 접근 거절)을 알림</td></tr>
-<tr><td>AGENTS.md의 규칙이 Claude Code에서 읽히지 않음</td><td>작업 폴더나 그 위 폴더에 CLAUDE.md, .claude/CLAUDE.md, CLAUDE.local.md 가운데 하나가 있으면 AGENTS.md를 읽지 않음</td><td>CLAUDE.md 첫 줄에 @AGENTS.md</td></tr>
-<tr><td>샌드박스를 켰는데 명령이 샌드박스 없이 실행됨</td><td>네이티브 Windows처럼 샌드박스를 지원하지 않는 환경이거나, Linux와 WSL2에 필요한 패키지(bubblewrap, socat)가 설치되지 않음</td><td>sandbox.failIfUnavailable을 true로 둠</td></tr>
-<tr><td>문서를 확인한 뒤 기본값이 변경되어 설정과 동작이 달라짐</td><td>두 제품의 기능이 자주 갱신됨</td><td>도입 시점에 최신 문서에서 기본값을 확인</td></tr>
+<tr><td>1. Codex에서 push가 금지되지 않고 확인 요청으로 넘어갈 수 있음</td><td>승인 정책은 확인 시점을 정하고, 금지는 규칙 파일이 맡음</td><td>규칙 파일에 forbidden 규칙 추가</td></tr>
+<tr><td>2. Claude Code에서 git -C . push 같은 다른 형태의 명령이 실행됨</td><td>금지 규칙은 명령 문자열만 대조하고, 샌드박스는 기본으로 꺼져 있음</td><td>샌드박스를 켜고(sandbox의 enabled 값), 원격 저장소의 도메인을 허용 도메인에 두지 않음</td></tr>
+<tr><td>3. 셸 명령이 외부 사이트에 접속함</td><td>셸 명령의 네트워크 접근은 확인 요청이 될 수 있으며, 승인자가 승인함</td><td>승인자에게 변경 요청 사항의 거절 기준(외부 자료 접근 거절)을 알림</td></tr>
+<tr><td>4. AGENTS.md의 규칙이 Claude Code에서 읽히지 않음</td><td>작업 폴더나 그 위 폴더에 CLAUDE.md, .claude/CLAUDE.md, CLAUDE.local.md 가운데 하나가 있으면 AGENTS.md를 읽지 않음</td><td>CLAUDE.md 첫 줄에 @AGENTS.md</td></tr>
+<tr><td>5. 샌드박스를 켰는데 명령이 샌드박스 없이 실행됨</td><td>네이티브 Windows처럼 샌드박스를 지원하지 않는 환경이거나, Linux와 WSL2에 필요한 패키지(bubblewrap, socat)가 설치되지 않음</td><td>sandbox.failIfUnavailable을 true로 둠</td></tr>
+<tr><td>6. 문서를 확인한 뒤 기본값이 변경되어 설정과 동작이 달라짐</td><td>두 제품의 기능이 자주 갱신됨</td><td>도입 시점에 최신 문서에서 기본값을 확인</td></tr>
 </tbody></table></div><figcaption><b>표 10-4. 정책을 다른 제품으로 옮길 때 생길 수 있는 실패를 예방하는 장치</b></figcaption></figure>
 <h2 id="check">설정과 결과의 확인 방법</h2>
 <p>같은 정책을 두 제품에 설정한 뒤에는, 제품마다 설정이 읽혔는지와 금지한 동작이 실제로 거부되는지 확인합니다. 확인은 에이전트에게 해당 동작을 해 달라고 대화로 요청하는 방식이며, push와 네트워크 확인은 원격 저장소에 연결되지 않은 실습 폴더(부록 실습 1에서 만든 expense-practice)에서 합니다. 네트워크 확인은 claude --permission-mode default로 시작한 대화형 터미널에서 합니다. auto 모드에서는 명령에 적힌 도메인을 분류기가 승인하면 연결될 수 있기 때문입니다.</p>
 <p>확인 시점은 이 장의 설정을 적용한 뒤입니다. 행 2는 샌드박스 설정을 더하기 전에도 한 번 요청해, 설정 전에는 파일 생성이 성공하고(만든 파일은 rm ~/sandbox-probe로 지움) 설정 뒤에는 실패하는지 확인합니다. Claude Code 행은 부록 실습 3을 마친 폴더에 샌드박스 설정을 더하고 Claude Code를 새로 시작한 뒤 확인합니다. Codex 행은 Codex를 설치해 사용하는 경우에만 하고, 설치하지 않았다면 config.toml과 규칙 파일의 내용이 예제 절의 Codex 설정 상자와 같은지 읽어 확인하는 것으로 대신합니다(동작 확인은 아님). 네이티브 Windows(Git Bash, PowerShell)는 샌드박스를 지원하지 않으므로 행 2와 5를 건너뛰거나 WSL2에서 확인합니다. 행 2와 5의 명령은 입력창에서 명령 앞에 !를 입력해 직접 실행하면 샌드박스 밖에서 실행될 수 있으므로 에이전트에게 실행을 요청합니다. 파일이 만들어졌으면 rm ~/sandbox-probe로 지우고, 샌드박스 밖에서 다시 실행할지 물으면 거절합니다. 표 10-5는 확인 항목마다 확인 방법과 확인 기준을 보여 주며, 행의 번호는 표 10-4의 실패 번호와 일치합니다.</p>
 <figure class="fig" id="tbl-10-5"><div class="table-wrap"><table><thead><tr><th>확인 항목</th><th>확인 방법</th><th>확인 기준</th></tr></thead><tbody>
-<tr><td>두 제품의 push 금지와 Claude Code의 웹 도구 금지</td><td>제품마다 원격 저장소에 push해 달라는 요청, Claude Code의 /permissions</td><td>금지 규칙으로 거부되었다는 메시지가 보임(원격 저장소가 없어 실패하는 오류와 구분). /permissions의 금지에 Bash(git push *), WebFetch, WebSearch가 있고 출처가 .claude/settings.json임. Codex는 forbidden 규칙으로 거부되었다는 메시지가 보임</td></tr>
-<tr><td>Claude Code의 샌드박스가 켜졌는지</td><td>홈 폴더에 빈 파일을 만드는 명령(touch ~/sandbox-probe) 실행을 에이전트에게 요청(!로 직접 입력하지 않음)</td><td>작업 폴더 밖 파일 생성이 실패함(macOS는 Operation not permitted, Linux와 WSL2는 Read-only file system). 원격 저장소가 연결된 환경의 git -C . push 차단까지 증명하지는 않음</td></tr>
-<tr><td>셸 명령의 네트워크 접근</td><td>"curl https://example.com을 실행해 줘" 요청</td><td>Claude Code는 바로 접속하지 않고 승인을 물음. Codex는 차단하거나 승인을 물음. Codex는 config.toml에 network_access = false가 있음</td></tr>
-<tr><td>Claude Code의 규칙 문서</td><td>expense-practice에 AGENTS.md를 만들고 CLAUDE.md 첫 줄에 @AGENTS.md를 적은 뒤 Claude Code의 /memory(두 파일은 텍스트 편집기로 직접 수정하고, 확인 뒤 AGENTS.md는 지우고 CLAUDE.md 첫 줄의 @AGENTS.md도 지움)</td><td>목록에 AGENTS.md의 경로가 있음(이 목록에 AGENTS.md가 표시되는 것은 v2.1.280 이상)</td></tr>
-<tr><td>샌드박스 동작 여부</td><td>touch ~/sandbox-probe 실행 요청(행 2와 같음)</td><td>파일 생성 실패(성공하면 샌드박스 없이 실행되는 환경이므로, 팀 설정에 sandbox.failIfUnavailable을 true로 둠)</td></tr>
-<tr><td>확인 날짜</td><td>비교 기준 절의 확인 날짜(Claude Code 2026년 10월 20일, Codex 2026년 10월 4일)와 도입 시점의 문서</td><td>기본값과 설정 이름이 비교 기준 절의 확인 날짜 기준과 일치함(실행 확인이 아닌 문서 대조)</td></tr>
+<tr><td>1. 두 제품의 push 금지와 Claude Code의 웹 도구 금지</td><td>제품마다 원격 저장소에 push해 달라는 요청, Claude Code의 /permissions</td><td>금지 규칙으로 거부되었다는 메시지가 보임(원격 저장소가 없어 실패하는 오류와 구분). /permissions의 금지에 Bash(git push *), WebFetch, WebSearch가 있고 출처가 .claude/settings.json임. Codex는 forbidden 규칙으로 거부되었다는 메시지가 보임</td></tr>
+<tr><td>2. Claude Code의 샌드박스가 켜졌는지</td><td>홈 폴더에 빈 파일을 만드는 명령(touch ~/sandbox-probe) 실행을 에이전트에게 요청(!로 직접 입력하지 않음)</td><td>작업 폴더 밖 파일 생성이 실패함(macOS는 Operation not permitted, Linux와 WSL2는 Read-only file system). 원격 저장소가 연결된 환경의 git -C . push 차단까지 증명하지는 않음</td></tr>
+<tr><td>3. 셸 명령의 네트워크 접근</td><td>"curl https://example.com을 실행해 줘" 요청</td><td>Claude Code는 바로 접속하지 않고 승인을 물음. Codex는 차단하거나 승인을 물음. Codex는 config.toml에 network_access = false가 있음</td></tr>
+<tr><td>4. Claude Code의 규칙 문서</td><td>expense-practice에 AGENTS.md를 만들고 CLAUDE.md 첫 줄에 @AGENTS.md를 적은 뒤 Claude Code의 /memory(두 파일은 텍스트 편집기로 직접 수정하고, 확인 뒤 AGENTS.md는 지우고 CLAUDE.md 첫 줄의 @AGENTS.md도 지움)</td><td>목록에 AGENTS.md의 경로가 있음(이 목록에 AGENTS.md가 표시되는 것은 v2.1.280 이상)</td></tr>
+<tr><td>5. 샌드박스 동작 여부</td><td>touch ~/sandbox-probe 실행 요청(행 2와 같음)</td><td>파일 생성 실패(성공하면 샌드박스 없이 실행되는 환경이므로, 팀 설정에 sandbox.failIfUnavailable을 true로 둠)</td></tr>
+<tr><td>6. 확인 날짜</td><td>비교 기준 절의 확인 날짜(Claude Code 2026년 10월 20일, Codex 2026년 10월 4일)와 도입 시점의 문서</td><td>기본값과 설정 이름이 비교 기준 절의 확인 날짜 기준과 일치함(실행 확인이 아닌 문서 대조)</td></tr>
 </tbody></table></div><figcaption><b>표 10-5. 두 제품 설정의 확인 방법</b></figcaption></figure>
 <h2 id="principle">설계 원칙과 점검 질문</h2>
 <p class="principle">제품은 모델 성능이 아니라, 조직이 운영하려는 하네스를 구성 요소마다 어떻게 구현하는지로 비교합니다.</p>
