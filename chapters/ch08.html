@@ -112,18 +112,19 @@
 <tr><td>HANDOFF.md</td><td>인계 메모</td><td>에이전트가 세션을 마칠 때 작성</td><td>4</td></tr>
 </tbody></table></div><figcaption><b>표 8-4. 변경 요청 사항의 기록과 세션 2가 읽는 순서</b></figcaption></figure>
 <p>읽는 순서와 수정 범위는 실습 폴더의 규칙 문서에 적혀 있습니다. 결정이 변경되면 사람이 결정 기록에 새 결정과 대체 관계를 적고, 에이전트는 결정 기록을 수정하지 않습니다. 다음은 세션 1을 마칠 때 에이전트가 작성한 인계 메모의 예입니다.</p>
-<pre>현재 상태: 작업 2, 3 완료(통과 값 true, 단위마다 commit). 진행 중인 작업 없음
+<pre>현재 상태: 최종 commit은 작업 3의 commit. 작업 2, 3 완료(통과 값 true, 단위마다 commit). 진행 중인 작업 없음
 읽을 문서: CLAUDE.md의 읽는 순서대로 docs/CR.md, DECISIONS.md, tasks.json
 미결정 사항: 없음. 작업 5(통합 시나리오)는 승인자(변경을 승인하는 사람)가 승인
 다음 작업: 작업 4. 완료 기준은 화면에서 프로젝트 코드 선택 가능, 목록에 없는 코드 거부
-확인 명령: python check.py(acceptance의 시험 1~3이 아직 실패하는 것이 정상)</pre>
+확인 명령: python check.py(종료 코드 1이 정상. tests는 통과, acceptance 시험 1~3만 실패)</pre>
 <p>확인 명령의 acceptance는 수용 시험(수용 기준을 충족하는지 확인하는 시험)을 둔 폴더이며, 시험 1~3은 작업 4의 화면 기능을 확인하므로 작업 4 전에는 실패합니다. 부록 실습 6은 새 세션에서 "HANDOFF.md를 읽고 이어서 작업해 줘"라고 요청합니다. 규칙 문서의 순서 대신 사람이 인계 메모부터 읽도록 지시한 경우이며, 인계 메모의 읽을 문서 항목이 나머지 기록을 다시 가리킵니다.</p>
+<p>인계 메모의 "작업 2 완료"는 통과 값을 근거로 하지만, 작업 2의 확인 방법인 수용 시험 4, 5는 구현 전에도 통과합니다(<a href="ch07.html#criteria">Chapter 7의 완료 기준을 검사로 변환</a>). 그래서 세션 2는 작업 2의 commit에서 정산 요청 데이터에 project_code 항목이 추가되었는지 git diff로 직접 확인한 뒤 작업 4를 시작합니다.</p>
 <p>세션 2가 작업 4를 마치고 완료 보고를 내면, 사용자는 검사 출력과 함께 실행 로그를 확인합니다. "작업 4를 마쳤다"는 보고가 사실인지, 사용자 폴더의 .claude/projects/ 아래 세션 기록 파일에서 python check.py 실행과 그 출력을 찾아 확인합니다. /usage로 이 세션의 사용량과 비용 추정치도 봅니다. 인계 메모로 세션을 이어 가는 실습은 <a href="../appendix/practice.html#lab-6">부록 실습의 실습 6</a>에 있습니다.</p>
 <h2 id="fail">실패를 예방하는 장치</h2>
 <p>결정과 진행 상황을 문서로 남기지 않으면, 변경 요청 사항을 두 세션에 나누어 구현할 때 다음 실패가 생길 수 있습니다. 표 8-5는 실패 유형과 원인, 방지 장치를 정리합니다.</p>
 <figure class="fig" id="tbl-8-5"><div class="table-wrap"><table><thead><tr><th>실패 유형</th><th>원인</th><th>방지 장치</th></tr></thead><tbody>
 <tr><td>세션 2가 이미 끝난 작업 2를 다시 구현함</td><td>진행 기록이 없음</td><td>tasks.json의 통과 값과 작업 단위마다 commit</td></tr>
-<tr><td>세션 2가 대체된 결정(D-012)을 근거로 구현함</td><td>결정의 변경을 대화에서만 합의함</td><td>결정 기록에 새 결정과 대체 관계를 남김(D-015 예시)</td></tr>
+<tr><td>세션 2가 대체된 결정(D-012)을 근거로 구현함</td><td>결정의 변경을 대화에서만 합의함</td><td>결정 기록에 새 결정과 대체 관계를 남김(가상의 D-015 예시)</td></tr>
 <tr><td>대화에서만 전달한 수정 범위 지시(예: acceptance 폴더는 수정하지 않음)를 압축 뒤에 놓침</td><td>계속 지킬 지시를 대화에만 둠</td><td>규칙 문서(CLAUDE.md)에 추가</td></tr>
 <tr><td>새 세션이 어디까지 했는지 몰라 저장소 전체를 탐색함</td><td>인계 메모가 없음</td><td>HANDOFF.md의 현재 상태와 다음 작업</td></tr>
 <tr><td>완료 보고를 확인하려 했지만 세션 기록이 이미 삭제됨</td><td>보관 기간과 확인 방법을 정하지 않음</td><td>보관 기간을 정하고, 완료 보고를 받을 때 바로 로그를 확인</td></tr>
@@ -132,12 +133,12 @@
 <p>기록이 제 역할을 하는지는 새 세션이 기록만으로 작업을 이어 가는지로 확인합니다. 명령과 파일은 부록 실습 1에서 만든 실습 폴더(expense-practice) 기준입니다. 표 8-6은 확인 항목과 확인 방법, 확인 기준입니다.</p>
 <figure class="fig" id="tbl-8-6"><div class="table-wrap"><table><thead><tr><th>확인 항목</th><th>확인 방법</th><th>확인 기준</th></tr></thead><tbody>
 <tr><td>인계 메모</td><td>HANDOFF.md를 열어 읽음</td><td>현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령의 다섯 항목이 있음</td></tr>
-<tr><td>진행 기록</td><td>git log --oneline과 tasks.json</td><td>에이전트가 수행해 통과 값이 true가 된 작업(작업 2, 3)마다 그 작업의 commit이 있음</td></tr>
-<tr><td>결정 기록</td><td>DECISIONS.md</td><td>D-012 한 건이 있음. 대체 관계는 D-015를 직접 추가해 읽어 보는 선택 과제</td></tr>
+<tr><td>진행 기록</td><td>git log --oneline과 tasks.json</td><td>에이전트가 수행해 통과 값이 true가 된 작업(작업 2, 3)마다 그 작업의 commit이 있음(commit 메시지에 작업 번호가 있음)</td></tr>
+<tr><td>결정 기록</td><td>DECISIONS.md</td><td>D-012 한 건이 있고 에이전트가 수정하지 않음(git diff HEAD~2 -- DECISIONS.md 출력 없음). 대체 관계는 D-015를 직접 추가해 읽어 보는 선택 과제</td></tr>
 <tr><td>이어 받기</td><td>새 세션에서 "HANDOFF.md를 읽고 이어서 작업해 줘" 요청(부록 실습 6)</td><td>통과 값이 false인 첫 단위(작업 4)를 선택하고, 끝난 작업 2, 3을 다시 구현하지 않음</td></tr>
-<tr><td>세션 기록</td><td>사용자 폴더의 .claude/projects/ 아래 파일</td><td>작업한 세션의 기록 파일이 있고, 완료 보고에 적힌 검사 명령과 출력이 기록에 있음</td></tr>
-<tr><td>보관 기간</td><td>설정 파일의 cleanupPeriodDays</td><td>확인에 필요한 기간 이상으로 정해져 있음(없으면 기본 30일)</td></tr>
-<tr><td>사용량</td><td>/usage</td><td>사용량과 비용 추정치가 표시됨(청구 근거가 아님)</td></tr>
+<tr><td>세션 기록</td><td>Git Bash, macOS, Linux에서는 grep -l "python check.py" ~/.claude/projects/*/*.jsonl, PowerShell에서는 Select-String -Path "$HOME\.claude\projects\*\*.jsonl" -Pattern "python check.py" -List</td><td>작업한 세션의 기록 파일이 있고, 완료 보고에 적힌 검사 명령과 출력이 기록에 있음</td></tr>
+<tr><td>보관 기간</td><td>사용자 설정 파일(macOS, Linux는 ~/.claude/settings.json, Windows는 %USERPROFILE%\.claude\settings.json)의 cleanupPeriodDays</td><td>완료 보고를 확인하는 데 필요한 기간 이상으로 정해져 있음(값이 없으면 기본 30일)</td></tr>
+<tr><td>사용량</td><td>/usage</td><td>실습 6을 마친 세션의 토큰 사용량과 비용 추정치가 0이 아님(청구 근거가 아님)</td></tr>
 </tbody></table></div><figcaption><b>표 8-6. 기록과 인계의 확인 방법</b></figcaption></figure>
 <h2 id="principle">설계 원칙과 점검 질문</h2>
 <p class="principle">세션이 끝나도 남아야 할 결정과 진행 상황은 대화가 아니라 저장소의 문서로 남깁니다.</p>
