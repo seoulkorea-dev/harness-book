@@ -81,3 +81,12 @@
 - 예제 파일 대조: CLAUDE.example.md 작업 순서 15행이 본문 105행 인용과 같음(32줄 유지). settings.example.json에 상한 키 없음(allow 6, ask 1, deny 9, PostToolUse Edit|Write). examples/ 전체에서 max_turns, max_budget, 상한, 예산 검색 0건
 - 내부 링크: ch07.html#criteria, ch01.html#loop, ch09.html#cost, ch02.html#tbl-2-4, practice.html#lab-1, lab-3, lab-4, lab-6 모두 존재
 - 미확인: RUNLOG.md에 python check.py 종료 코드 0 실행 기록 없음(실습 6 실행 때 기록할 것). /hooks 목록의 matcher 표시, /context의 하위 에이전트 항목은 계속 미확인
+
+## C3-11. 3장 정비(이슈 #66 3단계, PR #88, 2026-10-22) 새 문장의 근거
+- 자료 키: agent-loop(C3-1), hooks(C3-2), sub-agents(C3-3), permissions(C3-4), commands(C3-5), memory(C3-6), cli-reference(C3-10), permission-modes(1장 기록). 옛 표기 (Anthropic, 2026b)는 문서 셋(hooks-guide, hooks, sub-agents)을 묶었으므로 문서마다 키 하나로 나눔(BOOK_STANDARD 8절)
+- Configure permissions(https://code.claude.com/docs/en/permissions), 확인 2026-10-22(실무자 역할 검토자 WebFetch): Edit 규칙은 내장 편집 도구와 Claude Code가 알아보는 파일 명령에 적용되고, Bash로 실행한 프로그램이 파일을 직접 여는 경우에는 적용되지 않음(OS 수준 차단은 샌드박스). ./path는 현재 디렉터리 기준. Bash(git push *)는 git -C . push처럼 다르게 쓴 명령과 일치하지 않음. 본문 files 절 "금지 규칙이 막는 범위에는 한계" 문단
+- Hooks reference(https://code.claude.com/docs/en/hooks), 확인 2026-10-22(같음): 훅 명령은 현재 디렉터리에서 실행되며, 프로젝트 기준 경로는 $CLAUDE_PROJECT_DIR로 지정. 종료 코드 2면 stderr를 Claude에 보여 줌(PostToolUse는 막지 못함, 막는 것은 PreToolUse). 본문 훅 문단과 실습 파일 settings.example.json의 cd "$CLAUDE_PROJECT_DIR"
+- unittest 결과 출력: Python 표준 라이브러리 unittest의 TextTestRunner 기본 스트림은 sys.stderr(실행 확인: examples/expense-app에서 python -m unittest discover tests -q 2>/dev/null 출력 없음, 2026-10-22 작성 에이전트). fact-checker 재확인 대상
+- CLI reference(C3-10): --max-turns, --max-budget-usd는 -p 전용. 본문은 "명령 줄 상한 옵션은 -p 실행 전용"까지만 쓰고, 대화형 세션의 상한 설정 유무는 쓰지 않음
+- Permission modes(permission-modes): 기본 모드(default)는 허용 목록에 없는 도구 사용 전에 확인을 요청함. 본문은 "권한 모드가 사람에게 묻는 기본 모드라면"으로 조건을 밝힘(Q-116과 같은 처리)
+- Permission modes(permission-modes), 확인 2026-10-22(실무자 역할 검토자 3차 WebFetch): v2.1.283 이상 대화형 세션은 auto로 시작, Manual 모드의 설정 값은 default(별칭 manual), 시작 옵션 claude --permission-mode default. 금지 규칙은 모든 모드에서 막음. 명령 내용에 일치하는 ask 규칙은 auto에서도 확인 요청. auto 분류기의 기본 허용 목록에 "Pushing to any branch of the repository you're working in, including the default branch". 본문 files 절 권한 모드 문단과 표 3-6 넷째 행

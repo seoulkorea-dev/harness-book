@@ -57,3 +57,21 @@ $ echo $?
 | 실습 6 | HANDOFF.md, 세션 2(작업 4) | 실행 전 | HANDOFF.md, check.py 출력, /usage |
 
 실행할 때마다 날짜, 모델과 제품 버전, 요청 원문, 출력 원문, 재실행 시 차이를 함께 적는다.
+
+## 검사 스크립트 보강 뒤 기준 상태 (2026-10-22, 작성 에이전트, Linux, Python 3.13.16, 3장 정비 PR #88)
+
+check.py가 건너뜀, 수용 시험 수(5건), 이름에 project_code가 든 단위 시험 수를 함께 본다.
+
+```
+$ python check.py
+tests: 실행 3건, 실패 0건, 건너뜀 0건, project_code 시험 0건
+acceptance: 실행 5건, 실패 3건, 건너뜀 0건(정한 수 5건)
+exit=1
+$ python tools/check_tasks.py   (저장소 루트)
+건너뜀	작업 1	결정 기록 D-012(사람이 판단하는 확인)
+공백 있음	작업 2	python check.py의 수용 시험 4, 5 통과: 구현 전 상태에서도 통과(OK)
+정상	작업 3	python check.py의 tests 실패 0건, project_code 시험 1건 이상: 구현 전 상태에서 실패(NO TESTS RAN)
+정상	작업 4	python check.py의 수용 시험 1, 2, 3 통과: 구현 전 상태에서 실패(FAILED (failures=3))
+건너뜀	작업 5	사람 승인(통과 값은 사람이 변경)(사람이 판단하는 확인)
+요약: 공백 1건(작업 2)
+```

@@ -1,5 +1,5 @@
 """원고 구조 검사 (STYLE.md 3절, CLAUDE.md 캡션 규칙). 위반이 없으면 출력 없음.
-1. 캡션 설명(capnote)은 정확히 1줄
+1. 캡션 설명(capnote)은 0줄 또는 1줄(작가 결정 2026-10-23: 부연 설명이 필요 없으면 두지 않음)
 2. 절 제목(h2, h3) 바로 뒤에 그림이나 표를 두지 않음
 3. 요약 그림은 캡션에서 가리키는 같은 절의 표보다 앞에 둠
 4. 병합 셀(rowspan)이 있는 표에는 둘째 열 이후의 줄바꿈 금지 클래스(fit-2~)를 쓰지 않음
@@ -19,7 +19,7 @@ for path in pages:
     name = path[len(ROOT) + 1:]
     for m in re.finditer(r'<figcaption><b>([^<.]+)\.[^<]*</b>(.*?)</figcaption>', s, re.S):
         n = len(re.findall(r'<li>', m.group(2)))
-        if n != 1:
+        if n > 1:
             errors.append(f'{name}: {m.group(1)} 캡션 설명 {n}줄')
     for m in re.finditer(r'<(h2|h3)[^>]*>([^<]*)</\1>\s*<figure', s, re.S):
         errors.append(f'{name}: 절 "{re.sub(r"<[^>]+>", "", m.group(2))}" 제목 바로 뒤에 그림 또는 표')
