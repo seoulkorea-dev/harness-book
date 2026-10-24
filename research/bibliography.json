@@ -35,5 +35,7 @@
   "develop-tests": {"type": "web", "author": "Anthropic", "title": "Define success criteria and build evaluations", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"},
   "cc-best-practices": {"type": "web", "author": "Anthropic", "title": "Best practices for Claude Code", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/best-practices"},
   "claude-directory": {"type": "web", "author": "Anthropic", "title": "Explore the .claude directory", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/claude-directory"},
-  "monitoring": {"type": "web", "author": "Anthropic", "title": "Monitoring", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/monitoring-usage"}
+  "monitoring": {"type": "web", "author": "Anthropic", "title": "Monitoring", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/monitoring-usage"},
+  "sandbox-bash": {"type": "web", "author": "Anthropic", "title": "Configure the sandboxed Bash tool", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/sandboxing"},
+  "codex-approvals": {"type": "web", "author": "OpenAI", "title": "Agent approvals and security", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/agent-approvals-security"}
 }
