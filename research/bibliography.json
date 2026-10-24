@@ -31,5 +31,6 @@
   "prompting-best-practices": {"type": "web", "author": "Anthropic", "title": "Prompting best practices", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"},
   "skills": {"type": "web", "author": "Anthropic", "title": "Extend Claude with skills", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/skills"},
   "cli-reference": {"type": "web", "author": "Anthropic", "title": "CLI reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/cli-reference"},
-  "tools-reference": {"type": "web", "author": "Anthropic", "title": "Tools reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/tools-reference"}
+  "tools-reference": {"type": "web", "author": "Anthropic", "title": "Tools reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/tools-reference"},
+  "develop-tests": {"type": "web", "author": "Anthropic", "title": "Define success criteria and build evaluations", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"}
 }
