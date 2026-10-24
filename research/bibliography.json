@@ -41,5 +41,9 @@
   "cc-settings": {"type": "web", "author": "Anthropic", "title": "Claude Code settings", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/settings"},
   "codex-agents-md": {"type": "web", "author": "OpenAI", "title": "Custom instructions with AGENTS.md", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/guides/agents-md"},
   "codex-config": {"type": "web", "author": "OpenAI", "title": "Config basics", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/config-basic"},
-  "codex-rules": {"type": "web", "author": "OpenAI", "title": "Rules", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/rules"}
+  "codex-rules": {"type": "web", "author": "OpenAI", "title": "Rules", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/rules"},
+  "plans-pricing": {"type": "web", "author": "Anthropic", "title": "Plans & pricing", "venue": "Claude", "url": "https://claude.com/pricing"},
+  "cc-setup": {"type": "web", "author": "Anthropic", "title": "Set up Claude Code", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/setup"},
+  "cc-terminal-guide": {"type": "web", "author": "Anthropic", "title": "Terminal guide for new users", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/terminal-guide"},
+  "cc-security": {"type": "web", "author": "Anthropic", "title": "Security", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/security"}
 }
