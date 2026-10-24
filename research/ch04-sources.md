@@ -92,3 +92,26 @@ docs.claude.com 주소는 platform.claude.com으로 넘어갑니다(현행 주�
 - C4-2 best practices, 확인 2026-10-23: Be clear and direct, Add context(motivation: "give Claude more information about your goals"), Use examples effectively(Relevant, Diverse, Structured, Tip "3–5 examples"), Structure prompts with XML tags, Control the format of responses, Tool usage의 원문이 2026-10-22 기록과 같음
 - 예제 사실(R7) 확인 2026-10-23: CR.md(재무팀, 2026-10-05, 사유, D-012), examples/expense-app/DECISIONS.md D-012(2026-10-12, 운영 위원회 결정, 실시간 연동 규격 없음), docs/example-facts.md와 일치
 - 미확인 유지: prompt-overview와 prompting-best-practices의 게시일과 개정일(페이지에 표기 없음). ch02가 권한 규칙의 적용 범위(Bash 규칙이 매칭하지 않는 경우와 sandbox 병행)를 다루는지(검증 후 확정)
+
+## C4-1, C4-2, C4-4, C4-5 재확인과 새 확인(2026-10-24 fact-checker, 4장 플레이북 정리 PR)
+- S: C4-4 Anthropic, Effective context engineering for AI agents(자료 키 context-engineering)
+- URL: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, 확인 2026-10-24
+- 게시일: 2025-09-29, 작성: Anthropic Engineering(Applied AI 팀: Prithvi Rajasekaran, Ethan Dixon, Carly Ryan, Jeremy Hadfield. 기여: Rafi Ayub, Hannah Moran, Cal Rueb, Connor Jennings). 팀 표기는 Engineering이며 Claude Code 제품 글이 아님(주제는 에이전트 일반). BOOK_SPEC 7절에 따라 4장은 "Anthropic의 컨텍스트 엔지니어링 글"로 씀
+- 사용한 내용:
+  - 프롬프트 엔지니어링 정의: "Prompt engineering refers to methods for writing and organizing LLM instructions for optimal outcomes."(4장 도입 문단 2)
+  - 컨텍스트 엔지니어링 정의: "the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference"(4장 limits)
+  - context rot: 컨텍스트의 토큰이 늘수록 그 컨텍스트에서 정보를 정확히 기억해 내는 능력이 떨어짐(4장 limits)
+- 판정: 내용 일치, 4장 limits의 주어 "Claude Code의 엔지니어링 글"은 불일치(필수, 고칠 문안은 보고서 1번)
+- S: C4-5 Anthropic, Glossary(자료 키 platform-glossary)
+- URL: https://platform.claude.com/docs/en/about-claude/glossary, 확인 2026-10-24
+- 게시일: 표기 없음, 작성: Anthropic(Claude Platform Docs)
+- 사용한 내용: Temperature 절 "Even with temperature set to 0, the results will not be fully deterministic, and identical inputs might produce different outputs across API calls"(API 호출 기준). Tokens 절 "the smallest individual units of a language model". Context window 절 "the amount of text a language model can look back on and reference when generating new text". 4장의 토큰과 컨텍스트 윈도 정의는 이 책의 용어(BOOK_SPEC 5절)이며 위 문구와 취지가 같음
+- S: Configure permissions(자료 키 permissions)
+- URL: https://code.claude.com/docs/en/permissions, 확인 2026-10-24
+- 게시일: 표기 없음, 작성: Anthropic(Claude Code Docs)
+- 사용한 내용: Manage permissions 절의 Allow, Ask, Deny 정의와 "Permission rules are enforced by Claude Code, not by the model". Permission modes 절 "control how it approves tool calls"(기본값은 4장에서 쓰지 않음). "What a Bash rule doesn't match" 표: Bash(git push *)는 `git -C . push origin main`, `git 'push' origin main`을 막지 못함. "Bash 규칙은 명령 문자열을 대조하며 deny나 ask 규칙은 프로그램 둘레의 보안 경계가 아님". Edit 규칙은 편집용 내장 도구 전체에 적용, Read 규칙은 Grep, Glob 등에 best-effort. 4장은 이 범위를 Bash로 한정해 쓰도록 권고(보고서 3번)
+- C4-1 overview, 확인 2026-10-24: "Before prompt engineering" 세 전제와 "When to prompt engineer"의 latency와 cost 문장 원문이 2026-10-23 기록과 같음
+- C4-2 best practices, 확인 2026-10-24: Be clear and direct("do more than the task strictly requires ... rather than relying on the model to infer this from vague prompts"), Add context, Use examples effectively(Relevant, Diverse, Tip 3–5), XML tags, Control the format of responses, Tool usage("trained for precise instruction following", "can you suggest some changes")의 원문이 2026-10-22, 23 기록과 같음. 페이지 도입부의 대상 모델 목록은 갱신되어 있으나 4장이 인용한 절의 문구는 바뀌지 않음
+- 예제 사실(R7) 확인 2026-10-24: 재무팀, 요청일 2026-10-05, 사유(docs/CR.md), D-012(2026-10-12, 운영 위원회, 실시간 연동 규격 없음, 인사 시스템 일 1회 갱신 자료 data/projects.csv)가 docs/example-facts.md와 examples/expense-app/DECISIONS.md와 일치
+- 링크 확인 2026-10-24: ch02 #tool-scope, #instruct-enforce, ch05 #retrieval, #rule-doc, ch07 #criteria는 링크 문구와 도착 절 제목이 같고 내용이 맞음. ch03 #example은 제목이 "기능 추가 에이전트: CR 구현"이라 링크 문구와 다름(ch03 정비 대기)
+- 미확인 유지: 각 Claude 문서 페이지의 게시일과 개정일(페이지에 표기 없음). 채팅 제품(API가 아닌)에서 같은 입력의 출력이 달라지는지를 직접 서술한 1차 문서
