@@ -231,3 +231,83 @@ Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 
 
 ## 확인하지 못한 것
 - 대화형 CLI의 사람 거절이 거부 결과로 기록되는 방식(Agent SDK 문서만 확인, 본문은 "Agent SDK 문서에 따르면"으로 한정)
+
+# 2026-10-24 ch02 fact-checker 사실 점검(전체 재확인)
+
+Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 설정 키와 기본값은 확인일 기준이다.
+
+## S46. Anthropic, Manage costs effectively(Claude Code Docs). S29 재확인
+- URL: https://code.claude.com/docs/en/costs, 확인일: 2026-10-24, 작성: Anthropic
+- "Reduce token usage > Reduce MCP server overhead": MCP 도구 정의는 기본 지연 로드(이름과 서버 지시만 컨텍스트), /context로 점유 확인. "Prefer CLI tools when available"(gh, aws 등은 도구별 목록을 추가하지 않아 더 효율적). "Disable unused servers: Run /mcp to see configured servers and disable any you're not actively using."
+- 본문 "종료하라고 안내"는 불일치. 문서의 동사는 disable(비활성화). 서버를 끄는 이유로 "선택할 대상이 늘어난다"는 설명은 문서에 없음(이 책의 설명)
+- mcp 문서(S30): /mcp 패널에서 서버를 끄면 연결을 중단하고 설정은 남김(disabled 표시). 제거는 claude mcp remove
+
+## S47. Anthropic, Configure permissions(Claude Code Docs). S25, S42 재확인
+- URL: https://code.claude.com/docs/en/permissions, 확인일: 2026-10-24
+- 평가 순서 deny, ask, allow, 처음 일치가 결정. 이름만 쓴 deny는 도구를 컨텍스트에서 제거, 범위 규칙은 도구를 남기고 일치하는 호출만 차단
+- "Permission rules are enforced by Claude Code, not by the model."
+- Bash 규칙 한계(What a Bash rule doesn't match): Bash(git push *)는 git -C . push origin main 등과 일치하지 않음. Read, Edit deny는 내장 파일 도구, Bash가 인식하는 파일 명령(cat, head, tail, sed, tee), 리다이렉션에 적용되나 파일을 스스로 여는 Python, Node 스크립트는 막지 못함(샌드박스 필요)
+- PreToolUse 훅은 deny, ask 규칙을 우회하지 못함. 종료 코드 2인 훅은 권한 규칙 평가 전에 호출을 막음
+- 경로 표기: path 또는 ./path는 현재 디렉터리 기준, /path는 설정 파일 출처 기준, //path 절대 경로. ./data/**는 Claude Code를 실행한 폴더 기준이므로 시작 위치 주의
+
+## S48. Anthropic, Configure permissions(Agent SDK, Claude Code Docs). S40 재확인
+- URL: https://code.claude.com/docs/en/agent-sdk/permissions, 확인일: 2026-10-24
+- 평가 순서: 훅 → deny → ask → 권한 모드 → allow → canUseTool. 모드는 allow보다 먼저 적용되어 bypassPermissions는 이 단계에 이른 호출을 모두 승인(critical-path 제외), acceptEdits는 파일 편집 승인, plan은 allow 규칙이 일치해도 파일 편집을 자동 승인하지 않음, dontAsk는 프롬프트가 필요한 호출을 거부
+- 2장 표 2-2 "일치하는 규칙이 없으면 권한 모드로 처리"는 기본 흐름으로만 일치(예외는 이 평가 순서)
+
+## S49. Anthropic, Permission modes(Claude Code Docs)
+- URL: https://code.claude.com/docs/en/permission-modes, 확인일: 2026-10-24
+- "Allow rules have no effect in bypassPermissions." dontAsk 모드: 명시한 ask 규칙에 일치한 호출은 프롬프트 없이 거부. 자동 모드 진입 시 Bash(*) 등 넓은 allow 규칙은 제외, 좁은 규칙은 유지
+- 시작 모드: v2.1.283 이상 대화형 터미널과 VS Code는 auto, v2.1.302 이상 claude -p와 Agent SDK는 모드를 지정하지 않으면 Manual이며 승인이 필요한 호출은 allow 규칙, 훅, canUseTool, --permission-prompt-tool로 승인하지 않으면 거부(2장은 단정하지 않음, 10장 버전 주석)
+
+## S50. Anthropic, Hooks reference와 Automate actions with hooks(Claude Code Docs). S23, S28, S44 재확인
+- URL: https://code.claude.com/docs/en/hooks , https://code.claude.com/docs/en/hooks-guide, 확인일: 2026-10-24(hooks는 앞 100,000자)
+- 종료 코드 2 표: PreToolUse는 호출 차단, PostToolUse는 차단하지 않고 stderr를 Claude에게 보여 줌(도구는 이미 실행), Stop은 Claude가 멈추는 것을 막고 대화를 계속
+- Stop: "When Claude finishes responding"에 실행(작업 완료 때만이 아님), 사용자 인터럽트에는 실행되지 않음, 연속 8번 막으면 Claude Code가 훅을 무시, stop_hook_active 확인 필요(hooks-guide)
+- matcher "Edit|Write"는 두 도구 이름을 정확히 일치. PostToolUse는 도구 호출이 성공한 뒤에만 실행(실패는 PostToolUseFailure)
+- 성공한 훅은 대화에 아무것도 나타나지 않음(Ctrl+O 대화 기록). Blocking error는 대부분 이벤트에서 차단 메시지가 보임, Non-blocking error는 "<hook name> hook error" 알림. 미확인: PostToolUse 종료 코드 2에서 대화 화면에 hook error 표기가 나오는지(문서에 PostToolUse 항목 없음)
+- Windows: command 훅의 shell은 macOS와 Linux는 sh -c, Windows는 Git Bash, Git Bash가 없으면 PowerShell(Bash용 스크립트는 그대로 안 돌 수 있음)
+- Bash 등 셸 명령이 파일을 바꾸는 경우는 Edit|Write 훅이 보지 못함(hooks-guide FileChanged, Stop 안내)
+
+## S51. Anthropic, Create custom subagents(Claude Code Docs). S31 재확인
+- URL: https://code.claude.com/docs/en/sub-agents, 확인일: 2026-10-24(앞 100,000자와 끝 부분 열람)
+- frontmatter tools: 허용 목록(쉼표 문자열 또는 YAML 목록), 생략하면 사용 가능한 도구를 모두 상속. disallowedTools는 거부 목록이며 둘 다 있으면 disallowedTools를 먼저 적용. 위치 .claude/agents/(프로젝트), ~/.claude/agents/(사용자)
+- 읽기 전용 검토 예: tools: Read, Glob, Grep 또는 Read, Grep, Glob, Bash. reviewer.example.md와 같은 구조
+
+## S52. Anthropic, Connect Claude Code to tools via MCP(Claude Code Docs). S30 재확인
+- URL: https://code.claude.com/docs/en/mcp, 확인일: 2026-10-24(Scale with MCP tool search 절 열람)
+- "Only tool names and server instructions load at session start". 도구 검색 기본 켜짐. 예외: Opus 4, Sonnet 4, Haiku 4.5 이전 모델은 처음부터 로드, ENABLE_TOOL_SEARCH=false, Azure의 Foundry 배포, 서버별 alwaysLoad
+
+## S53. Anthropic, How the agent loop works(Agent SDK, Claude Code Docs). S37 재확인
+- URL: https://code.claude.com/docs/en/agent-sdk/agent-loop, 확인일: 2026-10-24
+- "The Agent SDK lets you embed Claude Code's autonomous agent loop in your own applications", "runs the same execution loop that powers Claude Code". 도구 거부: "Claude receives a rejection message as the tool result". "Every tool definition takes context space"
+
+## S54. Anthropic, Handle approvals and user input(Agent SDK, Claude Code Docs). S41 재확인
+- URL: https://code.claude.com/docs/en/agent-sdk/user-input, 확인일: 2026-10-24
+- 거부 응답 코드 주석 "Deny: tool doesn't execute, Claude sees the message". "도구 결과로 전달"이라는 표현은 이 문서에 없고 agent-loop(S53)에 있음
+- 미확인: 대화형 CLI에서 사람이 거절했을 때 기록되는 방식(문서 대상이 아님)
+
+## S55. Anthropic, 메모리, 설정 점검, 컨텍스트 창, 동작 방식, 명령 문서 재확인
+- URL: https://code.claude.com/docs/en/memory , /debug-your-config , /context-window , /how-claude-code-works , /commands, 확인일: 2026-10-24
+- memory: 세션은 새 컨텍스트로 시작. CLAUDE.md와 자동 메모리는 "context, not enforced configuration", 동작을 막으려면 PreToolUse 훅. 자동 메모리는 로컬 세션에서 기본 켜짐(self-hosted 환경은 꺼짐), 기기 로컬
+- debug-your-config: /context 범주(system prompt, system tools, MCP tools, custom subagents, memory files, skills, conversation messages). "Permissions and hooks enforce limits regardless of what Claude decides." 설정 병합 managed, 그다음 local, project, user. 훅 matcher는 단일 문자열 "Edit|Write", 대소문자 구분
+- context-window: /context는 범주별 실시간 분해를 보여 줌(도구 범주 이름은 이 문서에 없음). 시작 때 CLAUDE.md, 자동 메모리, MCP 도구 이름, 스킬 설명이 로드됨
+- how-claude-code-works: 오래된 도구 출력을 먼저 지우고 필요하면 요약, 앞쪽의 자세한 지시는 사라질 수 있음. MCP 도구 정의는 기본 지연 로드
+- commands: /hooks "View hook configurations", /mcp enable, disable, reconnect, /permissions 규칙 관리, /agents는 안내 문구(v2.1.197 이하는 대화형 화면)
+
+## S56. Anthropic, Effective context engineering for AI agents. S34 재확인
+- URL: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, 게시일 2025-09-29, 확인일: 2026-10-24, 작성: Anthropic Applied AI 팀(Prithvi Rajasekaran 외)
+- "bloated tool sets that cover too much functionality or lead to ambiguous decision points about which tool to use", "curating a minimal viable set of tools"
+
+## 실행 확인 기록(2026-10-24, Linux, python 3 가능, 이 환경에는 Claude Code 없음)
+- 실행: cd examples/expense-app && python3 check.py
+- 출력(요약 원문): tests: Ran 3 tests ... OK / acceptance: Ran 5 tests ... FAILED (failures=3) / 마지막 두 줄 "tests: 실행 3건, 실패 0건", "acceptance: 실행 5건, 실패 3건", 종료 코드 1
+- 실패한 시험: test_1_form_offers_project_codes, test_2_unknown_code_rejected_with_reason, test_3_list_shows_project_code. docs/example-facts.md "구현 전 상태: 수용 시험 1, 2, 3 실패, 4, 5 통과, 단위 테스트 3건 통과"와 일치
+- 실행: cd examples/expense-app && python -m unittest discover tests -q → "Ran 3 tests ... OK" (훅 명령의 앞부분)
+- 실행하지 못한 것: 훅이 실제로 작동하는 화면, 권한 거부 화면, /context 출력(Claude Code 실행 필요). 부록 실습 2~6은 RUNLOG 실행 전
+
+## 확인하지 못한 것(2026-10-24)
+- PostToolUse 종료 코드 2에서 대화 화면에 "hook error" 표기가 나오는지
+- 대화형 CLI에서 사람이 거절한 호출이 거부 결과로 기록되는 방식
+- 예제 훅이 Windows PowerShell(Git Bash 없음)에서 그대로 동작하는지
+- hooks 문서 뒷부분(100,000자 이후)은 열람하지 않음
