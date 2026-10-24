@@ -13,6 +13,7 @@
 <h2 id="criteria">완료 기준을 검사로 변환</h2>
 <p>완료 기준이 문장으로만 있으면 판정하는 사람마다 결과가 달라지므로, 맡기기 전에 검사로 정해 둡니다. 완료 기준은 작업 단위 목록에 작업 단위마다 적는 칸이고(<a href="ch06.html#split">Chapter 6의 작업 단위 분할</a>), 수용 기준(Acceptance Criteria)은 사람이 정한 완료 조건입니다(<a href="ch03.html#example">Chapter 3의 예제: 변경 요청 사항의 에이전트 명세서 작성</a>). 완료 기준을 통과, 실패로 갈리는 검사로 만드는 일을 이 장에서는 변환이라고 부릅니다.</p>
 <p>변환한 기준은 누가 판정해도 같은 결과가 나와야 합니다. 표 7-1은 문장으로 작성된 완료 기준을 검사로 변환한 예입니다. 수용 시험(Acceptance Test)은 수용 기준을 충족하는지 확인하는 시험이고, 응답 코드 200은 웹 서버가 요청을 정상으로 처리했다는 뜻입니다. 구조 검사 스크립트는 오류를 찾을 때만 출력하므로, 출력이 비어 있으면 통과입니다.</p>
+<p>변환한 검사는 구현 전에는 실패하고 구현 뒤에는 통과해야 합니다. 구현 전에도 통과하는 검사는 작업을 했는지 보여 주지 못하기 때문입니다.</p>
 <figure class="fig" id="tbl-7-1"><div class="table-wrap"><table><thead><tr><th>문장으로 작성된 완료 기준</th><th>검사로 변환한 기준</th></tr></thead><tbody>
 <tr><td>목록에 없는 코드는 거부할 것(이 장 예제의 기준)</td><td>거부를 확인하는 수용 시험 통과</td></tr>
 <tr><td>문서 형식을 지킬 것</td><td>구조 검사 스크립트의 출력이 비어 있음</td></tr>
@@ -71,21 +72,32 @@
 <tr><td>통합 시나리오의 범위(Chapter 6 작업 5의 완료 기준)</td><td>독립 검수(사람 채점)</td><td>승인자</td><td>승인, 반려</td><td>승인</td></tr>
 </tbody></table></div><figcaption><b>표 7-6. 변경 요청 사항의 검증 설계</b></figcaption></figure>
 <p>기준마다 방법 하나를 선택하는 것이 기본입니다. 둘째 행과 셋째 행은 같은 수용 기준을 한 번 더 보는 추가 장치입니다. 셋째 행은 수용 시험 1이 화면을 그리는 문서(HTML)에 선택 항목이 있는지만 보기 때문에, 화면에서 직접 선택해 봅니다. 시험은 기준마다 정해진 경우만 확인하므로, 시험이 통과해도 시험이 다루지 않는 경우가 남을 수 있습니다. 그래서 근거 파일과 줄 번호로 기준을 다시 대조합니다. 넷째 행의 통합 시나리오는 수용 기준에 들지 않고, 작업 단위 목록의 작업 5에서 승인자가 승인하는 단위입니다(<a href="ch06.html#example">Chapter 6의 예제: 변경 요청 사항의 작업 단위 나누기</a>).</p>
-<p>첫째 행의 수용 시험을 실행하는 파일은 Chapter 3에서 정한 검사 스크립트 check.py입니다. 보고 대신 출력 원문으로 판정하려면 스크립트가 무엇을 출력하는지가 중요하므로, 핵심 부분을 봅니다. 아래 코드는 따라 입력할 필요 없이 읽기만 하면 됩니다.</p>
-<pre>import sys, unittest
+<p>Chapter 6에서 본 것처럼 작업 단위 목록의 작업 2(데이터 모델에 프로젝트 코드 항목 추가)의 확인 방법인 수용 시험 4, 5는 구현 전에도 통과합니다. 이 확인을 구현 전에 실패하는 검사로 변환하려면, 정산 요청 데이터에 project_code 항목이 있는지 확인하는 시험을 더합니다. 이 시험은 항목을 추가하기 전에는 실패하고 추가한 뒤에는 통과합니다. 수용 시험은 사람이 작성하는 파일이므로, 시험을 더할지는 사람이 정합니다.</p>
+<p>첫째 행의 수용 시험을 실행하는 파일은 Chapter 3에서 정한 검사 스크립트 check.py입니다. 보고 대신 출력 원문으로 판정하려면 스크립트가 무엇을 출력하는지가 중요하므로, 핵심 부분을 봅니다. 다음은 check.py의 9~10행과 21~37행을 그대로 옮긴 발췌이고, 파일 설명과 시험 이름을 모으는 함수(test_ids)는 생략했습니다. 따라 입력할 필요 없이 읽기만 하면 됩니다.</p>
+<pre>ACCEPTANCE_COUNT = 5  # docs/CR.md의 수용 기준 수
+UNIT_KEYWORD = "project_code"
 
-results = {}
+ok = True
 for folder in ("tests", "acceptance"):
     suite = unittest.TestLoader().discover(folder)
+    ids = list(test_ids(suite))
     run = unittest.TextTestRunner(verbosity=0).run(suite)
-    results[folder] = (run.testsRun, len(run.failures) + len(run.errors))
-
-for folder, (count, failed) in results.items():
-    print(f"{folder}: 실행 {count}건, 실패 {failed}건")
-sys.exit(0 if all(count &gt; 0 and failed == 0 for count, failed in results.values()) else 1)</pre>
-<p>코드는 세 덩어리입니다. 첫 덩어리는 단위 테스트 폴더(tests)와 수용 시험 폴더(acceptance)에서 시험을 찾아 실행하고, 폴더마다 실행 건수와 실패 건수를 셉니다. 둘째 덩어리는 판정 근거인 두 건수를 폴더별로 출력합니다. 종료 코드는 명령이 끝날 때 돌려주는 값이며, 0은 성공을 뜻합니다. 마지막 줄은 두 폴더 모두 실행 건수가 0보다 크고 실패가 0건일 때만 종료 코드 0으로, 아니면 1로 끝냅니다.</p>
+    failed, skipped = len(run.failures) + len(run.errors), len(run.skipped)
+    line = f"{folder}: 실행 {run.testsRun}건, 실패 {failed}건, 건너뜀 {skipped}건"
+    ok = ok and run.testsRun &gt; 0 and failed == 0 and skipped == 0
+    if folder == "tests":
+        count = sum(1 for i in ids if UNIT_KEYWORD in i)
+        line += f", {UNIT_KEYWORD} 시험 {count}건"
+        ok = ok and count &gt; 0
+    else:
+        line += f"(정한 수 {ACCEPTANCE_COUNT}건)"
+        ok = ok and run.testsRun == ACCEPTANCE_COUNT
+    print(line)
+sys.exit(0 if ok else 1)</pre>
+<p>앞의 두 줄은 수용 시험의 정한 수(5건)와, 단위 테스트 이름에서 찾을 낱말(project_code)입니다. 반복문은 단위 테스트 폴더(tests)와 수용 시험 폴더(acceptance)에서 시험을 찾아 실행하고, 폴더마다 실행, 실패, 건너뜀 건수를 한 줄로 출력합니다. tests 줄에는 이름에 project_code가 든 시험의 수를, acceptance 줄에는 정한 수를 덧붙입니다. 종료 코드는 명령이 끝날 때 돌려주는 값이며, 0은 성공을 뜻합니다. 마지막 줄은 다음 조건을 모두 충족할 때만 종료 코드 0으로, 아니면 1로 끝냅니다.</p>
+<ul><li>두 폴더 모두 실행 건수가 0보다 크고, 실패와 건너뜀이 0건임</li><li>수용 시험이 정한 수(5건)만큼 실행됨</li><li>단위 테스트에 project_code 시험이 1건 이상 있음</li></ul>
 <p>실행 건수가 0건인 폴더를 실패로 판정하는 이유가 있습니다. 시험 파일을 찾지 못해 하나도 실행되지 않으면 실패 건수도 0건이 되어, 통과로 보이기 때문입니다.</p>
-<p>출력 원문은 다음처럼 읽습니다. 다음은 변경 요청 사항을 구현하기 전의 기준 상태에서 python check.py를 실행한 출력입니다(<a href="../appendix/practice.html#lab-1">부록 실습의 실습 1</a>). 구현 전이므로 수용 시험 1~3이 실패하고 종료 코드는 1입니다. 구현을 마치면 둘째 줄이 "acceptance: 실행 5건, 실패 0건"이 되고, 종료 코드는 0이어야 합니다.</p>
+<p>출력 원문은 다음처럼 읽습니다. 다음은 변경 요청 사항을 구현하기 전의 기준 상태에서 python check.py를 실행한 출력입니다(<a href="../appendix/practice.html#lab-1">부록 실습의 실습 1</a>). 구현 전이므로 수용 시험 1~3이 실패하고 종료 코드는 1입니다. 구현을 마치면 acceptance 줄이 "실행 5건, 실패 0건, 건너뜀 0건(정한 수 5건)"이 되고, tests 줄의 project_code 시험이 1건 이상이며 실패가 0건이면 종료 코드가 0입니다.</p>
 <pre>tests: 실행 3건, 실패 0건, 건너뜀 0건, project_code 시험 0건
 acceptance: 실행 5건, 실패 3건, 건너뜀 0건(정한 수 5건)</pre>
 <p>표 7-6 둘째 행의 검토 하위 에이전트(Subagent)는 읽기 도구만 사용하도록 정의한 검토자입니다(<a href="ch03.html#files">Chapter 3의 명세서를 하네스 설정 파일로 옮기기</a>). 결과를 만든 구현 에이전트와 다른 새 컨텍스트에서, 변경 요청 사항의 수용 기준을 기준표로 삼아 변경 내용을 대조합니다. 판정값은 기준마다 충족, 미충족, 확인 불가와 근거 파일, 줄 번호이고, 통과 조건은 표 7-6처럼 채점 전에 정합니다. 예시 답안은 두지 않습니다.</p>
@@ -100,9 +112,9 @@ acceptance: 실행 5건, 실패 3건, 건너뜀 0건(정한 수 5건)</pre>
 <tr><td>시험은 통과했지만 기준 충족을 아무도 대조하지 않음</td><td>결과를 만든 쪽만 확인함</td><td>검토 하위 에이전트의 기준별 대조 보고</td></tr>
 </tbody></table></div><figcaption><b>표 7-7. 변경 요청 사항의 검증에서 생길 수 있는 실패를 예방하는 장치</b></figcaption></figure>
 <h2 id="check">설정과 결과의 확인 방법</h2>
-<p>판정은 보고가 아니라 출력 원문으로 합니다. 명령은 실습 폴더(expense-practice)에서 실행합니다. 표 7-8은 변경 요청 사항의 완료를 판정할 때의 확인 항목과 확인 방법, 확인 기준입니다.</p>
+<p>판정은 보고가 아니라 출력 원문으로 합니다. 명령은 부록 실습 1에서 복사하고 git init한 실습 폴더(expense-practice)에서 실행합니다. 표 7-8은 변경 요청 사항의 완료를 판정할 때의 확인 항목과 확인 방법, 확인 기준입니다.</p>
 <figure class="fig" id="tbl-7-8"><div class="table-wrap"><table><thead><tr><th>확인 항목</th><th>확인 방법</th><th>확인 기준</th></tr></thead><tbody>
-<tr><td>판정 근거</td><td>python check.py의 출력 원문</td><td>tests와 acceptance의 실행 건수가 0보다 크고, 두 줄 모두 실패 0건</td></tr>
+<tr><td>판정 근거</td><td>python check.py의 출력 원문</td><td>두 줄 모두 실패와 건너뜀 0건, acceptance는 정한 수(5건)만큼 실행, tests의 project_code 시험 1건 이상</td></tr>
 <tr><td>종료 코드</td><td>python check.py 실행 직후, 사용하는 터미널에 맞춰 Git Bash에서는 echo $?, PowerShell에서는 $LASTEXITCODE</td><td>0(성공). 1이면 출력 원문에서 실패한 폴더를 확인</td></tr>
 <tr><td>검증 기준의 보호</td><td>git status</td><td>변경된 파일 목록에 acceptance/ 폴더와 check.py가 없음</td></tr>
 <tr><td>화면 동작</td><td>python app.py로 서버를 실행한 뒤 브라우저에서 http://localhost:8000/new(등록 화면)를 열고, 확인 뒤 터미널에서 Ctrl+C로 서버를 종료</td><td>등록 화면에서 목록의 프로젝트 코드를 선택할 수 있음</td></tr>
