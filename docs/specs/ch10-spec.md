@@ -125,3 +125,10 @@
 - Q-058: 표현을 조건부로(셸 네트워크는 승인 요청이 될 수 있고, 처리는 권한 모드와 승인 정책에 따름)
 - Q-059: 시안 선택 이유는 시안 작성 뒤 기록(A, B, C)
 - Q-060: 주장 줄과 원칙의 "구성 요소"가 2장의 다섯 구성 요소와 겹침. 권장안: 유지하고 본문은 "기준"으로 통일, 바꾼다면 원칙 "… 하네스를 비교 기준마다 어떻게 구현하는지로 비교합니다"
+
+## 플레이북 정리(이슈 #118, 2026-10-24)
+- 기준: NEW_BOOK_PLAYBOOK.md, BOOK_SPEC.md, 정리된 Chapter 1~9와 시작하며
+- 장 틀: criteria → rule-docs → permissions(perm-claude, perm-codex, perm-diff) → choice → example(example-claude, example-codex) → fail → check → principle(앵커 유지). 장 끝 참고 자료 절은 위첨자 인용으로. OpenAI 항목 하나에 묶였던 문서 넷을 키 넷으로 나눔(codex-agents-md, codex-approvals, codex-config, codex-rules), cc-settings 추가
+- 1차 정리: 도입부 세 문단, "이 책" 6곳과 "(이 책의 판단/정리)", CR → 변경 요청 사항(코드 상자 제외), 공통 절 제목, 예제 절 제목, 표 열(해설표 두 열, 실패 표, 확인 표 세 열로 맞추고 번호로 실패와 대응), 캡션 근거 괄호와 설명 줄, 버전 주석 상자, 링크 문구, 권한 모드 정의를 설계서와 같게, 출처 없는 반론 문장, 실습 폴더(expense-practice)
+- 그림 10-1: 구조 유지(시안 생략), 캡션 근거 괄호만 삭제
+- 9장 지침: 앞 장 용어를 grep으로 모아 첫 자리에서 한 줄 정의, 제품 동작은 규칙 → 권한 모드 → 격리의 세 단계로, 표 칸에 둘 이상이면 본문으로
