@@ -1,49 +1,341 @@
 {
   "_설명": "참고 문헌 자료 목록(BOOK_STANDARD.md 8절, D-131). 원고는 <sup class=\"cite\" data-ref=\"키\"></sup>로 쓰고, tools/build.py가 목차 순서로 처음 인용된 순서대로 책 전체 번호를 매겨 부록 끝 참고 문헌 쪽을 만든다. type: web(웹 문서, 날짜 없음), article(글, 발행일), paper(논문, 연도). 참고 문헌 항목은 저자, 제목, 매체까지를 주소 링크로 감싸고 주소는 글로 드러내지 않으며, 발행일은 링크 밖에 둔다. 열람일은 쓰지 않는다(이슈 #66 08:53). 확인 날짜는 research/의 장별 출처 기록에 남긴다.",
-  "platform-glossary": {"type": "web", "author": "Anthropic", "title": "Glossary", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/about-claude/glossary"},
-  "tool-use-how": {"type": "web", "author": "Anthropic", "title": "How tool use works", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works"},
-  "tool-use-handle": {"type": "web", "author": "Anthropic", "title": "Handle tool calls", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"},
-  "react": {"type": "paper", "author": "Shunyu Yao 외", "title": "ReAct: Synergizing Reasoning and Acting in Language Models", "venue": "ICLR 2023(arXiv 공개 2022.10.6)", "date": "2023", "url": "https://arxiv.org/abs/2210.03629"},
-  "building-effective-agents": {"type": "article", "author": "Erik Schluntz, Barry Zhang", "title": "Building effective agents", "venue": "Anthropic", "date": "2024.12.19", "url": "https://www.anthropic.com/research/building-effective-agents"},
-  "codex-agent-loop": {"type": "article", "author": "Michael Bolin", "title": "Unrolling the Codex agent loop", "venue": "OpenAI", "date": "2026.1.23", "url": "https://openai.com/index/unrolling-the-codex-agent-loop/"},
-  "long-running-harness": {"type": "article", "author": "Justin Young", "title": "Effective harnesses for long-running agents", "venue": "Anthropic", "date": "2025.11.26", "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"},
-  "context-engineering": {"type": "article", "author": "Prithvi Rajasekaran 외", "title": "Effective context engineering for AI agents", "venue": "Anthropic", "date": "2025.9.29", "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"},
-  "cc-glossary": {"type": "web", "author": "Anthropic", "title": "Glossary", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/glossary"},
-  "harness-engineering": {"type": "article", "author": "Ryan Lopopolo", "title": "Harness engineering: leveraging Codex in an agent-first world", "venue": "OpenAI", "date": "2026.2.11", "url": "https://openai.com/index/harness-engineering/"},
-  "sandboxing": {"type": "article", "author": "Anthropic", "title": "Beyond permission prompts: making Claude Code more secure and autonomous", "venue": "Anthropic", "date": "2025.10.20", "url": "https://www.anthropic.com/engineering/claude-code-sandboxing"},
-  "agent-loop": {"type": "web", "author": "Anthropic", "title": "How the agent loop works", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/agent-sdk/agent-loop"},
-  "hooks": {"type": "web", "author": "Anthropic", "title": "Hooks reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/hooks"},
-  "hashimoto-adoption": {"type": "article", "author": "Mitchell Hashimoto", "title": "My AI Adoption Journey", "venue": "mitchellh.com", "date": "2026.2.5", "url": "https://mitchellh.com/writing/my-ai-adoption-journey"},
-  "permissions": {"type": "web", "author": "Anthropic", "title": "Configure permissions", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permissions"},
-  "how-cc-works": {"type": "web", "author": "Anthropic", "title": "How Claude Code works", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/how-claude-code-works"},
-  "messages-api": {"type": "web", "author": "Anthropic", "title": "Using the Messages API", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"},
-  "permission-modes": {"type": "web", "author": "Anthropic", "title": "Permission modes", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/permission-modes"},
-  "memory": {"type": "web", "author": "Anthropic", "title": "How Claude remembers your project", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/memory"},
-  "costs": {"type": "web", "author": "Anthropic", "title": "Manage costs effectively", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/costs"},
-  "mcp": {"type": "web", "author": "Anthropic", "title": "Connect Claude Code to tools via MCP", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/mcp"},
-  "debug-config": {"type": "web", "author": "Anthropic", "title": "Debug your configuration", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/debug-your-config"},
-  "context-window": {"type": "web", "author": "Anthropic", "title": "Explore the context window", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/context-window"},
-  "commands": {"type": "web", "author": "Anthropic", "title": "Commands", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/commands"},
-  "sdk-user-input": {"type": "web", "author": "Anthropic", "title": "Handle approvals and user input", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/agent-sdk/user-input"},
-  "hooks-guide": {"type": "web", "author": "Anthropic", "title": "Automate actions with hooks", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/hooks-guide"},
-  "sub-agents": {"type": "web", "author": "Anthropic", "title": "Create custom subagents", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/sub-agents"},
-  "prompt-overview": {"type": "web", "author": "Anthropic", "title": "Prompt engineering overview", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"},
-  "prompting-best-practices": {"type": "web", "author": "Anthropic", "title": "Prompting best practices", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"},
-  "skills": {"type": "web", "author": "Anthropic", "title": "Extend Claude with skills", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/skills"},
-  "cli-reference": {"type": "web", "author": "Anthropic", "title": "CLI reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/cli-reference"},
-  "tools-reference": {"type": "web", "author": "Anthropic", "title": "Tools reference", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/tools-reference"},
-  "develop-tests": {"type": "web", "author": "Anthropic", "title": "Define success criteria and build evaluations", "venue": "Claude Platform Docs", "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"},
-  "cc-best-practices": {"type": "web", "author": "Anthropic", "title": "Best practices for Claude Code", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/best-practices"},
-  "claude-directory": {"type": "web", "author": "Anthropic", "title": "Explore the .claude directory", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/claude-directory"},
-  "monitoring": {"type": "web", "author": "Anthropic", "title": "Monitoring", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/monitoring-usage"},
-  "sandbox-bash": {"type": "web", "author": "Anthropic", "title": "Configure the sandboxed Bash tool", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/sandboxing"},
-  "codex-approvals": {"type": "web", "author": "OpenAI", "title": "Agent approvals and security", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/agent-approvals-security"},
-  "cc-settings": {"type": "web", "author": "Anthropic", "title": "Claude Code settings", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/settings"},
-  "codex-agents-md": {"type": "web", "author": "OpenAI", "title": "Custom instructions with AGENTS.md", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/guides/agents-md"},
-  "codex-config": {"type": "web", "author": "OpenAI", "title": "Config basics", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/config-basic"},
-  "codex-rules": {"type": "web", "author": "OpenAI", "title": "Rules", "venue": "Codex 문서", "url": "https://developers.openai.com/codex/rules"},
-  "plans-pricing": {"type": "web", "author": "Anthropic", "title": "Plans & pricing", "venue": "Claude", "url": "https://claude.com/pricing"},
-  "cc-setup": {"type": "web", "author": "Anthropic", "title": "Set up Claude Code", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/setup"},
-  "cc-terminal-guide": {"type": "web", "author": "Anthropic", "title": "Terminal guide for new users", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/terminal-guide"},
-  "cc-security": {"type": "web", "author": "Anthropic", "title": "Security", "venue": "Claude Code Docs", "url": "https://code.claude.com/docs/en/security"}
+  "platform-glossary": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Glossary",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/about-claude/glossary"
+  },
+  "tool-use-how": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "How tool use works",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works"
+  },
+  "tool-use-handle": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Handle tool calls",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"
+  },
+  "react": {
+    "type": "paper",
+    "author": "Shunyu Yao 외",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "venue": "ICLR 2023(arXiv 공개 2022.10.6)",
+    "date": "2023",
+    "url": "https://arxiv.org/abs/2210.03629"
+  },
+  "building-effective-agents": {
+    "type": "article",
+    "author": "Erik Schluntz, Barry Zhang",
+    "title": "Building effective agents",
+    "venue": "Anthropic",
+    "date": "2024.12.19",
+    "url": "https://www.anthropic.com/research/building-effective-agents"
+  },
+  "codex-agent-loop": {
+    "type": "article",
+    "author": "Michael Bolin",
+    "title": "Unrolling the Codex agent loop",
+    "venue": "OpenAI",
+    "date": "2026.1.23",
+    "url": "https://openai.com/index/unrolling-the-codex-agent-loop/"
+  },
+  "long-running-harness": {
+    "type": "article",
+    "author": "Justin Young",
+    "title": "Effective harnesses for long-running agents",
+    "venue": "Anthropic",
+    "date": "2025.11.26",
+    "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+  },
+  "context-engineering": {
+    "type": "article",
+    "author": "Prithvi Rajasekaran 외",
+    "title": "Effective context engineering for AI agents",
+    "venue": "Anthropic",
+    "date": "2025.9.29",
+    "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+  },
+  "cc-glossary": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Glossary",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/glossary"
+  },
+  "harness-engineering": {
+    "type": "article",
+    "author": "Ryan Lopopolo",
+    "title": "Harness engineering: leveraging Codex in an agent-first world",
+    "venue": "OpenAI",
+    "date": "2026.2.11",
+    "url": "https://openai.com/index/harness-engineering/"
+  },
+  "sandboxing": {
+    "type": "article",
+    "author": "Anthropic",
+    "title": "Beyond permission prompts: making Claude Code more secure and autonomous",
+    "venue": "Anthropic",
+    "date": "2025.10.20",
+    "url": "https://www.anthropic.com/engineering/claude-code-sandboxing"
+  },
+  "agent-loop": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "How the agent loop works",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/agent-sdk/agent-loop"
+  },
+  "hooks": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Hooks reference",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/hooks"
+  },
+  "hashimoto-adoption": {
+    "type": "article",
+    "author": "Mitchell Hashimoto",
+    "title": "My AI Adoption Journey",
+    "venue": "mitchellh.com",
+    "date": "2026.2.5",
+    "url": "https://mitchellh.com/writing/my-ai-adoption-journey"
+  },
+  "permissions": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Configure permissions",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/permissions"
+  },
+  "how-cc-works": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "How Claude Code works",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/how-claude-code-works"
+  },
+  "messages-api": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Using the Messages API",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+  },
+  "permission-modes": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Permission modes",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/permission-modes"
+  },
+  "memory": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "How Claude remembers your project",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/memory"
+  },
+  "costs": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Manage costs effectively",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/costs"
+  },
+  "mcp": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Connect Claude Code to tools via MCP",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/mcp"
+  },
+  "debug-config": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Debug your configuration",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/debug-your-config"
+  },
+  "context-window": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Explore the context window",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/context-window"
+  },
+  "commands": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Commands",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/commands"
+  },
+  "sdk-user-input": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Handle approvals and user input",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/agent-sdk/user-input"
+  },
+  "hooks-guide": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Automate actions with hooks",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/hooks-guide"
+  },
+  "sub-agents": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Create custom subagents",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/sub-agents"
+  },
+  "prompt-overview": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Prompt engineering overview",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+  },
+  "prompting-best-practices": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Prompting best practices",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+  },
+  "skills": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Extend Claude with skills",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/skills"
+  },
+  "cli-reference": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "CLI reference",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/cli-reference"
+  },
+  "tools-reference": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Tools reference",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/tools-reference"
+  },
+  "develop-tests": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Define success criteria and build evaluations",
+    "venue": "Claude Platform Docs",
+    "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+  },
+  "cc-best-practices": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Best practices for Claude Code",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/best-practices"
+  },
+  "claude-directory": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Explore the .claude directory",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/claude-directory"
+  },
+  "monitoring": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Monitoring",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/monitoring-usage"
+  },
+  "sandbox-bash": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Configure the sandboxed Bash tool",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/sandboxing"
+  },
+  "codex-approvals": {
+    "type": "web",
+    "author": "OpenAI",
+    "title": "Agent approvals and security",
+    "venue": "Codex 문서",
+    "url": "https://developers.openai.com/codex/agent-approvals-security"
+  },
+  "cc-settings": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Claude Code settings",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/settings"
+  },
+  "codex-agents-md": {
+    "type": "web",
+    "author": "OpenAI",
+    "title": "Custom instructions with AGENTS.md",
+    "venue": "Codex 문서",
+    "url": "https://developers.openai.com/codex/guides/agents-md"
+  },
+  "codex-config": {
+    "type": "web",
+    "author": "OpenAI",
+    "title": "Config basics",
+    "venue": "Codex 문서",
+    "url": "https://developers.openai.com/codex/config-basic"
+  },
+  "codex-rules": {
+    "type": "web",
+    "author": "OpenAI",
+    "title": "Rules",
+    "venue": "Codex 문서",
+    "url": "https://developers.openai.com/codex/rules"
+  },
+  "plans-pricing": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Plans & pricing",
+    "venue": "Claude",
+    "url": "https://claude.com/pricing"
+  },
+  "cc-setup": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Set up Claude Code",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/setup"
+  },
+  "cc-terminal-guide": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Terminal guide for new users",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/terminal-guide"
+  },
+  "cc-security": {
+    "type": "web",
+    "author": "Anthropic",
+    "title": "Security",
+    "venue": "Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/security"
+  },
+  "harness-design-apps": {
+    "type": "article",
+    "author": "Prithvi Rajasekaran",
+    "title": "Harness design for long-running application development",
+    "venue": "Anthropic",
+    "date": "2026.3.24",
+    "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps"
+  }
 }
