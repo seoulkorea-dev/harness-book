@@ -43,3 +43,8 @@ Sources: https://code.claude.com/docs/en/memory, /setup, /terminal-guide, /permi
 - **S-FB-27. 기준 일자 확인** (research/ch01~ch11-sources.md). Claude Code 문서 확인일 2026-10-20, Codex 문서 2026-10-04(ch10.html:8). OpenAI 문서는 2026-10-20 DNS 오류로 재확인 대기(research/ch10-sources.md:6, 84). 사용처: 시작하며 "2026년 10월에 확인한 공식 문서".
 - **S-FB-28. 저장소 공개 재확인 시도** (https://github.com/seoulkorea-dev/harness-book). gh repo view가 GraphQL 제한(HTTP 403)으로 실패. 공개 여부는 S-FB-22(2026-10-20)에 따름. 사용처: 집필 목적 셋째 항목.
 - **S-FB-29. 실습 비용** (src/appendix/practice.html:5~9). 실습 2부터 Claude Code 사용, 유료 요금제 또는 API 키 필요. 사용처: 시작하며 scope 둘째 문단.
+
+## 2026-10-26 마치며(옛 Chapter 11 이동, D-144)
+- 새 인용 키 harness-design-apps: Prithvi Rajasekaran, Harness design for long-running application development, Anthropic, 2026-03-24, https://www.anthropic.com/engineering/harness-design-long-running-apps. 근거 기록 research/ch01-sources.md S13(확인일 2026-10-19): 구성 요소는 모델이 혼자 못 하는 일에 대한 가정이고 새 모델마다 다시 시험, "the space of interesting harness combinations doesn't shrink as models improve", 자기 결과를 후하게 평가하는 실패
+- "작업하며 겪은 어려움" 근거: 이슈 #66(2026-10-22 작가 승인 통합 계획의 원인 네 가지), D-131, D-132(기준서와 동결), D-139(검토 장마다 한 번), D-137(클라우드 GraphQL 차단), research/ 각 장의 열람 실패 기록, HANDOFF.md 장별 고칠 문장 비율(24.0~55.2%)
+- "잘된 점" 근거: FAILURES.md F-07(인계 메모), HANDOFF.md(2~11장, 마치며, 부록 PR #124~#136 모두 2026-10-24 병합), seoulkorea-dev/genai-book PR #15~#26(2026-10-25)

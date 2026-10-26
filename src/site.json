@@ -14,7 +14,6 @@
         "ch08",
         "ch09",
         "ch10",
-        "ch11",
         "epilogue"
       ]
     ],
@@ -44,7 +43,7 @@
       "path": "chapters/epilogue.html",
       "nav": "마치며",
       "title": "마치며",
-      "desc": "설계할 것은 모델이 아니라, 모델에 보내는 요청과 주는 정보, 그리고 모델이 일하는 환경입니다."
+      "desc": "설계할 것은 모델이 아니라, 모델에 보내는 요청과 주는 정보, 그리고 모델이 일하는 환경입니다. 작가가 에이전트와 함께 책 두 권을 만든 과정으로 마무리합니다."
     },
     "terms": {
       "path": "appendix/terms.html",
@@ -106,12 +105,6 @@
       "title": "Chapter 10 제품 단위 비교: Codex와 Claude Code의 하네스",
       "desc": "제품 선택을 정하는 것은 어느 제품의 모델이 우수한지가 아니라, 조직이 운영하려는 하네스를 각 제품이 어떤 방식으로 구현하는지입니다."
     },
-    "ch11": {
-      "path": "chapters/ch11.html",
-      "nav": "Chapter 11 작가 사례: 책 한 권을 에이전트와 함께 만든 과정",
-      "title": "Chapter 11 작가 사례: 책 한 권을 에이전트와 함께 만든 과정",
-      "desc": "하네스의 완성도를 정하는 것은 처음 설계의 정교함이 아니라, 실패가 반복될 때마다 그 원인을 역할, 도구, 권한, 기록, 검증 가운데 어디로 옮겼는지입니다."
-    },
     "ch03": {
       "path": "chapters/ch03.html",
       "nav": "Chapter 3 하네스로 에이전트 설계하기",
@@ -132,5 +125,10 @@
       "generated": "references"
     }
   },
-  "redirects": {}
+  "redirects": {
+    "chapters/ch11.html": [
+      "chapters/epilogue.html",
+      "마치며"
+    ]
+  }
 }
