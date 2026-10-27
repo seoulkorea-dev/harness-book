@@ -116,6 +116,8 @@ if _pairs:
     for _f in glob_(f'{ROOT}/chapters/ch[0-9]*.html'):
         _n = _f[len(ROOT) + 1:]
         _t = open(_f, encoding='utf-8').read()
+        if 'http-equiv="refresh"' in _t:
+            continue  # 이동 쪽은 본문이 없음
         _m = re.search(r'<main\b.*?</main>', _t, re.S)
         _t = _m.group(0) if _m else _t
         _t = re.split(r'<h2 id="refs"', _t)[0]

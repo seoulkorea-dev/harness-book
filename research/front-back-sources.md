@@ -43,3 +43,21 @@ Sources: https://code.claude.com/docs/en/memory, /setup, /terminal-guide, /permi
 - **S-FB-27. 기준 일자 확인** (research/ch01~ch11-sources.md). Claude Code 문서 확인일 2026-10-20, Codex 문서 2026-10-04(ch10.html:8). OpenAI 문서는 2026-10-20 DNS 오류로 재확인 대기(research/ch10-sources.md:6, 84). 사용처: 시작하며 "2026년 10월에 확인한 공식 문서".
 - **S-FB-28. 저장소 공개 재확인 시도** (https://github.com/seoulkorea-dev/harness-book). gh repo view가 GraphQL 제한(HTTP 403)으로 실패. 공개 여부는 S-FB-22(2026-10-20)에 따름. 사용처: 집필 목적 셋째 항목.
 - **S-FB-29. 실습 비용** (src/appendix/practice.html:5~9). 실습 2부터 Claude Code 사용, 유료 요금제 또는 API 키 필요. 사용처: 시작하며 scope 둘째 문단.
+
+## 2026-10-26 마치며(옛 Chapter 11 이동, D-144)
+- 새 인용 키 harness-design-apps: Prithvi Rajasekaran, Harness design for long-running application development, Anthropic, 2026-03-24, https://www.anthropic.com/engineering/harness-design-long-running-apps. 근거 기록 research/ch01-sources.md S13(확인일 2026-10-19): 구성 요소는 모델이 혼자 못 하는 일에 대한 가정이고 새 모델마다 다시 시험, "the space of interesting harness combinations doesn't shrink as models improve", 자기 결과를 후하게 평가하는 실패
+- "작업하며 겪은 어려움" 근거: 이슈 #66(2026-10-22 작가 승인 통합 계획의 원인 네 가지), D-131, D-132(기준서와 동결), D-139(검토 장마다 한 번), PR #92(클라우드용 gh 대체, 보류)와 2026-10-26 gh GraphQL 403 확인, research/ 각 장의 열람 실패 기록, HANDOFF.md 장별 고칠 문장 비율(22.6~55.2%)
+- "잘된 점" 근거: FAILURES.md F-07(인계 메모), HANDOFF.md(2~11장, 마치며, 부록 PR #124~#136 모두 2026-10-24 병합), seoulkorea-dev/genai-book PR #15~#26(2026-10-25)
+
+## 2026-10-26 fact-checker 재확인(마치며: 어려움, 잘된 점, 하네스의 앞으로, 다음 작업)
+- Anthropic(Prithvi Rajasekaran), Harness design for long-running application development, https://www.anthropic.com/engineering/harness-design-long-running-apps, 게시 2026-03-24, 확인 2026-10-26. 원문 일치: "every component in a harness encodes an assumption about what the model can't do on its own", 새 모델이 나올 때 하네스를 다시 점검(re-examine)하는 것이 좋은 관행, "the space of interesting harness combinations doesn't shrink as models improve", "agents reliably skew positive when grading their own work". 사용처: 마치며 #future 첫 문단, 셋째 항목. 인용 키 harness-design-apps(bibliography.json에 있음, 정정 불필요).
+- Anthropic(Justin Young), Effective harnesses for long-running agents, https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents, 게시 2025-11-26, 확인 2026-10-26. 원문: "each new session begins with no memory of what came before". 사용처: 마치며 #future 셋째 항목. 인용 키 long-running-harness(있음). 본문에 발표 주체 Anthropic을 문장에 밝힐 것(권고 5).
+- seoulkorea-dev/harness-book 저장소 내부 대조, 확인 2026-10-26.
+  - HANDOFF.md "지금 상태" 2~11장 줄의 편집장 고칠 문장 비율은 22.6%, 28.6%, 24.0%, 36.4%, 41.8%, 50.6%, 45.2%, 55.2%, 49.3%, 53.7%로 범위 22.6~55.2%입니다. 아래 앞서 기록한 "24.0~55.2%"는 2장(22.6%)이 빠진 오류입니다.
+  - D-129, D-130: 점검 에이전트 개편과 재검수 최대 2회. D-139: 검토 장마다 한 번. D-131·D-132: 기준서와 동결.
+  - GitHub PR #124~#136(2026-10-24T00:53Z~06:02Z 병합, #134만 병합 기록 없음).
+  - FAILURES.md F-07.
+  - BOOK_STANDARD.md 22행, NEW_BOOK_PLAYBOOK.md 733, 1002행의 5% 기준.
+- seoulkorea-dev/genai-book PR #15~#26(gh REST, 병합 2026-10-25): Chapter 1~8, 시작하며(#23), 마치며(#24), 부록 1~3(#25), 책 전체 점검(#26)의 12건. .claude/agents 5개(chief-editor, fact-checker, practice-checker, production-checker, researcher).
+- 클라우드 제약: gh issue view 66이 "GitHub GraphQL is not available from Claude Code sessions"(HTTP 403)로 실패했습니다. 이슈 #66 본문은 열람 못 했습니다. openai.com HTTP 403 또는 이름 해석 실패는 research/ch01-sources.md 등 기존 기록과 같습니다.
+- 정정 요청(front-back-sources.md 끝, 2026-10-26 마치며 항목): (1) "D-137(클라우드 GraphQL 차단)"의 D-137은 DECISIONS.md에 없는 번호입니다(D-138 행: D-137은 열린 PR #92용으로 비워 둠). 근거를 "PR #92(클라우드용 gh 대체, 보류), 2026-10-26 gh GraphQL 403 확인, S-FB-28"로 바꿔야 합니다. (2) "24.0~55.2%"를 "22.6~55.2%"로 바꿔야 합니다.
