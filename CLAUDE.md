@@ -8,7 +8,9 @@
 5. docs/AUTHOR_QUEUE.md, DECISIONS.md 마지막 10건
 
 - 이 저장소에는 원고 작성 기준을 두지 않습니다(D-149). 옛 기준 문서와 옛 에이전트는 지웠습니다(git 기록에만 있음).
-- 검사 도구(lint/의 check_*.py와 banned.txt), .claude/agents/, .claude/skills/는 저장소에 두지 않습니다(D-150). 세션 시작 훅과 check_all이 tools/sync_kit.py로 book-kit에서 가져오며 git에는 들어가지 않습니다. 고칠 것은 book-kit에서 고칩니다. lint/rules_applied.txt(정비를 마친 장 목록)만 이 책의 기록으로 남습니다. 이 책만의 예외는 BOOK_SPEC.md에 적습니다.
+- 검사 도구(lint/의 check_*.py와 banned.txt), .claude/agents/, .claude/skills/는 저장소에 두지 않습니다(D-150). 세션 시작 훅과 check_all이 tools/sync_kit.py로 book-kit에서 가져오며 git에는 들어가지 않습니다. 고칠 것은 book-kit에서 고칩니다. lint/rules_applied.txt(정비를 마친 장 목록)만 이 책의 기록으로 남습니다.
+- 원고 규칙 검사는 이 세션의 python tools/check_all.py로 합니다. GitHub CI는 공개 저장소라 book-kit을 받지 않고 빌드와 빌드 결과 일치만 봅니다(D-151).
+- 책을 쓰다가 원칙이나 규칙을 바꿔야 하면 작가 승인 뒤 이 세션에서 book-kit에 작업 브랜치와 PR로 반영하고(규칙과 검사, 에이전트, 스킬을 같은 PR에서), 변경 내용은 book-kit에만 적습니다. 이 저장소의 DECISIONS.md에는 원칙 문장 없이 book-kit 변경 기록 날짜만 적습니다. 이 책만의 예외는 BOOK_SPEC.md에 적습니다.
 
 ## 이 세션의 역할
 - 작성 세션이다. 원고를 고치는 유일한 주체다. main에 직접 commit, push하지 않고 작업 브랜치와 PR로 반영한다.

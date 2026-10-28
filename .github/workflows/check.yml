@@ -1,5 +1,5 @@
-# PR과 main push마다 전체 검사를 실행한다. 브랜치 보호에서 이 검사를 필수로 지정한다.
-# 검사 도구는 저장소에 두지 않고 book-kit(비공개)에서 가져온다(D-150). 비밀 값 BOOK_KIT_TOKEN은 book-kit 읽기 전용 토큰.
+# PR과 main push마다 검사를 실행한다. 브랜치 보호에서 이 검사를 필수로 지정한다.
+# 원고 규칙 검사 도구는 비공개 book-kit에 있어 CI에서는 빌드와 빌드 결과 일치만 본다(D-151). 원고 규칙 검사는 작성 세션의 check_all.
 name: book-check
 on:
   pull_request:
@@ -10,15 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: book-kit 받기(검사 도구, 에이전트, 스킬의 원본)
-        uses: actions/checkout@v4
-        with:
-          repository: seoulkorea-dev/book-kit
-          token: ${{ secrets.BOOK_KIT_TOKEN }}
-          path: .book-kit
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - name: 전체 검사(book-kit 가져오기, 빌드, 금칙어, lint, 그림, 빌드 결과와 커밋 일치)
-        env:
-          BOOK_KIT: ${{ github.workspace }}/.book-kit
+      - name: 검사(빌드, 그림, 예제, 빌드 결과와 커밋 일치)
         run: python tools/check_all.py --ci

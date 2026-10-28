@@ -8,4 +8,4 @@ lint/check_*.py
 lint/banned.txt
 .claude/agents/
 .claude/skills/
-.book-kit/
+

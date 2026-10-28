@@ -18,38 +18,44 @@ results = []
 def add(name, ok, detail=""):
     results.append((name, ok, detail))
 
-# 검사 도구(lint), 에이전트, 스킬은 저장소에 두지 않고 book-kit에서 가져온다(D-150). CI는 book-kit을 받아 BOOK_KIT로 넘김
+# 검사 도구(lint), 에이전트, 스킬은 저장소에 두지 않고 book-kit(비공개)에서 가져온다(D-150).
+# 원고 규칙 검사는 작성 세션에서 한다. CI(공개 저장소)는 book-kit 없이 빌드와 빌드 결과 일치만 본다(D-151)
 code, out = run("python tools/sync_kit.py")
-if not os.path.exists("lint/banned.txt"):
+LINT = os.path.exists("lint/banned.txt")
+if not LINT and not CI:
     print("검사 도구 없음: book-kit을 찾지 못했습니다(../book-kit 또는 환경 변수 BOOK_KIT).\n" + out)
     sys.exit(1)
-add("book-kit 가져오기", "book-kit 없음" not in out, out[-500:])
+if LINT:
+    add("book-kit 가져오기", "book-kit 없음" not in out, out[-500:])
+else:
+    print("[CI] book-kit 없음: 원고 규칙 검사(금칙어, 번호, 구조, 문체, 검수 규칙)는 작성 세션에서 합니다.\n")
 
 code, out = run("python tools/build.py")
 add("빌드", code == 0, out[-300:])
 
-pats = [l.rstrip("\r\n") for l in open("lint/banned.txt", encoding="utf-8") if l.strip() and not l.startswith("#")]  # 끝 공백도 패턴의 일부
-hits = []
-for f in ["index.html"] + glob.glob("chapters/*.html") + glob.glob("appendix/*.html"):
-    for n, line in enumerate(open(f, encoding="utf-8"), 1):
-        for p in pats:
-            try:
-                if re.search(p, line):
-                    hits.append(f"{f}:{n}: {p}")
-            except re.error:
-                pass
-add("금칙어", not hits, "\n".join(hits[:20]))
+if LINT:  # 원고 규칙 검사(book-kit의 검사 도구). CI에서는 건너뜀
+    pats = [l.rstrip("\r\n") for l in open("lint/banned.txt", encoding="utf-8") if l.strip() and not l.startswith("#")]  # 끝 공백도 패턴의 일부
+    hits = []
+    for f in ["index.html"] + glob.glob("chapters/*.html") + glob.glob("appendix/*.html"):
+        for n, line in enumerate(open(f, encoding="utf-8"), 1):
+            for p in pats:
+                try:
+                    if re.search(p, line):
+                        hits.append(f"{f}:{n}: {p}")
+                except re.error:
+                    pass
+    add("금칙어", not hits, "\n".join(hits[:20]))
 
-for name, cmd in [("번호", "python lint/check_numbers.py"), ("구조", "python lint/check_structure.py")]:
-    code, out = run(cmd)
-    add(name, code == 0, out[-800:])
+    for name, cmd in [("번호", "python lint/check_numbers.py"), ("구조", "python lint/check_structure.py")]:
+        code, out = run(cmd)
+        add(name, code == 0, out[-800:])
 
-code, out = run("python lint/check_style.py")
-warns = [l for l in out.splitlines() if l.startswith("경고 ")]
-add("문체", not warns, "\n".join(warns[:20]))
-q_warns = [l for l in out.splitlines() if l.startswith("질문형 ")]
-if q_warns:  # 플레이북 6.2: 절 첫 문장 밖의 질문형 문장은 경고만
-    print("[경고] 질문형 문장(절 첫 문장 밖)\n" + "\n".join(q_warns[:20]) + "\n")
+    code, out = run("python lint/check_style.py")
+    warns = [l for l in out.splitlines() if l.startswith("경고 ")]
+    add("문체", not warns, "\n".join(warns[:20]))
+    q_warns = [l for l in out.splitlines() if l.startswith("질문형 ")]
+    if q_warns:  # 플레이북 6.2: 절 첫 문장 밖의 질문형 문장은 경고만
+        print("[경고] 질문형 문장(절 첫 문장 밖)\n" + "\n".join(q_warns[:20]) + "\n")
 
 fig_issues = []
 fig_small = []
@@ -96,11 +102,12 @@ elif fig_small:
     print("[경고] 그림 글자 크기(기준 미달, 아직 실패로 보지 않음)\n" + "\n".join(fig_small[:30]) + "\n")
 
 # 검수 규칙(플레이북 22장): 정비를 마친 장(lint/rules_applied.txt)은 실패, 나머지는 경고
-code, out = run("python lint/check_rules.py")
-add("검수 규칙", code == 0, "\n".join(l for l in out.splitlines() if l.startswith("실패"))[:3000])
-rule_warns = [l for l in out.splitlines() if l.startswith(("경고", "정비 전"))]
-if rule_warns:
-    print("[경고] 검수 규칙(정비 전 장과 경고 규칙)\n" + "\n".join(rule_warns[:20]) + "\n")
+if LINT:
+    code, out = run("python lint/check_rules.py")
+    add("검수 규칙", code == 0, "\n".join(l for l in out.splitlines() if l.startswith("실패"))[:3000])
+    rule_warns = [l for l in out.splitlines() if l.startswith(("경고", "정비 전"))]
+    if rule_warns:
+        print("[경고] 검수 규칙(정비 전 장과 경고 규칙)\n" + "\n".join(rule_warns[:20]) + "\n")
 # 예제 작업 단위의 확인이 구현 전에 실패하는지(R6): rules_applied.txt에 R6이 있으면 실패, 없으면 경고
 code, out = run("python tools/check_tasks.py")
 r6_strict = "R6" in {l.strip() for l in open("lint/rules_applied.txt", encoding="utf-8") if l.strip() and not l.startswith("#")}
