@@ -302,3 +302,12 @@ Claude Code 문서는 게시일 표기가 없어 확인일만 적는다. 로컬 
 - 컨텍스트 엔지니어링 글(Rajasekaran 외, 2025-09-29): "bloated tool sets", "ambiguous decision points", "curating a minimal viable set of tools"
 - example 대조: 표 2-4, 2-5, 2-6, 2-7과 본문은 reference/*.example.* 및 check.py와 일치. 불일치는 표 2-4 역할 행의 "규칙 문서 밖" 한정뿐
 - 실습 2, 3 실행 기록(RUNLOG)은 아직 없음: 본문의 실습 결과 문장은 부록 실습 실행 뒤 확정(출간 전 실행 목록)
+
+# 2026-10-28 ch02 재구성 확인
+
+## S55. Anthropic, Configure permissions(Claude Code Docs). S25 재확인
+- URL: https://code.claude.com/docs/en/permissions
+- 확인일: 2026-10-28, 작성: Anthropic
+- 확인 요청에 "No"로 답하며 의견을 적으면 그 의견이 거부 이유로 모델에 전달되고 작업이 계속됨. 주 대화의 확인 요청에 의견 없이 "No"를 고르면 그 턴이 멈춤("If you select No without a comment on a prompt from the main conversation, Claude Code stops the turn")
+- PreToolUse 훅은 권한 프롬프트보다 먼저 실행되고, 종료 코드 2로 끝나면 권한 규칙 평가 전에 호출이 멈춤. 훅의 allow는 deny, ask 규칙을 건너뛰지 못함
+- 2장 "사람과 프로그램의 승인" 소제목의 거절 방식 두 경우에 사용
