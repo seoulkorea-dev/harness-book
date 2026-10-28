@@ -1,6 +1,6 @@
 # 책 작업 하네스 구성 방안
 
-이 문서는 책을 **중단 없이** 쓰기 위한 작업 체계입니다. 원고의 원칙은 NEW_BOOK_PLAYBOOK.md, 책마다의 선택은 BOOK_SPEC.md, 작업을 어떻게 돌리는지는 이 문서를 따릅니다. 모든 책 프로젝트에 같이 씁니다.
+이 문서는 책을 **중단 없이** 쓰기 위한 작업 체계입니다. 원고의 원칙은 book-kit/book/PLAYBOOK.md(공통 원본, D-147), 책마다의 선택은 BOOK_SPEC.md, 작업을 어떻게 돌리는지는 이 문서를 따릅니다. 모든 책 프로젝트에 같이 씁니다.
 
 - 하네스는 책의 내용과 같은 다섯 구성 요소로 짭니다: 역할(2장), 도구(6장), 권한(7장), 기록(8장), 검증(9장).
 - 이 체계는 설치와 작동 시험(13장)을 마친 뒤 책이 끝날 때까지 바꾸지 않습니다. 바꿀 일이 생기면 다음 책의 개정 목록에 적습니다.
@@ -149,7 +149,7 @@
 | templates/ | 장 명세, 그림 명세, PR 설명, 이슈 보고 서식 |
 | examples/ | 실습 저장소(기준 상태와 참고본) |
 | .claude/ | 에이전트 정의, 명령, 설정과 훅 |
-| 루트 | CLAUDE.md, NEW_BOOK_PLAYBOOK.md, BOOK_SPEC.md, HARNESS_SETUP.md, DECISIONS.md, HANDOFF.md, FAILURES.md, DASHBOARD.md |
+| 루트 | CLAUDE.md, NEW_BOOK_PLAYBOOK.md(원본 위치 안내), BOOK_SPEC.md, HARNESS_SETUP.md, DECISIONS.md, HANDOFF.md, FAILURES.md, DASHBOARD.md |
 
 - 빌드 결과물(루트의 쪽 파일)은 직접 고치지 않습니다.
 
@@ -183,7 +183,7 @@
 | 구분 | 대상 |
 |---|---|
 | 허용 | 읽기와 검색 전부, src/, assets/, examples/(참고본과 실습 코드), reviews/, research/, docs/, templates/, HANDOFF.md, FAILURES.md, DASHBOARD.md 수정, 빌드와 검사 실행, 작업 브랜치 만들기와 commit, 작업 브랜치 push, PR 만들기와 갱신과 병합, 이슈 댓글 |
-| 금지 | 주 브랜치에 직접 commit이나 push, 강제 push, 큰 삭제 명령, .claude/settings.json 수정, 작가 영역 문서(NEW_BOOK_PLAYBOOK.md, BOOK_SPEC.md, HARNESS_SETUP.md, DECISIONS.md, CLAUDE.md) 수정, 예제의 원본 자료와 수용 시험 수정, 저장소 밖 쓰기 |
+| 금지 | 주 브랜치에 직접 commit이나 push, 강제 push, 큰 삭제 명령, .claude/settings.json 수정, 작가 영역 문서(플레이북, BOOK_SPEC.md, HARNESS_SETUP.md, DECISIONS.md, CLAUDE.md) 수정, 예제의 원본 자료와 수용 시험 수정, 저장소 밖 쓰기 |
 
 - 주 브랜치 보호(PR과 CI 통과 필수)를 GitHub에서 켭니다. 설정, 훅, 브랜치 보호의 세 겹으로 막습니다.
 - 에이전트 정의나 명령(.claude/)을 고쳐야 하면 새 판을 docs/staged-claude/에 두고 작가가 반영합니다.
@@ -316,7 +316,7 @@
 # 작업 안내
 
 ## 먼저 읽을 것
-1. NEW_BOOK_PLAYBOOK.md(원고 원칙과 규칙, 최종 점검표)
+1. book-kit/book/PLAYBOOK.md(원고 원칙과 규칙, 최종 점검표)
 2. BOOK_SPEC.md(이 책의 선택)
 3. HARNESS_SETUP.md(작업 진행 방식)
 4. HANDOFF.md 맨 위 "지금 상태"
@@ -375,7 +375,7 @@ model: inherit
 당신은 이 책의 분야를 이해하고 IT 책을 오래 편집했으며, 독자에게 전할 메시지를 정확히 알고,
 독자가 어려워하거나 알고 싶어 할 내용을 미리 알아 설명하게 하는 편집장입니다.
 
-1. NEW_BOOK_PLAYBOOK.md, BOOK_SPEC.md, 앞 장들의 원칙 문장을 읽습니다.
+1. book-kit/book/PLAYBOOK.md, BOOK_SPEC.md, 앞 장들의 원칙 문장을 읽습니다.
 2. 대상 장을 처음부터 끝까지 통독합니다. 바뀐 곳만 보지 않습니다.
 3. 실무자, 편집자, 독자의 세 관점으로 읽고, 판정 순서(플레이북 20.1)대로 판정합니다.
 4. 결과: 총평(가장 큰 문제 셋), 고칠 문장 비율, 절별 내용 정리표, 표 점검 표,

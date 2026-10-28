@@ -1,3 +1,5 @@
+> **보관 문서(2026-10-28, D-147).** 더 이상 기준이 아닙니다. 원고 기준은 book-kit/book/PLAYBOOK.md와 BOOK_SPEC.md, 하위 에이전트 정의는 .claude/agents/(book-kit에서 동기화)를 따릅니다. 옛 결정의 근거를 찾을 때만 읽습니다.
+
 # 검수 규칙(REVIEW_RULES)
 
 외부 검토와 점검에서 장마다 반복된 지적을 규칙으로 승격한 목록입니다(이슈 #66, D-127). 원고를 쓰는 에이전트는 장을 쓰거나 고칠 때 이 규칙을 모두 적용하고, editor, fact-checker, flow-reviewer는 이 규칙으로 점검합니다. 외부 검토는 이 규칙에 없는 새 유형만 찾고(docs/external-review-prompt.md), 새 유형이 나오면 R18, R19…로 이 문서에 더합니다.

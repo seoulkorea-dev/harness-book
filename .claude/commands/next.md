@@ -1,7 +1,7 @@
 ---
 description: 다음 한 단위(작가 요청 이슈 하나)를 HARNESS_SETUP.md 3장 순서로 끝까지 진행한다
 ---
-다음 한 단위를 끝까지 진행한다. 기준은 NEW_BOOK_PLAYBOOK.md(원고), BOOK_SPEC.md(이 책), HARNESS_SETUP.md(진행)이다. 작가에게 묻지 않고 진행하며, 작가만 정할 일은 docs/AUTHOR_QUEUE.md에 질문과 진행한 권장안을 적는다. 셸에서 cd를 쓰지 않는다. 체계(.claude/, 규칙 문서)는 바꾸지 않는다.
+다음 한 단위를 끝까지 진행한다. 기준은 book-kit/book/PLAYBOOK.md(원고, ../book-kit), BOOK_SPEC.md(이 책), HARNESS_SETUP.md(진행)이다. 작가에게 묻지 않고 진행하며, 작가만 정할 일은 docs/AUTHOR_QUEUE.md에 질문과 진행한 권장안을 적는다. 셸에서 cd를 쓰지 않는다. 체계(.claude/, 규칙 문서)는 바꾸지 않는다.
 
 0. 준비: git switch main, git pull --ff-only origin main. 실패하면 이유를 HANDOFF.md "## 지금 상태"에 적고 멈춘다.
 1. 이번 작업 정하기

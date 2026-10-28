@@ -1,4 +1,4 @@
-"""REVIEW_RULES.md의 자동 검사(이슈 #66, D-127).
+"""검수 규칙의 자동 검사(플레이북 22장).
 
 사용: python lint/check_rules.py
 src/chapters/*.html, src/appendix/*.html을 검사한다. 장별 정비를 마친 장(lint/rules_applied.txt에 이름이 있음)은
@@ -15,9 +15,9 @@ import glob, html, json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APPLIED = os.path.join(ROOT, "lint", "rules_applied.txt")
 BIB = {k for k in json.load(open(os.path.join(ROOT, "research", "bibliography.json"), encoding="utf-8")) if not k.startswith("_")}
-FAIL_HEAD = ["실패 유형", "원인", "방지 장치"]  # BOOK_STANDARD 10절, D-124 갱신(이슈 #66 08:28)
+FAIL_HEAD = ["실패 유형", "원인", "방지 장치"]  # 플레이북 9.2 실패 표
 CHECK_HEAD = ["확인 항목", "확인 방법", "확인 기준"]
-# 표 열 설계 원칙(BOOK_STANDARD 10절): 모호한 열 이름, 동사형과 질문형, 지시 표현
+# 표 열 설계 원칙(플레이북 9.1): 모호한 열 이름, 동사형과 질문형, 지시 표현
 VAGUE_HEAD = {"설명", "내용", "무엇인가", "예", "방법", "기준", "이유"}
 VERB_HEAD = re.compile(r"(?:할|일할|하는|된) (?:때|것|쪽)$|할 것$|는가$|^적합한 ")
 DEIXIS = re.compile(r"이 책|^(?:이|그) ")

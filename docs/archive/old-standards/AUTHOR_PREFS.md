@@ -1,3 +1,5 @@
+> **보관 문서(2026-10-28, D-147).** 더 이상 기준이 아닙니다. 원고 기준은 book-kit/book/PLAYBOOK.md와 BOOK_SPEC.md, 하위 에이전트 정의는 .claude/agents/(book-kit에서 동기화)를 따릅니다. 옛 결정의 근거를 찾을 때만 읽습니다.
+
 # 작가 결정과 취향(AUTHOR_PREFS)
 
 에이전트가 읽는 작가의 결정과 취향입니다. editor는 이 문서를 어긴 곳을 필수로 판정합니다. 바뀌면 작가 요청(GitHub 이슈)이나 DECISIONS.md로 갱신합니다.

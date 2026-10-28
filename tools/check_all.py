@@ -40,6 +40,9 @@ for name, cmd in [("번호", "python lint/check_numbers.py"), ("구조", "python
 code, out = run("python lint/check_style.py")
 warns = [l for l in out.splitlines() if l.startswith("경고 ")]
 add("문체", not warns, "\n".join(warns[:20]))
+q_warns = [l for l in out.splitlines() if l.startswith("질문형 ")]
+if q_warns:  # 플레이북 6.2: 절 첫 문장 밖의 질문형 문장은 경고만
+    print("[경고] 질문형 문장(절 첫 문장 밖)\n" + "\n".join(q_warns[:20]) + "\n")
 
 fig_issues = []
 fig_small = []
@@ -59,7 +62,7 @@ for f in sorted(glob.glob("chapters/*.html") + glob.glob("appendix/*.html") + ["
                 fig_issues.append(f"{f} {fid}: 그림 안에 '{b}'")
 add("그림 안 이름", not fig_issues, "\n".join(fig_issues[:30]))
 
-# 그림 체계(D-111, FIGURE_STYLE 7절): 제목 상자(맨 위 둥근 사각형, 파랑 테두리)와 맨 아래 "*" 한 줄
+# 그림 체계(D-111, 플레이북 10장): 제목 상자(맨 위 둥근 사각형, 파랑 테두리)와 맨 아래 "*" 한 줄
 fig_system = []
 for f in sorted(glob.glob("chapters/*.html") + glob.glob("appendix/*.html")):
     t2 = open(f, encoding="utf-8").read()
@@ -79,18 +82,18 @@ STRICT_SYSTEM = "--strict-figures" in sys.argv
 if STRICT_SYSTEM:
     add("그림 체계", not fig_system, "\n".join(fig_system[:30]))
 elif fig_system:
-    print("[경고] 그림 체계(FIGURE_STYLE 7절, 아직 실패로 보지 않음)\n" + "\n".join(fig_system[:30]) + "\n")
+    print("[경고] 그림 체계(플레이북 10장, 아직 실패로 보지 않음)\n" + "\n".join(fig_system[:30]) + "\n")
 if STRICT_FIG:
     add("그림 글자 크기", not fig_small, "\n".join(fig_small[:30]))
 elif fig_small:
     print("[경고] 그림 글자 크기(기준 미달, 아직 실패로 보지 않음)\n" + "\n".join(fig_small[:30]) + "\n")
 
-# 검수 규칙(REVIEW_RULES.md, 이슈 #66): 정비를 마친 장(lint/rules_applied.txt)은 실패, 나머지는 경고
+# 검수 규칙(플레이북 22장): 정비를 마친 장(lint/rules_applied.txt)은 실패, 나머지는 경고
 code, out = run("python lint/check_rules.py")
 add("검수 규칙", code == 0, "\n".join(l for l in out.splitlines() if l.startswith("실패"))[:3000])
 rule_warns = [l for l in out.splitlines() if l.startswith(("경고", "정비 전"))]
 if rule_warns:
-    print("[경고] 검수 규칙(REVIEW_RULES, 정비 전 장과 경고 규칙)\n" + "\n".join(rule_warns[:20]) + "\n")
+    print("[경고] 검수 규칙(정비 전 장과 경고 규칙)\n" + "\n".join(rule_warns[:20]) + "\n")
 # 예제 작업 단위의 확인이 구현 전에 실패하는지(R6): rules_applied.txt에 R6이 있으면 실패, 없으면 경고
 code, out = run("python tools/check_tasks.py")
 r6_strict = "R6" in {l.strip() for l in open("lint/rules_applied.txt", encoding="utf-8") if l.strip() and not l.startswith("#")}
@@ -98,6 +101,11 @@ if r6_strict:
     add("예제 확인(R6)", code == 0, out[-800:])
 elif code != 0:
     print("[경고] 예제 확인(R6, 아직 실패로 보지 않음)\n" + out + "\n")
+
+# book-kit(공통 원본)과 검사 도구, 에이전트 정의가 같은지(D-147). CI에서는 book-kit을 읽을 수 없어 건너뜀
+if not CI:
+    code, out = run("python tools/sync_kit.py --check")
+    add("book-kit 동기화", code == 0, out[-800:])
 
 if CI:
     code, out = run("git diff --exit-code --stat -- index.html chapters appendix")

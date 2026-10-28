@@ -3,7 +3,7 @@
 - 원고는 src/ 아래 HTML 조각(본문만)을 고친다. 루트의 index.html, chapters/, appendix/ 는 빌드 결과물이므로 직접 고치지 않는다.
 - 목차와 페이지 정보는 src/site.json 에 있다.
 - 빌드는 다른 쪽의 "표 3-1", "그림 8-1" 참조에만 링크를 건다. 같은 쪽 참조는 글자만 둔다. 없는 번호를 가리키면 멈춘다.
-- 인용(BOOK_STANDARD.md 8절, D-131): 원고의 <sup class="cite" data-ref="키"></sup>에 목차 순서로 처음 인용된 순서대로 책 전체 번호를 매기고,
+- 인용(플레이북 7.4, D-131): 원고의 <sup class="cite" data-ref="키"></sup>에 목차 순서로 처음 인용된 순서대로 책 전체 번호를 매기고,
   research/bibliography.json으로 부록 끝 "참고 문헌" 쪽(site.json에서 generated)을 만든다. 없는 키를 가리키면 멈춘다.
 실행: python3 tools/build.py
 """

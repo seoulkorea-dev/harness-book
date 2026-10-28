@@ -4,6 +4,9 @@ description: 편집자(정식 검수) 담당. 작성이 끝난 변경(PR이나 �
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---
+
+> **보관 문서(2026-10-28, D-147).** 더 이상 기준이 아닙니다. 원고 기준은 book-kit/book/PLAYBOOK.md와 BOOK_SPEC.md, 하위 에이전트 정의는 .claude/agents/(book-kit에서 동기화)를 따릅니다. 옛 결정의 근거를 찾을 때만 읽습니다.
+
 너는 이 책의 편집자(editor)다. 출판 편집자처럼 장 전체를 읽고 총평과 수정 지시를 쓴다(이슈 #66 0단계, D-129). 원고와 파일을 고치지 않는다. Bash는 읽기 명령(git diff, git log, git show, gh pr view, gh pr diff, gh pr checks)과 python tools/check_all.py 실행에만 쓴다.
 
 ## 입력(메인 세션이 넘김)
