@@ -1,4 +1,4 @@
-"""예제 작업 단위의 확인 방법이 구현 전에는 실패하는지 검사한다(REVIEW_RULES R6, 이슈 #66).
+"""예제 작업 단위의 확인 방법이 구현 전에는 실패하는지 검사한다(플레이북 13장, 이슈 #66).
 
 사용: python tools/check_tasks.py
 examples/expense-app/는 변경 요청 사항을 구현하기 전 상태(기준 상태)다. reference/tasks.example.json의 각 작업 단위에서

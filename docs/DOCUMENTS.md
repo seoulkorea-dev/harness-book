@@ -12,7 +12,7 @@
 
 | 순서 | 문서 | 역할 | 상태 |
 |---|---|---|---|
-| 1 | NEW_BOOK_PLAYBOOK.md | 원고 원칙과 규칙, 최종 점검표(25장). 모든 원고 작업의 기준 | 기준 |
+| 1 | book-kit/book/PLAYBOOK.md | 원고 원칙과 규칙, 최종 점검표(25장). 모든 원고 작업의 기준. 공통 원본을 ../book-kit에서 직접 읽음(D-147). 루트의 NEW_BOOK_PLAYBOOK.md는 위치 안내만 | 기준 |
 | 2 | BOOK_SPEC.md | 이 책의 선택(목차, 용어표, 예제, 그림, 비교 도서)과 플레이북 예외 | 기준 |
 | 3 | HARNESS_SETUP.md | 작업 진행 방식(한 장의 순서, 중단 없이 진행하는 규칙, 멈추는 경우) | 기준 |
 | 4 | CLAUDE.md | 작성 세션 안내(읽을 순서, 역할, 끝낼 때) | 기준 |
@@ -40,14 +40,14 @@
 
 | 에이전트 | 역할 | 상태 |
 |---|---|---|
-| chief-editor | 편집장. 장마다 1회 통독 판정 | 기준(HARNESS_SETUP 2장) |
+| chief-editor | 편집장. 장마다 1회 통독 판정 | 기준(HARNESS_SETUP 2장). 다섯 정의는 book-kit/book/agents에서 tools/sync_kit.py로 가져옴(D-147) |
 | fact-checker | 사실 점검 | 기준 |
 | practice-checker | 실습과 예제 점검 | 기준 |
 | production-checker | 제작 점검(그림, 화면, 링크) | 기준 |
 | researcher | 1차 출처 조사 | 기준 |
-| editor | 옛 정식 검수(여섯 확인) | 옛 문서(HARNESS_SETUP 2장 "두지 않는 역할") |
-| flow-reviewer | 옛 흐름 검토 | 옛 문서(같음) |
-| reader-novice | 옛 초보 독자 검토 | 옛 문서(같음) |
+| editor | 옛 정식 검수(여섯 확인) | 보관(docs/archive/agents/, D-147) |
+| flow-reviewer | 옛 흐름 검토 | 보관(같음) |
+| reader-novice | 옛 초보 독자 검토 | 보관(같음) |
 
 ### 3.2 명령(.claude/commands/)과 스킬(.claude/skills/)
 
@@ -72,7 +72,7 @@
 | tools/dashboard.py, tools/autorun.py, tools/check_review.py | 옛 대시보드 이슈 갱신, 자동 실행기, 옛 검수 문서 검사 | 옛 문서(D-130 뒤 쓰지 않음) |
 | templates/(chapter-spec, figure-spec, issue-report) | 장 명세, 그림 명세, 이슈 보고 서식 | 보조(옛 용어 "CR" 남음) |
 
-## 4. 옛 기준 문서(정리 예정)
+## 4. 옛 기준 문서(docs/archive/old-standards/로 옮김, D-147)
 
 | 문서 | 내용 | 대체한 곳 |
 |---|---|---|
@@ -81,10 +81,10 @@
 | diagram_guide.md | 다이어그램 제작 가이드 | 플레이북 10장 |
 | AI_DIAGRAM_GUIDE.md | AI 다이어그램, 일러스트 생성 참고 | 플레이북 10장(참고 자료) |
 | BOOK_STANDARD.md | 1단계 기준서 | 플레이북, BOOK_SPEC.md |
-| REVIEW_RULES.md | 검수 규칙 R1~R19, 여섯 확인 | 플레이북 20장, 25장(check_rules.py는 아직 R 번호를 씀) |
+| REVIEW_RULES.md | 검수 규칙 R1~R19, 여섯 확인 | 플레이북 20장, 22장, 25장(check_rules.py 출력에는 R 번호가 남음) |
 | AUTHOR_PREFS.md | 작가 결정과 취향 | DECISIONS.md, BOOK_SPEC.md |
 | RUNBOOK.md | 집필 자동화 실행 절차(ai-book 시범 시절) | HARNESS_SETUP.md |
 | docs/external-review-prompt.md | 외부 검토 프롬프트 | 편집장 1회(HARNESS_SETUP 2장) |
 | proposals/2026-10-15-ch03-example-spec.md | 3장 예제 설계 제안 | docs/example-facts.md, docs/specs/ |
 
-- 옛 문서를 지우거나 docs/legacy/로 옮길지는 작가가 정합니다(작가 확인 목록에 질문으로 남김).
+- 2026-10-28 작가 결정으로 위 문서 가운데 STYLE.md부터 RUNBOOK.md까지 여덟 개를 docs/archive/old-standards/로 옮겼습니다(맨 위에 보관 문서 표시). 옛 에이전트 정의와 동기화 전의 다섯 정의는 docs/archive/agents/에 있습니다.

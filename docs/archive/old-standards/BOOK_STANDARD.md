@@ -1,3 +1,5 @@
+> **보관 문서(2026-10-28, D-147).** 더 이상 기준이 아닙니다. 원고 기준은 book-kit/book/PLAYBOOK.md와 BOOK_SPEC.md, 하위 에이전트 정의는 .claude/agents/(book-kit에서 동기화)를 따릅니다. 옛 결정의 근거를 찾을 때만 읽습니다.
+
 # 기준서(BOOK_STANDARD)
 
 이 책의 모든 원고, 그림, 표, 실습, 검수가 따르는 기준을 한 문서에 모았습니다(이슈 #66 1단계, D-131). 흩어진 기준 문서(STYLE.md, FIGURE_STYLE.md, REVIEW_RULES.md, AUTHOR_PREFS.md, docs/example-facts.md)는 세부를 담고, 이 문서는 그 가운데 장을 쓰고 고칠 때 지켜야 할 기준을 정합니다.

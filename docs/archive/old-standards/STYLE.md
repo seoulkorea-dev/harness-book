@@ -1,3 +1,5 @@
+> **보관 문서(2026-10-28, D-147).** 더 이상 기준이 아닙니다. 원고 기준은 book-kit/book/PLAYBOOK.md와 BOOK_SPEC.md, 하위 에이전트 정의는 .claude/agents/(book-kit에서 동기화)를 따릅니다. 옛 결정의 근거를 찾을 때만 읽습니다.
+
 # 문체 규칙
 
 기본 규칙은 `NEW_BOOK_PLAYBOOK.md` 3장(원고 원칙)과 `.claude/skills/ko-book-style`입니다(D-017). 이 문서에는 이 책만의 예외와 추가 규칙을 적습니다.

@@ -1,3 +1,5 @@
+> **보관 문서(2026-10-28, D-147).** 더 이상 기준이 아닙니다. 원고 기준은 book-kit/book/PLAYBOOK.md와 BOOK_SPEC.md, 하위 에이전트 정의는 .claude/agents/(book-kit에서 동기화)를 따릅니다. 옛 결정의 근거를 찾을 때만 읽습니다.
+
 # IT 도서 다이어그램 & 일러스트 표준 제작 가이드 (diagram_guide.md)
 
 - **문서 버전**: v2.0 (통합 표준 개정본)

@@ -1,6 +1,6 @@
 """B 배제어 경고 검사. 한자어 치환 후보를 출력만 하고 종료 코드는 항상 0이다.
 
-치환 기준은 STYLE.md의 어휘 선택 절차를 따른다. 코드 상자 속 프롬프트도 검사한다. 뜻에 따라 바꿀 말이 다르므로
+치환 기준은 플레이북 6.3 어휘 선택을 따른다. 코드 상자 속 프롬프트도 검사한다. 뜻에 따라 바꿀 말이 다르므로
 자동으로 고치지 않고, 위치와 문맥만 보여 준다.
 """
 import glob
@@ -35,8 +35,8 @@ for f in files:
                 if i < len(cells) and "십시오" in cells[i]:
                     total["표 예제 십시오"] += 1
                     print(f"경고 {f}: 표 예제 칸 '십시오' | {re.sub('<[^>]+>', '', cells[i])[:40]}")
-    # 코드 상자 속 프롬프트 예제는 예외(STYLE.md 배제어). 줄 번호를 유지하도록 줄바꿈만 남긴다
-    # 코드 상자 속 프롬프트 말투는 "~해 줘"(STYLE.md). "십시오"가 남으면 따로 경고
+    # 코드 상자 속 프롬프트 예제는 예외(플레이북 6.3 배제어). 줄 번호를 유지하도록 줄바꿈만 남긴다
+    # 코드 상자 속 프롬프트 말투는 "~해 줘"(플레이북 15장). "십시오"가 남으면 따로 경고
     for m in re.finditer(r"<pre.*?</pre>", body, flags=re.S):
         # 입력 자료 태그(&lt;공지문&gt; 등) 안의 원문은 원래 문체를 유지하므로 제외
         k = re.sub(r"&lt;([^&/]+)&gt;.*?&lt;/\1&gt;", "", m.group(0), flags=re.S).count("십시오")
@@ -98,3 +98,33 @@ for f in files:
 
 if total:
     print("B 배제어 경고 합계:", sum(total.values()), dict(total.most_common()))
+
+# 질문형 문장(플레이북 6.2, 2026-10-28): 절 첫 문장에 하나만 허용(점검 질문 절 제외). 판단이 필요하므로 실패가 아니라 경고만.
+# 목록 항목(<li>)은 점검 질문 목록이므로 보지 않는다. check_all.py의 "문체"는 "경고 "로 시작하는 줄을 실패로 보므로, 이 경고는 "질문형 "으로 시작해 따로 보여 준다
+Q_END = re.compile(r"(?:\?|까요\.|니까\.)$")
+for f in files:
+    if f.endswith(("references.html", "terms.html")):
+        continue
+    body = re.sub(r"<(pre|table|svg|figure|aside)\b.*?</\1>", " ", open(f, encoding="utf-8").read(), flags=re.S)
+    for part in re.split(r"(?=<h[23]\b)", body):
+        head = re.match(r"<h[23]\b[^>]*>(.*?)</h[23]>", part, flags=re.S)
+        if not head:
+            continue  # 장 첫머리(도입부)는 절이 아니므로 아래 문장 검사만 받음
+        if "점검 질문" in head.group(1):
+            continue
+        first = True
+        for para in re.findall(r"<p\b[^>]*>(.*?)</p>", part, flags=re.S):
+            text = html.unescape(re.sub(r"<[^>]+>", "", para)).strip()
+            for sent in re.split(r"(?<=[.?!])\s+(?=[^)\s])", text):
+                sent = sent.strip()
+                if sent and Q_END.search(sent) and not first:
+                    print(f"질문형 {f}: 절 첫 문장 밖 | {sent[:40]}")
+                if sent:
+                    first = False
+    # 장 첫머리(첫 절 제목 앞)의 질문형 문장
+    lead = re.split(r"<h[23]\b", body, maxsplit=1)[0]
+    for para in re.findall(r"<p\b[^>]*>(.*?)</p>", lead, flags=re.S):
+        text = html.unescape(re.sub(r"<[^>]+>", "", para)).strip()
+        for sent in re.split(r"(?<=[.?!])\s+(?=[^)\s])", text):
+            if Q_END.search(sent.strip()):
+                print(f"질문형 {f}: 장 첫머리 | {sent.strip()[:40]}")
