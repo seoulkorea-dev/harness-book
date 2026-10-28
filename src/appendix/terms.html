@@ -52,14 +52,14 @@
 <dt>외부 실행 환경</dt><dd>파일 시스템, 데이터베이스, 네트워크, 소프트웨어, 기타 외부 서비스처럼 도구가 읽거나 변경하는 대상 전체입니다. 모델과 하네스 바깥에 있으며, 에이전트가 일으키는 변경은 하네스가 실행한 도구를 거칩니다. <a href="../chapters/ch01.html#agent-harness">(Chapter 1)</a></dd><dt>워크플로(Workflow)</dt><dd>미리 정한 코드 경로에 따라 모델과 도구를 조율하는 시스템입니다. 다음에 무엇을 할지 모델이 아니라 코드가 정합니다. <a href="../chapters/ch01.html#meanings">(Chapter 1)</a></dd>
 <dt>원본 자료</dt><dd>에이전트가 읽기만 하고 변경하면 안 되는 입력 자료입니다. 예제에서는 data/projects.csv입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a></dd>
 <dt>인계 메모</dt><dd>세션을 넘길 때 결정 기록, 진행 기록, 규칙 문서로 알 수 없는 맥락을 현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령의 다섯 항목으로 묶어 넘기는 문서입니다. 예제에서는 HANDOFF.md입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch08.html#handover">(Chapter 8)</a></dd>
-<dt>자동 메모리</dt><dd>Claude Code가 작업 중에 알게 된 내용을 기기 안의 파일에 스스로 기록하고 다음 세션에 읽는 기능입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch08.html#session">(Chapter 8)</a></dd>
+<dt>자동 메모리</dt><dd>Claude Code가 작업 중에 알게 된 내용을 기기 안의 파일에 스스로 기록하고 다음 세션에 읽는 기능입니다. <a href="../chapters/ch08.html#session">(Chapter 8)</a></dd>
 <dt>작업 단위</dt><dd>한 세션 안에 끝나고 완료 여부를 확인할 수 있는 크기로 나눈 작업입니다. <a href="../chapters/ch01.html#meanings">(Chapter 1)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd>
 <dt>작업 단위 목록</dt><dd>작업 단위마다 작업, 완료 기준, 확인 방법, 통과 값을 적은 목록 파일입니다. 진행 기록에 해당하며, 예제에서는 tasks.json입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd><dt>작업 단위 분할</dt><dd>맡길 업무를 작업 단위로 나누는 일입니다. <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd>
 <dt>작업 입력</dt><dd>이번 작업을 위해 사람이 주는 정보로, 요청과 요청에 첨부하는 자료입니다. 요청할 때마다 들어옵니다. <a href="../chapters/ch05.html#kinds">(Chapter 5)</a></dd>
 <dt>작업 중 생성 정보</dt><dd>작업하면서 에이전트가 얻은 정보로, 에이전트가 열어 모은 파일 내용과 명령이나 도구를 실행해 얻은 출력입니다. <a href="../chapters/ch05.html#kinds">(Chapter 5)</a></dd>
 <dt>장치</dt><dd>검사나 규칙 문서의 한 줄처럼, 같은 실패가 다시 나오지 않도록 구성 요소에 더한 설정입니다. 사용자와 팀이 더하는 설정이므로, 제품이 제공하는 층인 실행 장치와는 다릅니다. <a href="../chapters/epilogue.html#case">(마치며)</a></dd>
 <dt>저장소</dt><dd>코드와 문서를 변경 이력과 함께 보관하는 곳입니다. <a href="../chapters/ch01.html#request">(Chapter 1)</a></dd>
-<dt>종료 코드</dt><dd>명령이 끝나면서 성공이나 실패를 알리려고 돌려주는 숫자입니다. 0은 성공, 0이 아닌 값은 실패를 뜻합니다. <a href="../chapters/ch02.html#instruct-enforce">(Chapter 2)</a></dd>
+<dt>종료 코드</dt><dd>명령이 끝나면서 성공이나 실패를 알리려고 돌려주는 숫자입니다. 0은 성공, 0이 아닌 값은 실패를 뜻합니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a></dd>
 <dt>주 대화</dt><dd>사람과 에이전트가 주고받는 세션의 대화입니다. 하위 에이전트는 포크를 제외하면 주 대화의 내용을 보지 못합니다. <a href="../chapters/ch05.html#retrieval">(Chapter 5)</a> <a href="../chapters/ch06.html#multi-agent">(Chapter 6)</a></dd>
 <dt>주 에이전트</dt><dd>하위 에이전트에게 일을 맡기는 쪽으로, 주 대화에서 사람과 일하는 에이전트입니다. <a href="../chapters/ch06.html#multi-agent">(Chapter 6)</a></dd>
 <dt>지속적 통합(Continuous Integration, CI)</dt><dd>저장소에 변경이 올라올 때 자동으로 검사를 실행하는 장치입니다. <a href="../chapters/ch01.html#loop">(Chapter 1)</a></dd>
@@ -71,7 +71,7 @@
 <dt>컨텍스트 윈도(Context Window)</dt><dd>모델이 한 번에 처리할 수 있는 토큰의 범위입니다. <a href="../chapters/ch01.html#background">(Chapter 1)</a></dd>
 <dt>코딩 에이전트</dt><dd>저장소의 코드를 읽고 수정하며 테스트를 실행하는 에이전트 제품입니다. Claude Code와 Codex가 예입니다. <a href="../chapters/ch01.html#request">(Chapter 1)</a></dd><dt>턴</dt><dd>에이전트 루프에서 세는 단위로, 문서마다 범위가 다릅니다. Agent SDK 문서는 도구 호출을 주고받는 왕복 한 번을, Claude Code 용어집과 Codex의 에이전트 루프 글은 사용자 입력 하나에서 응답이 끝날 때까지를 한 턴이라고 합니다. 사용할 때는 어느 문서 기준인지 밝힙니다. <a href="../chapters/ch01.html#loop">(Chapter 1)</a></dd>
 <dt>토큰(Token)</dt><dd>모델이 텍스트를 나누어 처리하는 단위입니다. <a href="../chapters/ch01.html#background">(Chapter 1)</a></dd>
-<dt>통과 값</dt><dd>작업 단위 목록에서 단위가 끝났는지를 적는 칸입니다. 새로 등록한 미완료 단위는 false이고, 완료를 확인한 단위는 true입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd><dt>편집 뒤 훅</dt><dd>파일을 편집할 때마다 검사를 실행하도록 설정한 PostToolUse 훅(도구 실행 뒤에 실행되는 훅)입니다. 이미 실행된 편집은 되돌리지 못하고, 종료 코드 2로 끝나면 오류 출력을 모델에 전달합니다. <a href="../chapters/ch02.html#instruct-enforce">(Chapter 2)</a></dd>
+<dt>통과 값</dt><dd>작업 단위 목록에서 단위가 끝났는지를 적는 칸입니다. 새로 등록한 미완료 단위는 false이고, 완료를 확인한 단위는 true입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd><dt>편집 뒤 훅</dt><dd>파일을 편집할 때마다 검사를 실행하도록 설정한 PostToolUse 훅(도구 실행 뒤에 실행되는 훅)입니다. 이미 실행된 편집은 되돌리지 못하고, 종료 코드 2로 끝나면 오류 출력을 모델에 전달합니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a></dd>
 <dt>풀 리퀘스트(Pull Request)</dt><dd>코드 변경을 저장소에 반영하기 전에 검토를 요청하는 단위입니다. <a href="../chapters/ch01.html#harness">(Chapter 1)</a></dd>
 <dt>프롬프트</dt><dd>사람이 이번 작업에 입력하는 요청입니다. 컨텍스트의 일부이며, 제품이 미리 포함하는 시스템 프롬프트는 컨텍스트로 분류합니다. <a href="../chapters/ch01.html#layers">(Chapter 1)</a></dd>
 <dt>프롬프트 엔지니어링(Prompt Engineering)</dt><dd>원하는 결과를 얻도록 모델에 주는 지시문을 작성하고 구성하는 방법입니다. <a href="../chapters/ch01.html#prompt-context">(Chapter 1)</a></dd>
