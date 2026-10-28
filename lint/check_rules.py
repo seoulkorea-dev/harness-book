@@ -17,6 +17,8 @@ APPLIED = os.path.join(ROOT, "lint", "rules_applied.txt")
 BIB = {k for k in json.load(open(os.path.join(ROOT, "research", "bibliography.json"), encoding="utf-8")) if not k.startswith("_")}
 FAIL_HEAD = ["실패 유형", "원인", "방지 장치"]  # 플레이북 9.2 실패 표
 CHECK_HEAD = ["확인 항목", "확인 방법", "확인 기준"]
+# 플레이북 9.2 표준 세트의 첫 열 이름. 이것으로 시작하지 않는 표는 "간단한 표"(열 2~3, 행 2~5)로 보고 크기를 넘으면 경고
+SET_FIRST = {"구성 요소", "기술 요소", "구분", "실패 유형", "확인 항목", "증상"}
 # 표 열 설계 원칙(플레이북 9.1): 모호한 열 이름, 동사형과 질문형, 지시 표현
 VAGUE_HEAD = {"설명", "내용", "무엇인가", "예", "방법", "기준", "이유"}
 VERB_HEAD = re.compile(r"(?:할|일할|하는|된) (?:때|것|쪽)$|할 것$|는가$|^적합한 ")
@@ -68,6 +70,9 @@ def check_file(path):
         if "확인 방법" in cap or (heads and heads[0] in ("확인할 것", "확인 항목")):
             if heads[:3] != CHECK_HEAD:
                 fails.append(f"R9 {tid} 확인 표 열 이름 {heads[:3]}")
+        rows = len(re.findall(r"<tr\b", t)) - 1
+        if heads and heads[0] not in SET_FIRST and (len(heads) > 3 or rows > 5):
+            warns.append(f"R9 {tid} 표준 세트 밖 간단한 표의 크기 초과(열 {len(heads)}, 행 {rows}; 9.2: 열 2~3, 행 2~5)")
         if len(heads) > 4:
             fails.append(f"R9 {tid} 열 {len(heads)}개(최대 4개)")
         for h in heads:

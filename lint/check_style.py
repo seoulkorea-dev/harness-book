@@ -123,7 +123,7 @@ for f in files:
                     first = False
     # 장 첫머리(첫 절 제목 앞)의 질문형 문장
     lead = re.split(r"<h[23]\b", body, maxsplit=1)[0]
-    for para in re.findall(r"<p\b[^>]*>(.*?)</p>", lead, flags=re.S):
+    for para in re.findall(r"<(?:p|li)\b[^>]*>(.*?)</(?:p|li)>", lead, flags=re.S):  # 도입부는 요약 목록도 봄(6.2)
         text = html.unescape(re.sub(r"<[^>]+>", "", para)).strip()
         for sent in re.split(r"(?<=[.?!])\s+(?=[^)\s])", text):
             if Q_END.search(sent.strip()):
