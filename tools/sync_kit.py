@@ -1,4 +1,4 @@
-"""book-kit(공통 원본)에서 검사 도구와 하위 에이전트 정의를 가져온다(D-147).
+"""book-kit(공통 원본)에서 검사 도구, 하위 에이전트 정의, 스킬을 가져온다(D-147, D-149).
 
 플레이북은 복사하지 않고 book-kit/book/PLAYBOOK.md를 직접 읽는다. 검사 도구는 CI가 비공개 book-kit을
 읽을 수 없어 이 저장소에 복사본을 두고, 이 스크립트로만 맞춘다. 이 저장소의 복사본을 직접 고치지 않는다.
@@ -20,6 +20,9 @@ FILES = [(f"book/lint/{n}", f"lint/{n}") for n in
          ("check_numbers.py", "check_rules.py", "check_structure.py", "check_style.py", "banned.txt")]
 FILES += [(f"book/agents/{n}.md", f".claude/agents/{n}.md") for n in
           ("chief-editor", "fact-checker", "practice-checker", "production-checker", "researcher")]
+FILES += [(f"book/skills/{n}/SKILL.md", f".claude/skills/{n}/SKILL.md") for n in
+          ("book-structure", "chapter-review", "example-design", "fact-check", "figure-design",
+           "ko-book-style", "originality-check", "practice-design", "table-design")]
 
 
 def read(p):
@@ -40,6 +43,7 @@ def main():
         if check:
             diff.append(f"{dst} ≠ book-kit/{src}")
         else:
+            os.makedirs(os.path.dirname(d), exist_ok=True)
             shutil.copyfile(s, d)
             print(f"복사 book-kit/{src} → {dst}")
     if diff:
