@@ -1,5 +1,4 @@
-.claude/settings.local.json
-.claude/last_check_failed.txt
-logs/
+.claude/
 __pycache__/
 *.pyc
+logs/
