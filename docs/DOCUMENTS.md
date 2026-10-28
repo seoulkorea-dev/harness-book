@@ -40,7 +40,7 @@
 
 | 에이전트 | 역할 | 상태 |
 |---|---|---|
-| chief-editor | 편집장. 장마다 1회 통독 판정 | 기준(HARNESS_SETUP 2장). 다섯 정의는 book-kit/book/agents에서 tools/sync_kit.py로 가져옴(D-147) |
+| chief-editor | 편집장. 장마다 1회 통독 판정 | 기준(HARNESS_SETUP 2장). 정의는 저장소에 두지 않고 세션 시작 때 book-kit/book/agents에서 가져옴(D-150) |
 | fact-checker | 사실 점검 | 기준 |
 | practice-checker | 실습과 예제 점검 | 기준 |
 | production-checker | 제작 점검(그림, 화면, 링크) | 기준 |
@@ -87,4 +87,4 @@
 | docs/external-review-prompt.md | 외부 검토 프롬프트 | 편집장 1회(HARNESS_SETUP 2장) |
 | proposals/2026-10-15-ch03-example-spec.md | 3장 예제 설계 제안 | docs/example-facts.md, docs/specs/ |
 
-- 2026-10-28 작가 결정(D-149)으로 STYLE.md부터 RUNBOOK.md까지 여덟 개와 옛 에이전트 정의를 지웠습니다. 이 저장소에는 원고 작성 기준을 두지 않습니다. 장 명세와 그림 명세 서식(templates/chapter-spec.md, figure-spec.md)과 이 책의 옛 스킬 다섯도 지우고, 스킬은 book-kit 판 아홉을 동기화합니다.
+- 2026-10-28 작가 결정(D-149)으로 STYLE.md부터 RUNBOOK.md까지 여덟 개와 옛 에이전트 정의를 지웠습니다. 이 저장소에는 원고 작성 기준을 두지 않습니다. 장 명세와 그림 명세 서식(templates/chapter-spec.md, figure-spec.md)과 이 책의 옛 스킬 다섯도 지우고, 스킬, 에이전트, 검사 도구는 저장소에 두지 않고 세션 시작 훅과 check_all이 book-kit에서 가져옵니다(D-150).

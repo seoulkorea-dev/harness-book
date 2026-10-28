@@ -2,7 +2,7 @@
 사용: python tools/check_all.py [--ci]
 모든 항목을 실행한 뒤 요약을 출력하고, 하나라도 실패하면 종료 코드 1.
 """
-import glob, html, re, subprocess, sys
+import glob, html, os, re, subprocess, sys
 
 CI = "--ci" in sys.argv
 STRICT_FIG = "--strict-figures" in sys.argv  # 그림 글자 크기를 실패로 볼지(기본은 경고)
@@ -17,6 +17,13 @@ def run(cmd):
 results = []
 def add(name, ok, detail=""):
     results.append((name, ok, detail))
+
+# 검사 도구(lint), 에이전트, 스킬은 저장소에 두지 않고 book-kit에서 가져온다(D-150). CI는 book-kit을 받아 BOOK_KIT로 넘김
+code, out = run("python tools/sync_kit.py")
+if not os.path.exists("lint/banned.txt"):
+    print("검사 도구 없음: book-kit을 찾지 못했습니다(../book-kit 또는 환경 변수 BOOK_KIT).\n" + out)
+    sys.exit(1)
+add("book-kit 가져오기", "book-kit 없음" not in out, out[-500:])
 
 code, out = run("python tools/build.py")
 add("빌드", code == 0, out[-300:])
@@ -101,11 +108,6 @@ if r6_strict:
     add("예제 확인(R6)", code == 0, out[-800:])
 elif code != 0:
     print("[경고] 예제 확인(R6, 아직 실패로 보지 않음)\n" + out + "\n")
-
-# book-kit(공통 원본)과 검사 도구, 에이전트 정의가 같은지(D-147). CI에서는 book-kit을 읽을 수 없어 건너뜀
-if not CI:
-    code, out = run("python tools/sync_kit.py --check")
-    add("book-kit 동기화", code == 0, out[-800:])
 
 if CI:
     code, out = run("git diff --exit-code --stat -- index.html chapters appendix")

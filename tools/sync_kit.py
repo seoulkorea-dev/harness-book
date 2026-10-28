@@ -1,7 +1,8 @@
 """book-kit(공통 원본)에서 검사 도구, 하위 에이전트 정의, 스킬을 가져온다(D-147, D-149).
 
-플레이북은 복사하지 않고 book-kit/book/PLAYBOOK.md를 직접 읽는다. 검사 도구는 CI가 비공개 book-kit을
-읽을 수 없어 이 저장소에 복사본을 두고, 이 스크립트로만 맞춘다. 이 저장소의 복사본을 직접 고치지 않는다.
+플레이북은 복사하지 않고 book-kit/book/PLAYBOOK.md를 직접 읽는다. 검사 도구, 에이전트, 스킬은 Claude Code와
+check_all이 이 저장소 안의 경로에서 읽으므로 세션 시작 훅과 check_all이 이 스크립트로 가져온다.
+가져온 파일은 git에 넣지 않는다(.gitignore, D-150). CI는 book-kit을 받아 환경 변수 BOOK_KIT로 넘긴다.
 
     python tools/sync_kit.py          # book-kit에서 복사
     python tools/sync_kit.py --check  # 다르면 목록을 출력하고 종료 코드 1, book-kit이 없으면 0(건너뜀)

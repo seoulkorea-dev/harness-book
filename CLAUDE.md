@@ -8,7 +8,7 @@
 5. docs/AUTHOR_QUEUE.md, DECISIONS.md 마지막 10건
 
 - 이 저장소에는 원고 작성 기준을 두지 않습니다(D-149). 옛 기준 문서와 옛 에이전트는 지웠습니다(git 기록에만 있음).
-- 검사 도구(lint/의 check_*.py와 banned.txt), .claude/agents/의 정의, .claude/skills/는 book-kit의 복사본입니다. 여기서 고치지 않고 book-kit에서 고친 뒤 python tools/sync_kit.py로 가져옵니다. check_all이 어긋남을 실패로 알립니다. 이 책만의 예외는 BOOK_SPEC.md에 적습니다.
+- 검사 도구(lint/의 check_*.py와 banned.txt), .claude/agents/, .claude/skills/는 저장소에 두지 않습니다(D-150). 세션 시작 훅과 check_all이 tools/sync_kit.py로 book-kit에서 가져오며 git에는 들어가지 않습니다. 고칠 것은 book-kit에서 고칩니다. lint/rules_applied.txt(정비를 마친 장 목록)만 이 책의 기록으로 남습니다. 이 책만의 예외는 BOOK_SPEC.md에 적습니다.
 
 ## 이 세션의 역할
 - 작성 세션이다. 원고를 고치는 유일한 주체다. main에 직접 commit, push하지 않고 작업 브랜치와 PR로 반영한다.
