@@ -66,10 +66,10 @@
 <tr><td>읽는 순서</td><td>다음 세션이 기록을 읽는 차례. 시작할 때 자동으로 읽히는 규칙 문서가 나머지 차례를 정함</td></tr>
 </tbody></table></div><figcaption><b>표 8-1. 그림 8-1의 구성 요소</b></figcaption></figure>
 <p>표 8-2는 세 종류마다 기록하는 정보, 갱신 시점, 해당 파일을 보여 줍니다. 진행 기록의 파일인 작업 단위 목록(tasks.json)은 <a href="ch06.html#split">Chapter 6의 작업 단위 분할</a>에서 작업을 한 세션 안에 끝나는 작업 단위로 나누고, 단위마다 끝났는지를 통과 값(true 또는 false)으로 적은 파일입니다. 팀은 에이전트가 같은 실수를 두 번째로 했을 때 규칙 문서에 항목을 더하고, 사실이나 결정이 변경되어 맞지 않게 된 항목은 수정합니다(<a href="ch05.html#maintenance">Chapter 5의 규칙 문서의 관리</a>).</p>
-<figure class="fig" id="tbl-8-2"><div class="table-wrap"><table><thead><tr><th>기록 종류</th><th>기록하는 정보</th><th>갱신 시점</th><th>해당 파일</th></tr></thead><tbody>
-<tr><td>결정 기록</td><td>결정 내용, 대체한 이전 결정, 이유</td><td>결정하거나 결정을 변경할 때</td><td>결정 기록 문서(DECISIONS.md)</td></tr>
-<tr><td>진행 기록</td><td>작업 단위별 상태, 다음 작업</td><td>작업 단위가 끝날 때</td><td>작업 단위 목록(tasks.json), 작업 단위별 commit</td></tr>
-<tr><td>규칙 문서</td><td>모든 작업에 적용할 지침</td><td>같은 실수가 반복되거나 항목이 맞지 않게 되었을 때</td><td>CLAUDE.md, AGENTS.md</td></tr>
+<figure class="fig" id="tbl-8-2"><div class="table-wrap"><table><thead><tr><th>구분</th><th>결정 기록</th><th>진행 기록</th><th>규칙 문서</th></tr></thead><tbody>
+<tr><td>기록하는 정보</td><td>결정 내용, 대체한 이전 결정, 이유</td><td>작업 단위별 상태, 다음 작업</td><td>모든 작업에 적용할 지침</td></tr>
+<tr><td>갱신 시점</td><td>결정하거나 결정을 변경할 때</td><td>작업 단위가 끝날 때</td><td>같은 실수가 반복되거나 항목이 맞지 않게 되었을 때</td></tr>
+<tr><td>해당 파일</td><td>결정 기록 문서(DECISIONS.md)</td><td>작업 단위 목록(tasks.json), 작업 단위별 commit</td><td>CLAUDE.md, AGENTS.md</td></tr>
 </tbody></table></div><figcaption><b>표 8-2. 기록의 세 종류</b></figcaption></figure>
 <p>장기 실행 글의 실험에서 에이전트는 진행 기록 파일과 git 이력으로 작업 상태를 파악했습니다. 세션마다 설명이 포함된 commit을 남기고 진행 요약을 기록하도록 하자, 에이전트는 잘못된 변경을 되돌리고 동작하는 상태를 복구할 수 있었습니다<sup class="cite"><a href="../appendix/references.html#bib-7">7</a></sup>. commit은 작업 단위마다 하나씩 남깁니다.</p>
 <h2 id="decisions">결정 기록의 형식</h2>
