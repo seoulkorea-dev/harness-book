@@ -176,13 +176,6 @@
     "venue": "Claude Code Docs",
     "url": "https://code.claude.com/docs/en/commands"
   },
-  "sdk-user-input": {
-    "type": "web",
-    "author": "Anthropic",
-    "title": "Handle approvals and user input",
-    "venue": "Claude Code Docs",
-    "url": "https://code.claude.com/docs/en/agent-sdk/user-input"
-  },
   "hooks-guide": {
     "type": "web",
     "author": "Anthropic",
