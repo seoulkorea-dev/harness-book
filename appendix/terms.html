@@ -68,7 +68,7 @@
 <dt>도구</dt><dd>파일 읽기, 명령 실행, 검색처럼 모델 바깥에서 실행되는 기능입니다. <a href="../chapters/ch01.html#background">(Chapter 1)</a></dd>
 <dt>도구 호출</dt><dd>모델이 특정 도구를 정해진 입력으로 실행해 달라고 요청하는 것입니다. <a href="../chapters/ch01.html#background">(Chapter 1)</a></dd>
 <dt>독립 검수</dt><dd>결과를 만들지 않은 다른 에이전트나 사람이 결과를 검토하는 검증 방법입니다. <a href="../chapters/ch07.html#methods">(Chapter 7)</a></dd>
-<dt>변경 요청 사항</dt><dd>운영 중인 시스템의 기능을 어떻게 변경할지 요청한 내용입니다. 예제의 경비 정산 시스템 개편 변경 요청 사항은 정산 요청 화면에 프로젝트 코드 선택 항목을 추가해 달라는 가상 회사 재무팀의 요청이며, 변경 요청 사항 문서(docs/CR.md)에 적습니다. <a href="../chapters/ch01.html#meanings">(Chapter 1)</a></dd><dt>변환</dt><dd>완료 기준을 통과나 실패로 가르는 검사로 만드는 일입니다. <a href="../chapters/ch07.html#criteria">(Chapter 7)</a></dd>
+<dt>변경 요청 사항</dt><dd>운영 중인 시스템의 기능을 어떻게 변경할지 요청한 내용입니다. 예제의 경비 정산 시스템 개편 변경 요청 사항은 정산 요청 화면에 프로젝트 코드 선택 항목을 추가해 달라는 가상 회사 재무팀의 요청이며, 변경 요청 사항 문서(docs/CR.md)에 적습니다. <a href="../chapters/ch03.html#example">(Chapter 1)</a></dd><dt>변환</dt><dd>완료 기준을 통과나 실패로 가르는 검사로 만드는 일입니다. <a href="../chapters/ch07.html#criteria">(Chapter 7)</a></dd>
 <dt>빌드</dt><dd>원고나 코드로 결과물을 만드는 일입니다. <a href="../chapters/ch07.html#report">(Chapter 7)</a></dd>
 <dt>상시 규칙</dt><dd>에이전트가 읽는 정보 가운데 모든 작업에 해당하는 규칙으로, 세션이 시작될 때마다 규칙 문서에서 들어옵니다. <a href="../chapters/ch05.html#kinds">(Chapter 5)</a></dd>
 <dt>샌드박스(Sandbox)</dt><dd>셸 명령(터미널에서 실행하는 명령)과 그 하위 프로세스가 접근할 수 있는 파일과 네트워크를 운영 체제 수준에서 제한하는 장치입니다. Claude Code에서는 기본으로 꺼져 있고, 파일 편집 도구는 대상이 아닙니다. <a href="../chapters/ch01.html#background">(Chapter 1)</a> <a href="../chapters/ch09.html#isolation">(Chapter 9)</a></dd>
@@ -97,7 +97,7 @@
 <dt>원본 자료</dt><dd>에이전트가 읽기만 하고 변경하면 안 되는 입력 자료입니다. 예제에서는 data/projects.csv입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a></dd>
 <dt>인계 메모</dt><dd>세션을 넘길 때 결정 기록, 진행 기록, 규칙 문서로 알 수 없는 맥락을 현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령의 다섯 항목으로 묶어 넘기는 문서입니다. 예제에서는 HANDOFF.md입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch08.html#handover">(Chapter 8)</a></dd>
 <dt>자동 메모리</dt><dd>Claude Code가 작업 중에 알게 된 내용을 기기 안의 파일에 스스로 기록하고 다음 세션에 읽는 기능입니다. <a href="../chapters/ch08.html#session">(Chapter 8)</a></dd>
-<dt>작업 단위</dt><dd>한 세션 안에 끝나고 완료 여부를 확인할 수 있는 크기로 나눈 작업입니다. <a href="../chapters/ch01.html#meanings">(Chapter 1)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd>
+<dt>작업 단위</dt><dd>한 세션 안에 끝나고 완료 여부를 확인할 수 있는 크기로 나눈 작업입니다. <a href="../chapters/ch03.html#example">(Chapter 3)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd>
 <dt>작업 단위 목록</dt><dd>작업 단위마다 작업, 완료 기준, 확인 방법, 통과 값을 적은 목록 파일입니다. 진행 기록에 해당하며, 예제에서는 tasks.json입니다. <a href="../chapters/ch02.html#example">(Chapter 2)</a> <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd><dt>작업 단위 분할</dt><dd>맡길 업무를 작업 단위로 나누는 일입니다. <a href="../chapters/ch06.html#split">(Chapter 6)</a></dd>
 <dt>작업 입력</dt><dd>이번 작업을 위해 사람이 주는 정보로, 요청과 요청에 첨부하는 자료입니다. 요청할 때마다 들어옵니다. <a href="../chapters/ch05.html#kinds">(Chapter 5)</a></dd>
 <dt>작업 중 생성 정보</dt><dd>작업하면서 에이전트가 얻은 정보로, 에이전트가 열어 모은 파일 내용과 명령이나 도구를 실행해 얻은 출력입니다. <a href="../chapters/ch05.html#kinds">(Chapter 5)</a></dd>
