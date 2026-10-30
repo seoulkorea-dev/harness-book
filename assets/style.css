@@ -252,3 +252,37 @@ sup.cite a { text-decoration: none; }
 ol.bib { padding-left: 2rem; line-height: 1.6; }
 ol.bib li { margin: 0.35rem 0; word-break: keep-all; overflow-wrap: anywhere; }
 ol.bib li:target { background: #e0f2fe; }
+
+
+/* 시작하며 쪽 책 표지(2026-10-04, Stitch 시안 2차): 512x686 비율, 어두운 바탕과 주황 강조, 외부 글꼴과 외부 이미지 없음 */
+.book-cover { width: 100%; max-width: 512px; aspect-ratio: 512 / 686; margin: 0 0 2.5rem; background: #0a0a0c; color: #fff; display: flex; flex-direction: column; overflow: hidden; }
+
+.book-cover-art { display: block; width: 100%; height: auto; flex-shrink: 0; }
+
+.book-cover-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 12px 36px 24px; }
+
+.book-cover-meta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 12px; }
+
+.book-cover-kicker, .book-cover-series, .book-cover-edition { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; text-transform: uppercase; }
+
+.book-cover-kicker { letter-spacing: 0.2em; font-weight: 600; color: rgba(251, 191, 36, 0.9); }
+
+.book-cover-series { letter-spacing: 0.2em; color: #a3a3a3; white-space: nowrap; }
+
+.book-cover h1 { margin: 0 0 10px; }
+
+.book-cover h1 .h-title { font-size: 38px; font-weight: 800; line-height: 1.12; letter-spacing: -0.025em; color: #fff; }
+
+.book-cover-accent, .book-cover-line { display: block; }
+
+.book-cover-accent { color: #F59E0B; }
+
+.book-cover-line:first-of-type { margin-top: 4px; }
+
+.book-cover-sub { margin: 12px 0 0; padding-right: 8px; font-size: 15px; font-weight: 400; line-height: 1.375; color: #d4d4d4; }
+
+.book-cover-edition { margin: 0; padding-top: 14px; border-top: 1px solid rgba(38, 38, 38, 0.8); letter-spacing: 0.05em; color: #737373; }
+
+.book-cover-band { display: block; width: 100%; height: 28px; flex-shrink: 0; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 900px) { .book-cover-body { padding: 10px 22px 18px; } .book-cover-kicker, .book-cover-series { font-size: 10px; letter-spacing: 0.1em; } .book-cover-meta { gap: 0.5rem; } .book-cover h1 .h-title { font-size: 30px; } .book-cover-sub { font-size: 14px; } }
