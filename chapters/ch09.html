@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Chapter 9 위험 관리: 승인, 격리, 비용 | 하네스 엔지니어링: 모델을 에이전트로 만드는 설계</title>
-<meta name="description" content="에이전트의 판단력만으로는 사고의 크기를 줄일 수 없고, 에이전트에 허용한 권한의 범위와 승인 지점의 위치를 정해야 합니다.">
+<meta name="description" content="사고의 크기는 에이전트에 허용한 권한의 범위와 승인 지점의 위치로 정해집니다.">
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
@@ -43,7 +43,7 @@
 <main id="main">
 <article>
 <h1><span class="h-num">Chapter 9</span> <span class="h-title">위험 관리: 승인, 격리, 비용</span></h1>
-<p class="claim">에이전트의 판단력만으로는 사고의 크기를 줄일 수 없고, 에이전트에 허용한 권한의 범위와 승인 지점의 위치를 정해야 합니다.</p>
+<p class="claim">사고의 크기는 에이전트에 허용한 권한의 범위와 승인 지점의 위치로 정해집니다.</p>
 <p class="lead">이 장에서는 에이전트(Agent)에 허용한 권한 안에서 생기는 사고의 크기를 줄이는 위험 관리를 다룹니다. 에이전트는 허용된 권한 안에서 파일을 수정하고 명령을 실행하는데, 그 권한 안에는 되돌리기 어려운 동작도 있고, 금지한 동작이 다른 형태의 명령으로 실행될 수도 있습니다. 권한을 넓게 열어 두면 한 번의 잘못된 판단이 원본 자료의 손상, 외부 발송, 예상하지 못한 지출로 이어질 수 있습니다. 그래서 에이전트에 허용할 범위를 미리 정해야 합니다.</p>
 <p class="lead">위험 관리는 세 가지입니다. 되돌리기 어려운 동작에 사람의 확인을 두는 승인, 에이전트가 실행한 명령이 접근할 수 있는 파일과 네트워크를 에이전트 프로그램 바깥의 운영 체제가 제한하는 격리, 토큰(Token, 모델이 텍스트를 나누어 처리하는 단위) 사용량과 지출의 범위를 정하는 비용입니다. 하네스(Harness)에 두는 권한 규칙(Permission Rule)의 종류와 평가 순서는 Chapter 2에서 다루었습니다. 되돌리기 어렵거나 결과를 확정하는 동작에서 사람이 개입하는 자리인 승인 지점은 Chapter 3에서 맡길 업무의 값을 정리한 에이전트 명세서의 한 항목으로 정했습니다. 이 장에서는 동작의 위험에 따른 규칙의 배치와, 규칙으로 막을 수 없는 경로와 지출의 범위를 정하는 수단을 다룹니다.</p>
 <p class="lead">먼저 위험 관리의 방법과 승인 지점 설계, 위험에 따른 권한 규칙 배치를 살펴봅니다. 이어서 샌드박스(Sandbox)를 포함한 격리로 권한 규칙의 한계를 보완하는 방법과 비용 관리를 익힌 뒤, 경비 정산 시스템 개편 변경 요청 사항(이하 변경 요청 사항)의 위험 관리 예제를 다룹니다.</p>

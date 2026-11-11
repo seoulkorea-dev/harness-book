@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Chapter 10 제품 단위 비교: Codex와 Claude Code의 하네스 | 하네스 엔지니어링: 모델을 에이전트로 만드는 설계</title>
-<meta name="description" content="어느 제품의 모델이 우수한지만으로는 제품 선택을 정할 수 없고, 조직이 운영하려는 하네스를 각 제품이 어떤 방식으로 구현하는지를 함께 봐야 합니다.">
+<meta name="description" content="제품은 모델 성능과 함께, 조직이 운영하려는 하네스를 각 제품이 어떻게 구현하는지로 선택합니다.">
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
@@ -43,7 +43,7 @@
 <main id="main">
 <article>
 <h1><span class="h-num">Chapter 10</span> <span class="h-title">제품 단위 비교: Codex와 Claude Code의 하네스</span></h1>
-<p class="claim">어느 제품의 모델이 우수한지만으로는 제품 선택을 정할 수 없고, 조직이 운영하려는 하네스를 각 제품이 어떤 방식으로 구현하는지를 함께 봐야 합니다.</p>
+<p class="claim">제품은 모델 성능과 함께, 조직이 운영하려는 하네스를 각 제품이 어떻게 구현하는지로 선택합니다.</p>
 <p class="lead">이 장에서는 조직이 허용하고 금지할 동작을 정한 정책을 Codex와 Claude Code에 옮길 때, 두 제품의 하네스(Harness)가 어떻게 다른지 다룹니다. 두 제품은 모두 규칙 문서, 권한, 격리, 설정 파일로 하네스를 구현하지만, 같은 정책도 이 네 곳의 설정 위치와 형식이 제품마다 다르고, 기본으로 켜진 것과 직접 설정해야 하는 것도 다릅니다. 모델 성능만으로 제품을 선택하면, 한 제품에서 금지한 push(확정한 변경을 원격 저장소에 올리는 일)가 다른 제품에서는 확인 요청으로 넘어갈 수 있는 것처럼, 정책이 설정에 반영되지 않은 것을 운영 중에 발견할 수 있습니다. 그래서 제품은 정책이 적히는 곳을 기준으로 비교해야 합니다.</p>
 <p class="lead">비교 기준은 규칙 문서, 권한, 격리, 설정 파일의 네 가지입니다. 규칙 문서는 에이전트(Agent)가 읽고 따르는 지시를 적는 문서이고, 권한은 동작마다 허용, 확인 요청, 금지 가운데 무엇으로 처리할지 정하는 설정입니다. 격리는 명령이 접근할 수 있는 파일과 네트워크를 에이전트 프로그램 바깥의 운영 체제가 제한하는 일이고, 설정 파일은 권한과 격리의 값을 저장하는 파일입니다. 두 제품 모두 격리 기능을 샌드박스(Sandbox)라고 부릅니다. Chapter 9에서는 한 제품 안에서 권한 규칙(Permission Rule)과 격리로 위험을 관리했습니다. 이 장에서는 그 두 장치를 포함한 네 기준이 두 제품에서 어떻게 구현되는지 비교합니다.</p>
 <p class="lead">먼저 제품을 비교하는 네 기준을 살펴보고, 규칙 문서와 권한, 격리를 두 제품에서 비교한 뒤, 제품 선택 기준과 경비 정산 시스템 개편 변경 요청 사항(이하 변경 요청 사항)의 정책을 두 제품의 설정으로 옮기는 예제를 다룹니다.</p>
