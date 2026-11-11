@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Chapter 7 검증 설계: 완료 보고 대신 증거 받기 | 하네스 엔지니어링: 모델을 에이전트로 만드는 설계</title>
-<meta name="description" content="완료 보고만으로는 결과를 받아들일 근거가 충분하지 않고, 검사 출력과 산출물처럼 사용자가 직접 확인할 수 있는 증거가 필요합니다.">
+<meta name="description" content="결과를 받아들이는 근거는 사용자가 직접 확인할 수 있는 검사 출력과 산출물입니다.">
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
@@ -43,7 +43,7 @@
 <main id="main">
 <article>
 <h1><span class="h-num">Chapter 7</span> <span class="h-title">검증 설계: 완료 보고 대신 증거 받기</span></h1>
-<p class="claim">완료 보고만으로는 결과를 받아들일 근거가 충분하지 않고, 검사 출력과 산출물처럼 사용자가 직접 확인할 수 있는 증거가 필요합니다.</p>
+<p class="claim">결과를 받아들이는 근거는 사용자가 직접 확인할 수 있는 검사 출력과 산출물입니다.</p>
 <p class="lead">이 장에서는 에이전트(Agent)가 만든 결과를 무엇으로 받아들일지 정하는 검증 설계를 다룹니다. 에이전트는 작업을 마치면 완료 보고를 작성하는데, 완료 보고는 결과를 만든 에이전트 자신의 판단이어서 결과가 실제로 동작한다는 뜻은 아닙니다. 완료 보고만으로 결과를 받아들이면 동작하지 않는 결과도 완료로 처리될 수 있으므로, 작업을 맡기기 전에 어떤 증거로 완료를 판정할지 정해야 합니다.</p>
 <p class="lead">검증 설계에서는 완료 기준의 검사 변환, 기준마다의 검증 방법, 판단이 필요한 기준의 판정 방식의 세 가지를 정해야 합니다. 완료 기준은 통과와 실패로 갈리는 검사로 변환하고, 완료 기준마다 누가 판정하는지에 따라 세 가지 검증 방법(자동 검사, 출력 확인, 독립 검수) 가운데 하나를 정합니다. 코드로 판정하기 어려운 기준은 항목별 판정 방법을 적은 표에 따라 결과를 만들지 않은 쪽이 판정하게 합니다. Chapter 6에서는 작업 단위마다 완료 기준과 확인 방법을 적었고, 이 장에서는 그 확인의 설계 방식과 판정 근거를 정합니다.</p>
 <p class="lead">먼저 완료 보고가 근거가 되지 않는 이유와 완료 기준을 검사로 변환하는 방법을 살펴보고, 검증 방법의 선택과 판단이 필요한 기준을 표로 판정하는 방법을 익힌 뒤, 경비 정산 시스템 개편 변경 요청 사항(이하 변경 요청 사항)의 검증을 설계하는 예제를 다룹니다.</p>
