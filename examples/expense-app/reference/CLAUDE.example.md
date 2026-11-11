@@ -15,7 +15,7 @@
 - 작업 2는 확인 방법이 사람의 commit 확인이므로, 데이터 모델 변경을 마치고 python check.py에서 기존 시험이 새로 실패하지 않으면 commit 확인을 요청한다. 완료는 사람이 commit 확인에서 확정하고, "통과" 값은 사람이 commit 확인 뒤 true로 변경한다.
 - 확인 방법을 충족하면 commit 전에 reviewer 하위 에이전트에게 바뀐 파일 목록과 변경 내용(git status, git diff 출력)을 넘겨 수용 기준 대조를 요청한다.
 - 완료 보고에는 python check.py의 출력 원문과 reviewer의 대조 보고를 포함한다.
-- 대조 보고 뒤 그 단위의 변경을 commit한다(commit은 사람 확인 후). 사람이 수정을 요청하면 그 단위의 "통과" 값을 false로 되돌리고 다시 작업한다.
+- 대조 보고 뒤 그 단위의 변경을 "작업 N: 변경 요약" 형식의 메시지로 commit한다(commit은 사람 확인 후). 사람이 수정을 요청하면 그 단위의 "통과" 값을 false로 되돌리고 다시 작업한다.
 
 ## 수정 범위
 - 수정할 수 있음: expense/, app.py, tests/, tasks.json의 "통과" 값, HANDOFF.md
@@ -24,7 +24,7 @@
 
 ## 중단 규칙
 - 작업 단위를 마칠 때 실행한 check.py에서 그 단위의 확인 방법에 든 시험이 세 번 연속 실패하면(편집 뒤 훅의 실패는 세지 않음) 중단하고 HANDOFF.md를 작성한다.
-- 세션을 마칠 때 HANDOFF.md에 현재 상태, 읽을 문서, 미결정, 다음 작업, 확인 명령을 적는다.
+- 세션을 마칠 때 HANDOFF.md에 현재 상태, 읽을 문서, 미결정 사항, 다음 작업, 확인 명령을 적는다.
 
 ## 명령
 - 단위 테스트: python -m unittest discover tests -q
