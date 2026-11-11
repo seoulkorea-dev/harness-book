@@ -21,7 +21,8 @@
       "Bash(git push *)",
       "WebFetch",
       "WebSearch"
-    ]
+    ],
+    "defaultMode": "default"
   },
   "hooks": {
     "PostToolUse": [
